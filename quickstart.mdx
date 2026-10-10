@@ -1,0 +1,17 @@
+---
+title: Quickstart
+description: Make a request from your server.
+---
+
+1. Sign in at [socialquery.dev](https://socialquery.dev/auth/login).
+2. Create an API key under **Dashboard → API keys**. Copy it when it is displayed and store it in your secret manager.
+3. Set `SOCIALQUERY_API_KEY` in your shell or server environment.
+
+```bash
+curl --fail-with-body 'https://socialquery.dev/v1/hackernews/search?query=developer%20tools' \
+  -H "x-api-key: $SOCIALQUERY_API_KEY"
+```
+
+Inspect the HTTP status, `success`, and `data`. Keep the `X-Request-Id` header for support. Provider failures return an error envelope and refund the request's credits. An unavailable endpoint returns HTTP 503.
+
+Public website testing requires Cloudflare Turnstile verification. Server API calls use API key authentication and do not need Turnstile.

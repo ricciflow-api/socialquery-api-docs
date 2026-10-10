@@ -1,0 +1,10 @@
+---
+title: Authentication
+description: Create, scope, and revoke API keys.
+---
+
+Send your key in the `x-api-key` header. Requests without a valid, unexpired key return HTTP 401. Keys that lack access to an endpoint return HTTP 403.
+
+Keys are shown once at creation. SocialQuery stores a SHA-256 hash instead of the original key. Revoke unused keys from the dashboard. Keep keys on your server; do not include them in browser bundles, query strings, screenshots, or public repositories.
+
+The public metadata routes do not require authentication. Dashboard sessions use Supabase Auth and are separate from API keys.

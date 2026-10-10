@@ -1,0 +1,18 @@
+---
+title: Errors and limits
+description: Handle failures without treating them as empty data.
+---
+
+| HTTP status | Meaning | Action |
+| --- | --- | --- |
+| 401 | Missing, invalid, revoked, or expired API key | Check the key |
+| 402 | Insufficient credits | Check the balance |
+| 403 | Scope or access denied | Check key scope and endpoint access |
+| 404 | Endpoint or resource not found | Verify the path and identifier |
+| 405 | Wrong HTTP method | Use the method in the reference |
+| 409 | Idempotency conflict or request in progress | Retry the original request later |
+| 422 | Invalid or unsupported parameters | Correct the inputs |
+| 429 | Request limit reached | Wait before retrying |
+| 503 | Provider or required service unavailable | Retry later or contact support |
+
+The default authenticated limit is 60 requests per minute per API key. Public website testing has separate per-visitor and global limits. Limits can be tighter upstream. Never treat a failed request as a successful empty collection.

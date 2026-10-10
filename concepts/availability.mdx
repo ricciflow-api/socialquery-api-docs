@@ -1,0 +1,10 @@
+---
+title: Endpoint availability
+description: Understand the beta catalog and provider activation.
+---
+
+The 68-platform catalog describes our compatibility target. Each operation has its own provider route. A route becomes usable only when an implementation, credentials, quota, and upstream access are available.
+
+The initial provider set is ScrapeCreators, DataForSEO, and TwitterAPI.io, alongside implemented public APIs. Free trials have finite credits; exhausted upstream credits do not guarantee continuing service. Fallbacks run only where an operation has a compatible adapter and configured credentials.
+
+An unavailable operation returns `503`. We do not substitute an unrelated web search or synthetic example for a live result. Response field normalization is still being verified for beta routes. Build against the actual endpoint response and retain source identifiers.

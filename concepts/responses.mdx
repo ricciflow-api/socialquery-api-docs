@@ -1,0 +1,10 @@
+---
+title: Responses and pagination
+description: Read the shared envelope and endpoint-specific data.
+---
+
+Responses include `success`, `platform`, `endpoint`, `data`, and credit metadata. The HTTP status and error code indicate whether the operation succeeded.
+
+`data` is operation-specific. Lists may include `items`, `total`, and `next_cursor`; detail operations return a profile, post, or result object. `total` can be the number returned in this page, not the platform's complete result count. Missing upstream fields may be null or absent.
+
+Pass a returned pagination cursor only to the same endpoint with the same search parameters. Never reuse cursors across providers or assume a cursor is a page number. Cursor behavior remains provider-specific during beta.

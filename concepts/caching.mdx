@@ -1,0 +1,10 @@
+---
+title: Caching and retries
+description: Reduce repeated upstream work.
+---
+
+Eligible successful GET results are cached with an endpoint-specific expiration. `X-Cache: HIT` indicates a cached response and `X-Credits-Used: 0` indicates no charge. Freshness depends on both the cache lifetime and the upstream source.
+
+Send `Cache-Control: no-cache` to request a fresh upstream fetch. Fresh successful responses use the usual credits.
+
+Use bounded exponential backoff for HTTP 429 and transient 5xx responses. Preserve the same `Idempotency-Key` for retries of the same request. Reusing a key with different parameters returns HTTP 409. Avoid automatically retrying mutations unless the response is known to be safely replayable.

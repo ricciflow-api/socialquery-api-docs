@@ -1,0 +1,1096 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "SocialQuery",
+  "theme": "almond",
+  "description": "Public social data with one API key and a shared response envelope.",
+  "colors": {
+    "primary": "#447B39",
+    "light": "#8AB54C",
+    "dark": "#336B36"
+  },
+  "fonts": {
+    "family": "Inter"
+  },
+  "background": {
+    "color": {
+      "light": "#FCFDF8",
+      "dark": "#102D1C"
+    }
+  },
+  "logo": {
+    "light": "/logo/socialquery-light.svg",
+    "dark": "/logo/socialquery-dark.svg",
+    "href": "https://socialquery.dev"
+  },
+  "favicon": "/icon.svg",
+  "api": {
+    "openapi": "openapi.json",
+    "playground": {
+      "display": "interactive"
+    },
+    "examples": {
+      "languages": [
+        "curl",
+        "python",
+        "javascript"
+      ],
+      "defaults": "required",
+      "prefill": false,
+      "autogenerate": true
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "authentication"
+            ]
+          },
+          {
+            "group": "Core concepts",
+            "pages": [
+              "concepts/availability",
+              "concepts/responses",
+              "concepts/credits",
+              "concepts/caching",
+              "concepts/errors"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/providers",
+              "guides/agents"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "icon": "code",
+        "groups": [
+          {
+            "group": "linkedin",
+            "pages": [
+              "api-reference/linkedin/get_linkedin_profile",
+              "api-reference/linkedin/get_linkedin_company",
+              "api-reference/linkedin/get_linkedin_company_by_domain",
+              "api-reference/linkedin/get_linkedin_profile_similar",
+              "api-reference/linkedin/get_linkedin_search_companies",
+              "api-reference/linkedin/get_linkedin_profile_posted_jobs",
+              "api-reference/linkedin/get_linkedin_job_hiring_team",
+              "api-reference/linkedin/get_linkedin_profile_articles",
+              "api-reference/linkedin/get_linkedin_article",
+              "api-reference/linkedin/get_linkedin_article_comments",
+              "api-reference/linkedin/get_linkedin_article_reactions",
+              "api-reference/linkedin/get_linkedin_search_hashtag",
+              "api-reference/linkedin/get_linkedin_profile_activity",
+              "api-reference/linkedin/get_linkedin_company_also_viewed",
+              "api-reference/linkedin/get_linkedin_company_employees_count",
+              "api-reference/linkedin/get_linkedin_profile_interests_schools",
+              "api-reference/linkedin/get_linkedin_profile_interests_newsletters",
+              "api-reference/linkedin/get_linkedin_profile_interests_top_voices",
+              "api-reference/linkedin/get_linkedin_profile_position_skills",
+              "api-reference/linkedin/get_linkedin_profile_top_position",
+              "api-reference/linkedin/get_linkedin_search_people_by_url",
+              "api-reference/linkedin/get_linkedin_profile_all",
+              "api-reference/linkedin/get_linkedin_profile_complete",
+              "api-reference/linkedin/get_linkedin_profile_with_posts",
+              "api-reference/linkedin/get_linkedin_post_with_comments",
+              "api-reference/linkedin/get_linkedin_post",
+              "api-reference/linkedin/get_linkedin_search_people",
+              "api-reference/linkedin/get_linkedin_company_people",
+              "api-reference/linkedin/get_linkedin_post_comments",
+              "api-reference/linkedin/get_linkedin_profile_posts",
+              "api-reference/linkedin/get_linkedin_profile_reactions",
+              "api-reference/linkedin/get_linkedin_post_reposts",
+              "api-reference/linkedin/get_linkedin_group_posts",
+              "api-reference/linkedin/get_linkedin_company_affiliated_pages",
+              "api-reference/linkedin/get_linkedin_post_comments_replies",
+              "api-reference/linkedin/get_linkedin_profile_experiences",
+              "api-reference/linkedin/get_linkedin_profile_educations",
+              "api-reference/linkedin/get_linkedin_profile_skills",
+              "api-reference/linkedin/get_linkedin_profile_honors",
+              "api-reference/linkedin/get_linkedin_profile_certifications",
+              "api-reference/linkedin/get_linkedin_profile_publications",
+              "api-reference/linkedin/get_linkedin_profile_volunteers",
+              "api-reference/linkedin/get_linkedin_profile_recommendations",
+              "api-reference/linkedin/get_linkedin_profile_interests_companies",
+              "api-reference/linkedin/get_linkedin_profile_interests_groups",
+              "api-reference/linkedin/get_linkedin_profile_images",
+              "api-reference/linkedin/get_linkedin_profile_videos",
+              "api-reference/linkedin/get_linkedin_profile_comments",
+              "api-reference/linkedin/get_linkedin_post_reactions",
+              "api-reference/linkedin/get_linkedin_company_jobs",
+              "api-reference/linkedin/get_linkedin_search_jobs",
+              "api-reference/linkedin/get_linkedin_search_location",
+              "api-reference/linkedin/get_linkedin_search_schools",
+              "api-reference/linkedin/get_linkedin_search_industry",
+              "api-reference/linkedin/get_linkedin_profile_about",
+              "api-reference/linkedin/get_linkedin_profile_contact",
+              "api-reference/linkedin/get_linkedin_profile_stats",
+              "api-reference/linkedin/get_linkedin_company_job_count",
+              "api-reference/linkedin/get_linkedin_company_insights",
+              "api-reference/linkedin/get_linkedin_group",
+              "api-reference/linkedin/get_linkedin_job",
+              "api-reference/linkedin/get_linkedin_company_posts",
+              "api-reference/linkedin/get_linkedin_ad",
+              "api-reference/linkedin/get_linkedin_ads_search",
+              "api-reference/linkedin/get_linkedin_profile_posts_archive",
+              "api-reference/linkedin/get_linkedin_search_posts",
+              "api-reference/linkedin/get_linkedin_post_transcript",
+              "api-reference/linkedin/get_linkedin_profile_full"
+            ]
+          },
+          {
+            "group": "prism",
+            "pages": [
+              "api-reference/prism/get_prism_lookup",
+              "api-reference/prism/get_prism_comments",
+              "api-reference/prism/get_prism_brand_mentions",
+              "api-reference/prism/get_prism_demand_signals",
+              "api-reference/prism/get_prism_campaign",
+              "api-reference/prism/get_prism_ai_visibility",
+              "api-reference/prism/get_prism_crisis_postmortem",
+              "api-reference/prism/get_prism_crisis_radar",
+              "api-reference/prism/get_prism_devtool_pulse",
+              "api-reference/prism/get_prism_leads",
+              "api-reference/prism/get_prism_comment_leads",
+              "api-reference/prism/get_prism_earned_media",
+              "api-reference/prism/get_prism_truthsocial_pulse",
+              "api-reference/prism/get_prism_launch_echo",
+              "api-reference/prism/get_prism_audience_overlap",
+              "api-reference/prism/get_prism_reputation",
+              "api-reference/prism/get_prism_employer_brand",
+              "api-reference/prism/get_prism_audience_questions",
+              "api-reference/prism/get_prism_product_reviews",
+              "api-reference/prism/get_prism_apps_lookup",
+              "api-reference/prism/get_prism_org_radar",
+              "api-reference/prism/get_prism_creator_vet",
+              "api-reference/prism/get_prism_adverse_screen",
+              "api-reference/prism/get_prism_find_accounts",
+              "api-reference/prism/get_prism_mentions",
+              "api-reference/prism/get_prism_brief_check",
+              "api-reference/prism/get_prism_format_lift",
+              "api-reference/prism/get_prism_earliness",
+              "api-reference/prism/get_prism_trend_board",
+              "api-reference/prism/get_prism_audience_language",
+              "api-reference/prism/get_prism_korea_gap",
+              "api-reference/prism/get_prism_share_of_voice",
+              "api-reference/prism/get_prism_review_integrity",
+              "api-reference/prism/get_prism_answers",
+              "api-reference/prism/get_prism_video_intel",
+              "api-reference/prism/get_prism_voice",
+              "api-reference/prism/get_prism_app_reviews",
+              "api-reference/prism/get_prism_creator_card",
+              "api-reference/prism/get_prism_handle_audit",
+              "api-reference/prism/post_prism_post_stats",
+              "api-reference/prism/post_prism_comment_lookup",
+              "api-reference/prism/post_prism_profiles",
+              "api-reference/prism/post_prism_jobs",
+              "api-reference/prism/get_prism_jobs",
+              "api-reference/prism/get_prism_jobs_job_id",
+              "api-reference/prism/get_prism_investigate"
+            ]
+          },
+          {
+            "group": "instagram",
+            "pages": [
+              "api-reference/instagram/get_instagram_profile",
+              "api-reference/instagram/get_instagram_profile_about",
+              "api-reference/instagram/get_instagram_profile_posts",
+              "api-reference/instagram/get_instagram_post",
+              "api-reference/instagram/get_instagram_post_comments",
+              "api-reference/instagram/get_instagram_comment",
+              "api-reference/instagram/get_instagram_basic_profile",
+              "api-reference/instagram/get_instagram_profile_reels",
+              "api-reference/instagram/get_instagram_highlights",
+              "api-reference/instagram/get_instagram_highlight_detail",
+              "api-reference/instagram/get_instagram_search_reels",
+              "api-reference/instagram/get_instagram_media_transcript",
+              "api-reference/instagram/get_instagram_media_screen_text",
+              "api-reference/instagram/get_instagram_user_embed",
+              "api-reference/instagram/get_instagram_audio_reels",
+              "api-reference/instagram/get_instagram_search_hashtag",
+              "api-reference/instagram/get_instagram_search_profiles",
+              "api-reference/instagram/get_instagram_reels_trending",
+              "api-reference/instagram/get_instagram_followers",
+              "api-reference/instagram/get_instagram_following",
+              "api-reference/instagram/get_instagram_similar",
+              "api-reference/instagram/get_instagram_post_likers",
+              "api-reference/instagram/get_instagram_post_stats",
+              "api-reference/instagram/get_instagram_tagged",
+              "api-reference/instagram/get_instagram_location_posts",
+              "api-reference/instagram/get_instagram_engagement",
+              "api-reference/instagram/get_instagram_search_location",
+              "api-reference/instagram/get_instagram_search",
+              "api-reference/instagram/get_instagram_search_popular",
+              "api-reference/instagram/get_instagram_post_comment_replies",
+              "api-reference/instagram/get_instagram_username_suggestions",
+              "api-reference/instagram/get_instagram_search_music",
+              "api-reference/instagram/get_instagram_stories",
+              "api-reference/instagram/get_instagram_story_download",
+              "api-reference/instagram/get_instagram_music_trending",
+              "api-reference/instagram/get_instagram_profile_full",
+              "api-reference/instagram/get_instagram_profile_reels_full",
+              "api-reference/instagram/get_instagram_profile_posts_full"
+            ]
+          },
+          {
+            "group": "tiktok",
+            "pages": [
+              "api-reference/tiktok/get_tiktok_profile",
+              "api-reference/tiktok/get_tiktok_profile_videos",
+              "api-reference/tiktok/get_tiktok_post",
+              "api-reference/tiktok/get_tiktok_post_comments",
+              "api-reference/tiktok/get_tiktok_video_comment_replies",
+              "api-reference/tiktok/get_tiktok_comment",
+              "api-reference/tiktok/get_tiktok_search",
+              "api-reference/tiktok/get_tiktok_trending",
+              "api-reference/tiktok/get_tiktok_search_hashtag",
+              "api-reference/tiktok/get_tiktok_search_top",
+              "api-reference/tiktok/get_tiktok_search_users",
+              "api-reference/tiktok/get_tiktok_similar",
+              "api-reference/tiktok/get_tiktok_user_audience",
+              "api-reference/tiktok/get_tiktok_user_followers",
+              "api-reference/tiktok/get_tiktok_user_following",
+              "api-reference/tiktok/get_tiktok_user_live",
+              "api-reference/tiktok/get_tiktok_post_transcript",
+              "api-reference/tiktok/get_tiktok_video_screen_text",
+              "api-reference/tiktok/get_tiktok_song",
+              "api-reference/tiktok/get_tiktok_song_videos",
+              "api-reference/tiktok/get_tiktok_hashtags_popular",
+              "api-reference/tiktok/get_tiktok_videos_popular",
+              "api-reference/tiktok/get_tiktok_profile_region",
+              "api-reference/tiktok/get_tiktok_adlibrary_search",
+              "api-reference/tiktok/get_tiktok_adlibrary_ad",
+              "api-reference/tiktok/get_tiktok_search_suggestions",
+              "api-reference/tiktok/get_tiktok_collection_videos",
+              "api-reference/tiktok/get_tiktok_profile_playlists",
+              "api-reference/tiktok/get_tiktok_playlist_videos",
+              "api-reference/tiktok/get_tiktok_user_liked",
+              "api-reference/tiktok/get_tiktok_location_posts",
+              "api-reference/tiktok/get_tiktok_effects",
+              "api-reference/tiktok/get_tiktok_effect_videos",
+              "api-reference/tiktok/get_tiktok_search_music",
+              "api-reference/tiktok/get_tiktok_hashtag",
+              "api-reference/tiktok/get_tiktok_ads_top",
+              "api-reference/tiktok/get_tiktok_profile_full"
+            ]
+          },
+          {
+            "group": "youtube",
+            "pages": [
+              "api-reference/youtube/get_youtube_channel",
+              "api-reference/youtube/get_youtube_channel_about",
+              "api-reference/youtube/get_youtube_channel_videos",
+              "api-reference/youtube/get_youtube_video",
+              "api-reference/youtube/post_youtube_videos",
+              "api-reference/youtube/post_youtube_channels",
+              "api-reference/youtube/post_youtube_transcripts",
+              "api-reference/youtube/get_youtube_video_sponsors",
+              "api-reference/youtube/get_youtube_video_comments",
+              "api-reference/youtube/get_youtube_video_comment_replies",
+              "api-reference/youtube/get_youtube_search",
+              "api-reference/youtube/get_youtube_channel_shorts",
+              "api-reference/youtube/get_youtube_community_post",
+              "api-reference/youtube/get_youtube_playlist",
+              "api-reference/youtube/get_youtube_search_hashtag",
+              "api-reference/youtube/get_youtube_shorts_trending",
+              "api-reference/youtube/get_youtube_video_transcript",
+              "api-reference/youtube/get_youtube_channel_playlists",
+              "api-reference/youtube/get_youtube_channel_lives",
+              "api-reference/youtube/get_youtube_channel_community_posts",
+              "api-reference/youtube/get_youtube_videos_trending",
+              "api-reference/youtube/get_youtube_playlist_items",
+              "api-reference/youtube/get_youtube_search_advanced",
+              "api-reference/youtube/get_youtube_search_suggestions",
+              "api-reference/youtube/get_youtube_video_audio",
+              "api-reference/youtube/get_youtube_video_files",
+              "api-reference/youtube/get_youtube_video_subtitles",
+              "api-reference/youtube/get_youtube_video_thumbnails",
+              "api-reference/youtube/get_youtube_profile_full"
+            ]
+          },
+          {
+            "group": "facebook",
+            "pages": [
+              "api-reference/facebook/get_facebook_profile",
+              "api-reference/facebook/get_facebook_profile_posts",
+              "api-reference/facebook/get_facebook_post",
+              "api-reference/facebook/get_facebook_post_comments",
+              "api-reference/facebook/get_facebook_group_posts",
+              "api-reference/facebook/get_facebook_group",
+              "api-reference/facebook/get_facebook_post_transcript",
+              "api-reference/facebook/get_facebook_profile_photos",
+              "api-reference/facebook/get_facebook_profile_reels",
+              "api-reference/facebook/get_facebook_adlibrary_ad",
+              "api-reference/facebook/get_facebook_adlibrary_company_ads",
+              "api-reference/facebook/get_facebook_adlibrary_search_ads",
+              "api-reference/facebook/get_facebook_adlibrary_search_companies",
+              "api-reference/facebook/get_facebook_profile_events",
+              "api-reference/facebook/get_facebook_post_comment_replies",
+              "api-reference/facebook/get_facebook_marketplace_location_search",
+              "api-reference/facebook/get_facebook_marketplace_search",
+              "api-reference/facebook/get_facebook_marketplace_item",
+              "api-reference/facebook/get_facebook_events_search",
+              "api-reference/facebook/get_facebook_events",
+              "api-reference/facebook/get_facebook_event_details",
+              "api-reference/facebook/get_facebook_adlibrary_ad_transcript",
+              "api-reference/facebook/get_facebook_profile_full",
+              "api-reference/facebook/get_facebook_profile_reels_full",
+              "api-reference/facebook/get_facebook_search_posts",
+              "api-reference/facebook/get_facebook_search_pages",
+              "api-reference/facebook/get_facebook_search_people",
+              "api-reference/facebook/get_facebook_search_videos",
+              "api-reference/facebook/get_facebook_search_groups"
+            ]
+          },
+          {
+            "group": "web",
+            "pages": [
+              "api-reference/web/get_web_scrape",
+              "api-reference/web/get_web_search",
+              "api-reference/web/get_web_map",
+              "api-reference/web/get_web_extract",
+              "api-reference/web/post_web_crawl",
+              "api-reference/web/post_web_batch_scrape",
+              "api-reference/web/get_web_jobs",
+              "api-reference/web/get_web_jobs_job_id",
+              "api-reference/web/delete_web_jobs_job_id",
+              "api-reference/web/post_web_agent",
+              "api-reference/web/post_web_monitors",
+              "api-reference/web/get_web_monitors",
+              "api-reference/web/get_web_monitors_monitor_id",
+              "api-reference/web/patch_web_monitors_monitor_id",
+              "api-reference/web/delete_web_monitors_monitor_id",
+              "api-reference/web/get_web_monitors_monitor_id_checks",
+              "api-reference/web/post_web_sessions",
+              "api-reference/web/get_web_sessions",
+              "api-reference/web/get_web_sessions_session_id",
+              "api-reference/web/delete_web_sessions_session_id",
+              "api-reference/web/post_web_sessions_session_id_execute",
+              "api-reference/web/post_web_parse"
+            ]
+          },
+          {
+            "group": "us congress trades",
+            "pages": [
+              "api-reference/us_congress_trades/get_us_congress_trades_trades",
+              "api-reference/us_congress_trades/get_us_congress_trades_trades_latest",
+              "api-reference/us_congress_trades/get_us_congress_trades_trades_recent",
+              "api-reference/us_congress_trades/get_us_congress_trades_members",
+              "api-reference/us_congress_trades/get_us_congress_trades_politician",
+              "api-reference/us_congress_trades/get_us_congress_trades_politician_trades",
+              "api-reference/us_congress_trades/get_us_congress_trades_ticker",
+              "api-reference/us_congress_trades/get_us_congress_trades_ticker_trades",
+              "api-reference/us_congress_trades/get_us_congress_trades_state_trades",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_party",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_sectors",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_issuers",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_politicians",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_tickers",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_volume",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_unusual",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_buy_sell",
+              "api-reference/us_congress_trades/get_us_congress_trades_stats_reporting_gaps"
+            ]
+          },
+          {
+            "group": "klarna",
+            "pages": [
+              "api-reference/klarna/get_klarna_product",
+              "api-reference/klarna/get_klarna_product_offers",
+              "api-reference/klarna/get_klarna_search",
+              "api-reference/klarna/get_klarna_search_suggestions",
+              "api-reference/klarna/get_klarna_reviews",
+              "api-reference/klarna/get_klarna_reviews_pro",
+              "api-reference/klarna/get_klarna_reviews_overview",
+              "api-reference/klarna/get_klarna_product_price_history",
+              "api-reference/klarna/get_klarna_product_compare",
+              "api-reference/klarna/get_klarna_category",
+              "api-reference/klarna/get_klarna_categories",
+              "api-reference/klarna/get_klarna_categories_children",
+              "api-reference/klarna/get_klarna_category_filters",
+              "api-reference/klarna/get_klarna_category_keywords",
+              "api-reference/klarna/get_klarna_category_guide",
+              "api-reference/klarna/get_klarna_stores",
+              "api-reference/klarna/get_klarna_store_products",
+              "api-reference/klarna/get_klarna_store_filters"
+            ]
+          },
+          {
+            "group": "tripadvisor",
+            "pages": [
+              "api-reference/tripadvisor/get_tripadvisor_search",
+              "api-reference/tripadvisor/get_tripadvisor_reviews",
+              "api-reference/tripadvisor/get_tripadvisor_place",
+              "api-reference/tripadvisor/get_tripadvisor_autocomplete",
+              "api-reference/tripadvisor/get_tripadvisor_hotels",
+              "api-reference/tripadvisor/get_tripadvisor_hotel",
+              "api-reference/tripadvisor/get_tripadvisor_restaurants",
+              "api-reference/tripadvisor/get_tripadvisor_restaurant",
+              "api-reference/tripadvisor/get_tripadvisor_restaurant_reviews",
+              "api-reference/tripadvisor/get_tripadvisor_attractions",
+              "api-reference/tripadvisor/get_tripadvisor_attraction",
+              "api-reference/tripadvisor/get_tripadvisor_attraction_reviews",
+              "api-reference/tripadvisor/get_tripadvisor_experience_types",
+              "api-reference/tripadvisor/get_tripadvisor_cruises",
+              "api-reference/tripadvisor/get_tripadvisor_cruise",
+              "api-reference/tripadvisor/get_tripadvisor_cruise_reviews"
+            ]
+          },
+          {
+            "group": "twitter",
+            "pages": [
+              "api-reference/twitter/get_twitter_profile",
+              "api-reference/twitter/get_twitter_user_tweets",
+              "api-reference/twitter/get_twitter_tweet",
+              "api-reference/twitter/get_twitter_community",
+              "api-reference/twitter/get_twitter_community_tweets",
+              "api-reference/twitter/get_twitter_tweet_transcript",
+              "api-reference/twitter/get_twitter_ai_search",
+              "api-reference/twitter/get_twitter_search_tweets",
+              "api-reference/twitter/get_twitter_tweet_replies",
+              "api-reference/twitter/get_twitter_user_media",
+              "api-reference/twitter/get_twitter_user_followers",
+              "api-reference/twitter/get_twitter_user_following",
+              "api-reference/twitter/get_twitter_tweet_retweeters",
+              "api-reference/twitter/get_twitter_search_users",
+              "api-reference/twitter/get_twitter_profile_full"
+            ]
+          },
+          {
+            "group": "reddit",
+            "pages": [
+              "api-reference/reddit/get_reddit_subreddit",
+              "api-reference/reddit/get_reddit_subreddit_details",
+              "api-reference/reddit/get_reddit_search",
+              "api-reference/reddit/get_reddit_post",
+              "api-reference/reddit/get_reddit_post_comments",
+              "api-reference/reddit/get_reddit_subreddit_search",
+              "api-reference/reddit/get_reddit_profile",
+              "api-reference/reddit/get_reddit_profile_posts",
+              "api-reference/reddit/get_reddit_profile_comments",
+              "api-reference/reddit/get_reddit_search_comments",
+              "api-reference/reddit/get_reddit_subreddits_search",
+              "api-reference/reddit/get_reddit_search_media",
+              "api-reference/reddit/get_reddit_post_transcript",
+              "api-reference/reddit/get_reddit_omni_search"
+            ]
+          },
+          {
+            "group": "naver",
+            "pages": [
+              "api-reference/naver/get_naver_blog_search",
+              "api-reference/naver/get_naver_news_search",
+              "api-reference/naver/get_naver_encyc_search",
+              "api-reference/naver/get_naver_cafearticle_search",
+              "api-reference/naver/get_naver_kin_search",
+              "api-reference/naver/get_naver_local_search",
+              "api-reference/naver/get_naver_image_search",
+              "api-reference/naver/get_naver_webkr_search",
+              "api-reference/naver/get_naver_errata",
+              "api-reference/naver/get_naver_adult",
+              "api-reference/naver/get_naver_search_trend",
+              "api-reference/naver/get_naver_shopping_insight_category",
+              "api-reference/naver/get_naver_shopping_insight_keyword",
+              "api-reference/naver/get_naver_brief"
+            ]
+          },
+          {
+            "group": "utility",
+            "pages": [
+              "api-reference/utility/get_utility_endpoints",
+              "api-reference/utility/get_utility_endpoint",
+              "api-reference/utility/get_utility_capabilities",
+              "api-reference/utility/get_utility_plan",
+              "api-reference/utility/get_utility_resolve",
+              "api-reference/utility/get_utility_estimate",
+              "api-reference/utility/get_utility_explain_error",
+              "api-reference/utility/get_utility_docs_search",
+              "api-reference/utility/get_utility_find",
+              "api-reference/utility/get_utility_recipes",
+              "api-reference/utility/get_utility_quickstart",
+              "api-reference/utility/get_utility_llms"
+            ]
+          },
+          {
+            "group": "github",
+            "pages": [
+              "api-reference/github/get_github_profile",
+              "api-reference/github/get_github_repo",
+              "api-reference/github/get_github_profile_repos",
+              "api-reference/github/get_github_repo_readme",
+              "api-reference/github/get_github_repo_releases",
+              "api-reference/github/get_github_repo_issues",
+              "api-reference/github/get_github_issue",
+              "api-reference/github/get_github_issue_comments",
+              "api-reference/github/get_github_search",
+              "api-reference/github/get_github_repo_top_issues",
+              "api-reference/github/get_github_repo_dossier",
+              "api-reference/github/get_github_user_profile_velocity"
+            ]
+          },
+          {
+            "group": "google",
+            "pages": [
+              "api-reference/google/get_google_search",
+              "api-reference/google/get_google_ad",
+              "api-reference/google/get_google_adlibrary_advertisers_search",
+              "api-reference/google/get_google_company_ads",
+              "api-reference/google/get_google_business_info",
+              "api-reference/google/get_google_business_extended_reviews",
+              "api-reference/google/get_google_business_updates",
+              "api-reference/google/get_google_business_questions",
+              "api-reference/google/get_google_hotels_search",
+              "api-reference/google/get_google_hotels_info",
+              "api-reference/google/get_google_keyword_volume"
+            ]
+          },
+          {
+            "group": "sephora",
+            "pages": [
+              "api-reference/sephora/get_sephora_product",
+              "api-reference/sephora/get_sephora_reviews",
+              "api-reference/sephora/get_sephora_search",
+              "api-reference/sephora/get_sephora_search_suggestions",
+              "api-reference/sephora/get_sephora_category",
+              "api-reference/sephora/get_sephora_categories",
+              "api-reference/sephora/get_sephora_category_data",
+              "api-reference/sephora/get_sephora_brands",
+              "api-reference/sephora/get_sephora_brand_products",
+              "api-reference/sephora/get_sephora_stores",
+              "api-reference/sephora/get_sephora_availability"
+            ]
+          },
+          {
+            "group": "gumtree",
+            "pages": [
+              "api-reference/gumtree/get_gumtree_search",
+              "api-reference/gumtree/get_gumtree_product",
+              "api-reference/gumtree/get_gumtree_product_similar",
+              "api-reference/gumtree/get_gumtree_seller",
+              "api-reference/gumtree/get_gumtree_seller_listings",
+              "api-reference/gumtree/get_gumtree_search_suggestions",
+              "api-reference/gumtree/get_gumtree_trending",
+              "api-reference/gumtree/get_gumtree_categories",
+              "api-reference/gumtree/get_gumtree_filters",
+              "api-reference/gumtree/get_gumtree_locations",
+              "api-reference/gumtree/get_gumtree_locations_nearest"
+            ]
+          },
+          {
+            "group": "jobs",
+            "pages": [
+              "api-reference/jobs/get_jobs_linkedin_search",
+              "api-reference/jobs/get_jobs_linkedin",
+              "api-reference/jobs/get_jobs_linkedin_organizations",
+              "api-reference/jobs/get_jobs_indeed_search",
+              "api-reference/jobs/get_jobs_indeed",
+              "api-reference/jobs/get_jobs_bing_search",
+              "api-reference/jobs/get_jobs_bing",
+              "api-reference/jobs/get_jobs_xing_search",
+              "api-reference/jobs/get_jobs_xing",
+              "api-reference/jobs/get_jobs_salary_titles",
+              "api-reference/jobs/get_jobs_salary"
+            ]
+          },
+          {
+            "group": "content analysis",
+            "pages": [
+              "api-reference/content_analysis/get_content_analysis_search",
+              "api-reference/content_analysis/get_content_analysis_summary",
+              "api-reference/content_analysis/get_content_analysis_sentiment",
+              "api-reference/content_analysis/get_content_analysis_rating_distribution",
+              "api-reference/content_analysis/get_content_analysis_phrase_trends",
+              "api-reference/content_analysis/get_content_analysis_category_trends",
+              "api-reference/content_analysis/get_content_analysis_languages",
+              "api-reference/content_analysis/get_content_analysis_locations",
+              "api-reference/content_analysis/get_content_analysis_categories",
+              "api-reference/content_analysis/get_content_analysis_filters"
+            ]
+          },
+          {
+            "group": "google play",
+            "pages": [
+              "api-reference/google_play/get_google_play_app_search",
+              "api-reference/google_play/get_google_play_search_suggestions",
+              "api-reference/google_play/get_google_play_app_info",
+              "api-reference/google_play/get_google_play_app_reviews",
+              "api-reference/google_play/get_google_play_app_list",
+              "api-reference/google_play/get_google_play_app_listings_search",
+              "api-reference/google_play/get_google_play_categories",
+              "api-reference/google_play/get_google_play_locations",
+              "api-reference/google_play/get_google_play_languages"
+            ]
+          },
+          {
+            "group": "app store",
+            "pages": [
+              "api-reference/app_store/get_app_store_app_search",
+              "api-reference/app_store/get_app_store_search_suggestions",
+              "api-reference/app_store/get_app_store_app_info",
+              "api-reference/app_store/get_app_store_app_reviews",
+              "api-reference/app_store/get_app_store_app_list",
+              "api-reference/app_store/get_app_store_app_listings_search",
+              "api-reference/app_store/get_app_store_categories",
+              "api-reference/app_store/get_app_store_locations",
+              "api-reference/app_store/get_app_store_languages"
+            ]
+          },
+          {
+            "group": "aliexpress",
+            "pages": [
+              "api-reference/aliexpress/get_aliexpress_product",
+              "api-reference/aliexpress/get_aliexpress_search",
+              "api-reference/aliexpress/get_aliexpress_product_similar",
+              "api-reference/aliexpress/get_aliexpress_reviews",
+              "api-reference/aliexpress/get_aliexpress_product_shipping",
+              "api-reference/aliexpress/get_aliexpress_search_hot",
+              "api-reference/aliexpress/get_aliexpress_search_promo",
+              "api-reference/aliexpress/get_aliexpress_categories",
+              "api-reference/aliexpress/get_aliexpress_promo"
+            ]
+          },
+          {
+            "group": "amazon",
+            "pages": [
+              "api-reference/amazon/get_amazon_shop",
+              "api-reference/amazon/get_amazon_product_search",
+              "api-reference/amazon/get_amazon_product",
+              "api-reference/amazon/get_amazon_reviews",
+              "api-reference/amazon/get_amazon_sellers",
+              "api-reference/amazon/get_amazon_best_sellers",
+              "api-reference/amazon/get_amazon_deals",
+              "api-reference/amazon/get_amazon_seller"
+            ]
+          },
+          {
+            "group": "finance",
+            "pages": [
+              "api-reference/finance/get_finance_quote",
+              "api-reference/finance/get_finance_ticker_search",
+              "api-reference/finance/get_finance_markets",
+              "api-reference/finance/get_finance_news",
+              "api-reference/finance/get_finance_history",
+              "api-reference/finance/get_finance_statements",
+              "api-reference/finance/get_finance_options",
+              "api-reference/finance/get_finance_fundamentals"
+            ]
+          },
+          {
+            "group": "douyin",
+            "pages": [
+              "api-reference/douyin/get_douyin_search",
+              "api-reference/douyin/get_douyin_profile",
+              "api-reference/douyin/get_douyin_profile_posts",
+              "api-reference/douyin/get_douyin_post",
+              "api-reference/douyin/get_douyin_post_comments",
+              "api-reference/douyin/get_douyin_comment_replies",
+              "api-reference/douyin/get_douyin_search_users",
+              "api-reference/douyin/get_douyin_trending"
+            ]
+          },
+          {
+            "group": "g2",
+            "pages": [
+              "api-reference/g2/get_g2_product",
+              "api-reference/g2/get_g2_reviews",
+              "api-reference/g2/get_g2_category",
+              "api-reference/g2/get_g2_categories",
+              "api-reference/g2/get_g2_seller",
+              "api-reference/g2/get_g2_seller_products",
+              "api-reference/g2/get_g2_product_index"
+            ]
+          },
+          {
+            "group": "quora",
+            "pages": [
+              "api-reference/quora/get_quora_search",
+              "api-reference/quora/get_quora_post",
+              "api-reference/quora/get_quora_answers",
+              "api-reference/quora/get_quora_posts",
+              "api-reference/quora/get_quora_profiles",
+              "api-reference/quora/get_quora_spaces",
+              "api-reference/quora/get_quora_topics"
+            ]
+          },
+          {
+            "group": "threads",
+            "pages": [
+              "api-reference/threads/get_threads_profile",
+              "api-reference/threads/get_threads_user_posts",
+              "api-reference/threads/get_threads_post",
+              "api-reference/threads/get_threads_search",
+              "api-reference/threads/get_threads_post_comments",
+              "api-reference/threads/get_threads_search_users"
+            ]
+          },
+          {
+            "group": "pinterest",
+            "pages": [
+              "api-reference/pinterest/get_pinterest_search",
+              "api-reference/pinterest/get_pinterest_pin",
+              "api-reference/pinterest/get_pinterest_url_stats",
+              "api-reference/pinterest/get_pinterest_board",
+              "api-reference/pinterest/get_pinterest_user_boards",
+              "api-reference/pinterest/get_pinterest_trends"
+            ]
+          },
+          {
+            "group": "tiktokshop",
+            "pages": [
+              "api-reference/tiktokshop/get_tiktokshop_product",
+              "api-reference/tiktokshop/get_tiktokshop_product_reviews",
+              "api-reference/tiktokshop/get_tiktokshop_products",
+              "api-reference/tiktokshop/get_tiktokshop_search",
+              "api-reference/tiktokshop/get_tiktokshop_user_showcase",
+              "api-reference/tiktokshop/get_tiktokshop_sales"
+            ]
+          },
+          {
+            "group": "hm",
+            "pages": [
+              "api-reference/hm/get_hm_search",
+              "api-reference/hm/get_hm_search_suggestions",
+              "api-reference/hm/get_hm_stores",
+              "api-reference/hm/get_hm_countries",
+              "api-reference/hm/get_hm_categories",
+              "api-reference/hm/get_hm_product_suppliers"
+            ]
+          },
+          {
+            "group": "spotify",
+            "pages": [
+              "api-reference/spotify/get_spotify_artist",
+              "api-reference/spotify/get_spotify_track",
+              "api-reference/spotify/get_spotify_album",
+              "api-reference/spotify/get_spotify_search",
+              "api-reference/spotify/get_spotify_podcast",
+              "api-reference/spotify/get_spotify_podcast_episodes"
+            ]
+          },
+          {
+            "group": "xiaohongshu",
+            "pages": [
+              "api-reference/xiaohongshu/get_xiaohongshu_search",
+              "api-reference/xiaohongshu/get_xiaohongshu_trending",
+              "api-reference/xiaohongshu/get_xiaohongshu_profile",
+              "api-reference/xiaohongshu/get_xiaohongshu_profile_posts",
+              "api-reference/xiaohongshu/get_xiaohongshu_post",
+              "api-reference/xiaohongshu/get_xiaohongshu_post_comments"
+            ]
+          },
+          {
+            "group": "google shopping",
+            "pages": [
+              "api-reference/google_shopping/get_google_shopping_product_search",
+              "api-reference/google_shopping/get_google_shopping_product",
+              "api-reference/google_shopping/get_google_shopping_reviews",
+              "api-reference/google_shopping/get_google_shopping_sellers",
+              "api-reference/google_shopping/get_google_shopping_price_history"
+            ]
+          },
+          {
+            "group": "walmart",
+            "pages": [
+              "api-reference/walmart/get_walmart_product",
+              "api-reference/walmart/get_walmart_reviews",
+              "api-reference/walmart/get_walmart_search",
+              "api-reference/walmart/get_walmart_category",
+              "api-reference/walmart/get_walmart_offers"
+            ]
+          },
+          {
+            "group": "target",
+            "pages": [
+              "api-reference/target/get_target_product",
+              "api-reference/target/get_target_reviews",
+              "api-reference/target/get_target_category",
+              "api-reference/target/get_target_categories",
+              "api-reference/target/get_target_stores"
+            ]
+          },
+          {
+            "group": "kohls",
+            "pages": [
+              "api-reference/kohls/get_kohls_search",
+              "api-reference/kohls/get_kohls_reviews",
+              "api-reference/kohls/get_kohls_questions",
+              "api-reference/kohls/get_kohls_stores",
+              "api-reference/kohls/get_kohls_categories"
+            ]
+          },
+          {
+            "group": "yelp",
+            "pages": [
+              "api-reference/yelp/get_yelp_business_info",
+              "api-reference/yelp/get_yelp_business_reviews",
+              "api-reference/yelp/get_yelp_search",
+              "api-reference/yelp/get_yelp_search_full",
+              "api-reference/yelp/get_yelp_search_suggestions"
+            ]
+          },
+          {
+            "group": "rumble",
+            "pages": [
+              "api-reference/rumble/get_rumble_search",
+              "api-reference/rumble/get_rumble_channel_videos",
+              "api-reference/rumble/get_rumble_video",
+              "api-reference/rumble/get_rumble_video_transcript",
+              "api-reference/rumble/get_rumble_video_comments"
+            ]
+          },
+          {
+            "group": "apple music",
+            "pages": [
+              "api-reference/apple_music/get_apple_music_search",
+              "api-reference/apple_music/get_apple_music_artist",
+              "api-reference/apple_music/get_apple_music_album",
+              "api-reference/apple_music/get_apple_music_track",
+              "api-reference/apple_music/get_apple_music_charts"
+            ]
+          },
+          {
+            "group": "search",
+            "pages": [
+              "api-reference/search/get_search_everywhere",
+              "api-reference/search/get_search_forums",
+              "api-reference/search/get_search_creators",
+              "api-reference/search/get_search_multi",
+              "api-reference/search/get_search_news"
+            ]
+          },
+          {
+            "group": "economy",
+            "pages": [
+              "api-reference/economy/get_economy_consumer_spend",
+              "api-reference/economy/get_economy_tourism_spend",
+              "api-reference/economy/get_economy_government_spend",
+              "api-reference/economy/get_economy_government_contracts",
+              "api-reference/economy/get_economy_imports"
+            ]
+          },
+          {
+            "group": "twitch",
+            "pages": [
+              "api-reference/twitch/get_twitch_profile",
+              "api-reference/twitch/get_twitch_clip",
+              "api-reference/twitch/get_twitch_user_videos",
+              "api-reference/twitch/get_twitch_user_schedule"
+            ]
+          },
+          {
+            "group": "home depot",
+            "pages": [
+              "api-reference/home_depot/get_home_depot_product",
+              "api-reference/home_depot/get_home_depot_reviews",
+              "api-reference/home_depot/get_home_depot_search",
+              "api-reference/home_depot/get_home_depot_stores"
+            ]
+          },
+          {
+            "group": "etsy",
+            "pages": [
+              "api-reference/etsy/get_etsy_product",
+              "api-reference/etsy/get_etsy_shop_products",
+              "api-reference/etsy/get_etsy_product_similar",
+              "api-reference/etsy/get_etsy_search_suggestions"
+            ]
+          },
+          {
+            "group": "hackernews",
+            "pages": [
+              "api-reference/hackernews/get_hackernews_search",
+              "api-reference/hackernews/get_hackernews_story",
+              "api-reference/hackernews/get_hackernews_story_comments",
+              "api-reference/hackernews/get_hackernews_profile"
+            ]
+          },
+          {
+            "group": "tavily",
+            "pages": [
+              "api-reference/tavily/get_tavily_search",
+              "api-reference/tavily/get_tavily_extract",
+              "api-reference/tavily/get_tavily_map",
+              "api-reference/tavily/get_tavily_crawl"
+            ]
+          },
+          {
+            "group": "bluesky",
+            "pages": [
+              "api-reference/bluesky/get_bluesky_profile",
+              "api-reference/bluesky/get_bluesky_user_posts",
+              "api-reference/bluesky/get_bluesky_post",
+              "api-reference/bluesky/get_bluesky_search"
+            ]
+          },
+          {
+            "group": "truthsocial",
+            "pages": [
+              "api-reference/truthsocial/get_truthsocial_profile",
+              "api-reference/truthsocial/get_truthsocial_user_posts",
+              "api-reference/truthsocial/get_truthsocial_post"
+            ]
+          },
+          {
+            "group": "telegram",
+            "pages": [
+              "api-reference/telegram/get_telegram_profile",
+              "api-reference/telegram/get_telegram_profile_posts",
+              "api-reference/telegram/get_telegram_post"
+            ]
+          },
+          {
+            "group": "kwai",
+            "pages": [
+              "api-reference/kwai/get_kwai_profile",
+              "api-reference/kwai/get_kwai_user_posts",
+              "api-reference/kwai/get_kwai_post"
+            ]
+          },
+          {
+            "group": "google trends",
+            "pages": [
+              "api-reference/google_trends/get_google_trends_explore",
+              "api-reference/google_trends/get_google_trends_rising",
+              "api-reference/google_trends/get_google_trends_trending"
+            ]
+          },
+          {
+            "group": "trustpilot",
+            "pages": [
+              "api-reference/trustpilot/get_trustpilot_business_search",
+              "api-reference/trustpilot/get_trustpilot_reviews",
+              "api-reference/trustpilot/post_trustpilot_reviews_history"
+            ]
+          },
+          {
+            "group": "wayfair",
+            "pages": [
+              "api-reference/wayfair/get_wayfair_search",
+              "api-reference/wayfair/get_wayfair_product",
+              "api-reference/wayfair/get_wayfair_reviews"
+            ]
+          },
+          {
+            "group": "snapchat",
+            "pages": [
+              "api-reference/snapchat/get_snapchat_profile",
+              "api-reference/snapchat/get_snapchat_spotlight_comments"
+            ]
+          },
+          {
+            "group": "ebay",
+            "pages": [
+              "api-reference/ebay/get_ebay_search",
+              "api-reference/ebay/get_ebay_product"
+            ]
+          },
+          {
+            "group": "kick",
+            "pages": [
+              "api-reference/kick/get_kick_clip"
+            ]
+          },
+          {
+            "group": "perplexity",
+            "pages": [
+              "api-reference/perplexity/get_perplexity_research"
+            ]
+          },
+          {
+            "group": "google news",
+            "pages": [
+              "api-reference/google_news/get_google_news_search"
+            ]
+          },
+          {
+            "group": "linktree",
+            "pages": [
+              "api-reference/linktree/get_linktree_page"
+            ]
+          },
+          {
+            "group": "linkbio",
+            "pages": [
+              "api-reference/linkbio/get_linkbio_page"
+            ]
+          },
+          {
+            "group": "linkme",
+            "pages": [
+              "api-reference/linkme/get_linkme_page"
+            ]
+          },
+          {
+            "group": "komi",
+            "pages": [
+              "api-reference/komi/get_komi_page"
+            ]
+          },
+          {
+            "group": "pillar",
+            "pages": [
+              "api-reference/pillar/get_pillar_page"
+            ]
+          },
+          {
+            "group": "polymarket",
+            "pages": [
+              "api-reference/polymarket/get_polymarket_research"
+            ]
+          },
+          {
+            "group": "on page",
+            "pages": [
+              "api-reference/on_page/get_on_page_page"
+            ]
+          },
+          {
+            "group": "producthunt",
+            "pages": [
+              "api-reference/producthunt/get_producthunt_launches"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Platforms",
+        "href": "https://socialquery.dev/platforms"
+      },
+      {
+        "label": "Support",
+        "href": "https://socialquery.dev/contact"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get API key",
+      "href": "https://socialquery.dev/dashboard/api-keys"
+    }
+  },
+  "footer": {
+    "socials": {
+      "website": "https://socialquery.dev"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "canonical": "https://docs.socialquery.dev"
+    }
+  }
+}
