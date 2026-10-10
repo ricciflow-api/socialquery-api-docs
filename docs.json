@@ -1092,5 +1092,10 @@
     "metatags": {
       "canonical": "https://docs.socialquery.dev"
     }
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-5S2T8S57W2"
+    }
   }
 }
