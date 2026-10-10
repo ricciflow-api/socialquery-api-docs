@@ -77,7 +77,7 @@
         "icon": "code",
         "groups": [
           {
-            "group": "linkedin",
+            "group": "LinkedIn",
             "pages": [
               "api-reference/linkedin/get_linkedin_profile",
               "api-reference/linkedin/get_linkedin_company",
@@ -150,7 +150,7 @@
             ]
           },
           {
-            "group": "prism",
+            "group": "Prism",
             "pages": [
               "api-reference/prism/get_prism_lookup",
               "api-reference/prism/get_prism_comments",
@@ -201,7 +201,7 @@
             ]
           },
           {
-            "group": "instagram",
+            "group": "Instagram",
             "pages": [
               "api-reference/instagram/get_instagram_profile",
               "api-reference/instagram/get_instagram_profile_about",
@@ -244,7 +244,7 @@
             ]
           },
           {
-            "group": "tiktok",
+            "group": "TikTok",
             "pages": [
               "api-reference/tiktok/get_tiktok_profile",
               "api-reference/tiktok/get_tiktok_profile_videos",
@@ -286,7 +286,7 @@
             ]
           },
           {
-            "group": "youtube",
+            "group": "YouTube",
             "pages": [
               "api-reference/youtube/get_youtube_channel",
               "api-reference/youtube/get_youtube_channel_about",
@@ -320,7 +320,7 @@
             ]
           },
           {
-            "group": "facebook",
+            "group": "Facebook",
             "pages": [
               "api-reference/facebook/get_facebook_profile",
               "api-reference/facebook/get_facebook_profile_posts",
@@ -354,7 +354,7 @@
             ]
           },
           {
-            "group": "web",
+            "group": "Web",
             "pages": [
               "api-reference/web/get_web_scrape",
               "api-reference/web/get_web_search",
@@ -381,7 +381,7 @@
             ]
           },
           {
-            "group": "us congress trades",
+            "group": "Us Congress Trades",
             "pages": [
               "api-reference/us_congress_trades/get_us_congress_trades_trades",
               "api-reference/us_congress_trades/get_us_congress_trades_trades_latest",
@@ -405,7 +405,7 @@
             ]
           },
           {
-            "group": "klarna",
+            "group": "Klarna",
             "pages": [
               "api-reference/klarna/get_klarna_product",
               "api-reference/klarna/get_klarna_product_offers",
@@ -428,7 +428,7 @@
             ]
           },
           {
-            "group": "tripadvisor",
+            "group": "Tripadvisor",
             "pages": [
               "api-reference/tripadvisor/get_tripadvisor_search",
               "api-reference/tripadvisor/get_tripadvisor_reviews",
@@ -449,7 +449,7 @@
             ]
           },
           {
-            "group": "twitter",
+            "group": "X (Twitter)",
             "pages": [
               "api-reference/twitter/get_twitter_profile",
               "api-reference/twitter/get_twitter_user_tweets",
@@ -469,7 +469,7 @@
             ]
           },
           {
-            "group": "reddit",
+            "group": "Reddit",
             "pages": [
               "api-reference/reddit/get_reddit_subreddit",
               "api-reference/reddit/get_reddit_subreddit_details",
@@ -488,7 +488,7 @@
             ]
           },
           {
-            "group": "naver",
+            "group": "Naver",
             "pages": [
               "api-reference/naver/get_naver_blog_search",
               "api-reference/naver/get_naver_news_search",
@@ -507,7 +507,7 @@
             ]
           },
           {
-            "group": "utility",
+            "group": "Utility",
             "pages": [
               "api-reference/utility/get_utility_endpoints",
               "api-reference/utility/get_utility_endpoint",
@@ -524,7 +524,7 @@
             ]
           },
           {
-            "group": "github",
+            "group": "GitHub",
             "pages": [
               "api-reference/github/get_github_profile",
               "api-reference/github/get_github_repo",
@@ -541,7 +541,7 @@
             ]
           },
           {
-            "group": "google",
+            "group": "Google",
             "pages": [
               "api-reference/google/get_google_search",
               "api-reference/google/get_google_ad",
@@ -557,7 +557,7 @@
             ]
           },
           {
-            "group": "sephora",
+            "group": "Sephora",
             "pages": [
               "api-reference/sephora/get_sephora_product",
               "api-reference/sephora/get_sephora_reviews",
@@ -573,7 +573,7 @@
             ]
           },
           {
-            "group": "gumtree",
+            "group": "Gumtree",
             "pages": [
               "api-reference/gumtree/get_gumtree_search",
               "api-reference/gumtree/get_gumtree_product",
@@ -589,7 +589,7 @@
             ]
           },
           {
-            "group": "jobs",
+            "group": "Jobs",
             "pages": [
               "api-reference/jobs/get_jobs_linkedin_search",
               "api-reference/jobs/get_jobs_linkedin",
@@ -605,7 +605,7 @@
             ]
           },
           {
-            "group": "content analysis",
+            "group": "Content Analysis",
             "pages": [
               "api-reference/content_analysis/get_content_analysis_search",
               "api-reference/content_analysis/get_content_analysis_summary",
@@ -620,7 +620,7 @@
             ]
           },
           {
-            "group": "google play",
+            "group": "Google Play",
             "pages": [
               "api-reference/google_play/get_google_play_app_search",
               "api-reference/google_play/get_google_play_search_suggestions",
@@ -634,7 +634,7 @@
             ]
           },
           {
-            "group": "app store",
+            "group": "App Store",
             "pages": [
               "api-reference/app_store/get_app_store_app_search",
               "api-reference/app_store/get_app_store_search_suggestions",
@@ -648,7 +648,7 @@
             ]
           },
           {
-            "group": "aliexpress",
+            "group": "Aliexpress",
             "pages": [
               "api-reference/aliexpress/get_aliexpress_product",
               "api-reference/aliexpress/get_aliexpress_search",
@@ -662,7 +662,7 @@
             ]
           },
           {
-            "group": "amazon",
+            "group": "Amazon",
             "pages": [
               "api-reference/amazon/get_amazon_shop",
               "api-reference/amazon/get_amazon_product_search",
@@ -675,7 +675,7 @@
             ]
           },
           {
-            "group": "finance",
+            "group": "Finance",
             "pages": [
               "api-reference/finance/get_finance_quote",
               "api-reference/finance/get_finance_ticker_search",
@@ -688,7 +688,7 @@
             ]
           },
           {
-            "group": "douyin",
+            "group": "Douyin",
             "pages": [
               "api-reference/douyin/get_douyin_search",
               "api-reference/douyin/get_douyin_profile",
@@ -701,7 +701,7 @@
             ]
           },
           {
-            "group": "g2",
+            "group": "G2",
             "pages": [
               "api-reference/g2/get_g2_product",
               "api-reference/g2/get_g2_reviews",
@@ -713,7 +713,7 @@
             ]
           },
           {
-            "group": "quora",
+            "group": "Quora",
             "pages": [
               "api-reference/quora/get_quora_search",
               "api-reference/quora/get_quora_post",
@@ -725,7 +725,7 @@
             ]
           },
           {
-            "group": "threads",
+            "group": "Threads",
             "pages": [
               "api-reference/threads/get_threads_profile",
               "api-reference/threads/get_threads_user_posts",
@@ -736,7 +736,7 @@
             ]
           },
           {
-            "group": "pinterest",
+            "group": "Pinterest",
             "pages": [
               "api-reference/pinterest/get_pinterest_search",
               "api-reference/pinterest/get_pinterest_pin",
@@ -747,7 +747,7 @@
             ]
           },
           {
-            "group": "tiktokshop",
+            "group": "TikTok Shop",
             "pages": [
               "api-reference/tiktokshop/get_tiktokshop_product",
               "api-reference/tiktokshop/get_tiktokshop_product_reviews",
@@ -758,7 +758,7 @@
             ]
           },
           {
-            "group": "hm",
+            "group": "Hm",
             "pages": [
               "api-reference/hm/get_hm_search",
               "api-reference/hm/get_hm_search_suggestions",
@@ -769,7 +769,7 @@
             ]
           },
           {
-            "group": "spotify",
+            "group": "Spotify",
             "pages": [
               "api-reference/spotify/get_spotify_artist",
               "api-reference/spotify/get_spotify_track",
@@ -780,7 +780,7 @@
             ]
           },
           {
-            "group": "xiaohongshu",
+            "group": "Xiaohongshu",
             "pages": [
               "api-reference/xiaohongshu/get_xiaohongshu_search",
               "api-reference/xiaohongshu/get_xiaohongshu_trending",
@@ -791,7 +791,7 @@
             ]
           },
           {
-            "group": "google shopping",
+            "group": "Google Shopping",
             "pages": [
               "api-reference/google_shopping/get_google_shopping_product_search",
               "api-reference/google_shopping/get_google_shopping_product",
@@ -801,7 +801,7 @@
             ]
           },
           {
-            "group": "walmart",
+            "group": "Walmart",
             "pages": [
               "api-reference/walmart/get_walmart_product",
               "api-reference/walmart/get_walmart_reviews",
@@ -811,7 +811,7 @@
             ]
           },
           {
-            "group": "target",
+            "group": "Target",
             "pages": [
               "api-reference/target/get_target_product",
               "api-reference/target/get_target_reviews",
@@ -821,7 +821,7 @@
             ]
           },
           {
-            "group": "kohls",
+            "group": "Kohls",
             "pages": [
               "api-reference/kohls/get_kohls_search",
               "api-reference/kohls/get_kohls_reviews",
@@ -831,7 +831,7 @@
             ]
           },
           {
-            "group": "yelp",
+            "group": "Yelp",
             "pages": [
               "api-reference/yelp/get_yelp_business_info",
               "api-reference/yelp/get_yelp_business_reviews",
@@ -841,7 +841,7 @@
             ]
           },
           {
-            "group": "rumble",
+            "group": "Rumble",
             "pages": [
               "api-reference/rumble/get_rumble_search",
               "api-reference/rumble/get_rumble_channel_videos",
@@ -851,7 +851,7 @@
             ]
           },
           {
-            "group": "apple music",
+            "group": "Apple Music",
             "pages": [
               "api-reference/apple_music/get_apple_music_search",
               "api-reference/apple_music/get_apple_music_artist",
@@ -861,7 +861,7 @@
             ]
           },
           {
-            "group": "search",
+            "group": "Search",
             "pages": [
               "api-reference/search/get_search_everywhere",
               "api-reference/search/get_search_forums",
@@ -871,7 +871,7 @@
             ]
           },
           {
-            "group": "economy",
+            "group": "Economy",
             "pages": [
               "api-reference/economy/get_economy_consumer_spend",
               "api-reference/economy/get_economy_tourism_spend",
@@ -881,7 +881,7 @@
             ]
           },
           {
-            "group": "twitch",
+            "group": "Twitch",
             "pages": [
               "api-reference/twitch/get_twitch_profile",
               "api-reference/twitch/get_twitch_clip",
@@ -890,7 +890,7 @@
             ]
           },
           {
-            "group": "home depot",
+            "group": "Home Depot",
             "pages": [
               "api-reference/home_depot/get_home_depot_product",
               "api-reference/home_depot/get_home_depot_reviews",
@@ -899,7 +899,7 @@
             ]
           },
           {
-            "group": "etsy",
+            "group": "Etsy",
             "pages": [
               "api-reference/etsy/get_etsy_product",
               "api-reference/etsy/get_etsy_shop_products",
@@ -908,7 +908,7 @@
             ]
           },
           {
-            "group": "hackernews",
+            "group": "Hacker News",
             "pages": [
               "api-reference/hackernews/get_hackernews_search",
               "api-reference/hackernews/get_hackernews_story",
@@ -917,7 +917,7 @@
             ]
           },
           {
-            "group": "tavily",
+            "group": "Tavily",
             "pages": [
               "api-reference/tavily/get_tavily_search",
               "api-reference/tavily/get_tavily_extract",
@@ -926,7 +926,7 @@
             ]
           },
           {
-            "group": "bluesky",
+            "group": "Bluesky",
             "pages": [
               "api-reference/bluesky/get_bluesky_profile",
               "api-reference/bluesky/get_bluesky_user_posts",
@@ -935,7 +935,7 @@
             ]
           },
           {
-            "group": "truthsocial",
+            "group": "Truthsocial",
             "pages": [
               "api-reference/truthsocial/get_truthsocial_profile",
               "api-reference/truthsocial/get_truthsocial_user_posts",
@@ -943,7 +943,7 @@
             ]
           },
           {
-            "group": "telegram",
+            "group": "Telegram",
             "pages": [
               "api-reference/telegram/get_telegram_profile",
               "api-reference/telegram/get_telegram_profile_posts",
@@ -951,7 +951,7 @@
             ]
           },
           {
-            "group": "kwai",
+            "group": "Kwai",
             "pages": [
               "api-reference/kwai/get_kwai_profile",
               "api-reference/kwai/get_kwai_user_posts",
@@ -959,7 +959,7 @@
             ]
           },
           {
-            "group": "google trends",
+            "group": "Google Trends",
             "pages": [
               "api-reference/google_trends/get_google_trends_explore",
               "api-reference/google_trends/get_google_trends_rising",
@@ -967,7 +967,7 @@
             ]
           },
           {
-            "group": "trustpilot",
+            "group": "Trustpilot",
             "pages": [
               "api-reference/trustpilot/get_trustpilot_business_search",
               "api-reference/trustpilot/get_trustpilot_reviews",
@@ -975,7 +975,7 @@
             ]
           },
           {
-            "group": "wayfair",
+            "group": "Wayfair",
             "pages": [
               "api-reference/wayfair/get_wayfair_search",
               "api-reference/wayfair/get_wayfair_product",
@@ -983,81 +983,81 @@
             ]
           },
           {
-            "group": "snapchat",
+            "group": "Snapchat",
             "pages": [
               "api-reference/snapchat/get_snapchat_profile",
               "api-reference/snapchat/get_snapchat_spotlight_comments"
             ]
           },
           {
-            "group": "ebay",
+            "group": "eBay",
             "pages": [
               "api-reference/ebay/get_ebay_search",
               "api-reference/ebay/get_ebay_product"
             ]
           },
           {
-            "group": "kick",
+            "group": "Kick",
             "pages": [
               "api-reference/kick/get_kick_clip"
             ]
           },
           {
-            "group": "perplexity",
+            "group": "Perplexity",
             "pages": [
               "api-reference/perplexity/get_perplexity_research"
             ]
           },
           {
-            "group": "google news",
+            "group": "Google News",
             "pages": [
               "api-reference/google_news/get_google_news_search"
             ]
           },
           {
-            "group": "linktree",
+            "group": "Linktree",
             "pages": [
               "api-reference/linktree/get_linktree_page"
             ]
           },
           {
-            "group": "linkbio",
+            "group": "Linkbio",
             "pages": [
               "api-reference/linkbio/get_linkbio_page"
             ]
           },
           {
-            "group": "linkme",
+            "group": "Linkme",
             "pages": [
               "api-reference/linkme/get_linkme_page"
             ]
           },
           {
-            "group": "komi",
+            "group": "Komi",
             "pages": [
               "api-reference/komi/get_komi_page"
             ]
           },
           {
-            "group": "pillar",
+            "group": "Pillar",
             "pages": [
               "api-reference/pillar/get_pillar_page"
             ]
           },
           {
-            "group": "polymarket",
+            "group": "Polymarket",
             "pages": [
               "api-reference/polymarket/get_polymarket_research"
             ]
           },
           {
-            "group": "on page",
+            "group": "On Page",
             "pages": [
               "api-reference/on_page/get_on_page_page"
             ]
           },
           {
-            "group": "producthunt",
+            "group": "Product Hunt",
             "pages": [
               "api-reference/producthunt/get_producthunt_launches"
             ]
