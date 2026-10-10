@@ -1,0 +1,5 @@
+{
+  "name": "socialquery-api-docs",
+  "private": true,
+  "scripts": {"test": "node scripts/validate.mjs"}
+}

@@ -67,7 +67,8 @@
             "group": "Guides",
             "pages": [
               "guides/providers",
-              "guides/agents"
+              "guides/agents",
+              "guides/public-repositories"
             ]
           }
         ]
