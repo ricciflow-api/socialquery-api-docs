@@ -5,6 +5,10 @@ description: Understand the beta catalog and provider activation.
 
 The 68-platform catalog describes our compatibility target. Each operation has its own provider route. A route becomes usable only when an implementation, credentials, quota, and upstream access are available.
 
-The initial provider set is ScrapeCreators, DataForSEO, and TwitterAPI.io, alongside implemented public APIs. Free trials have finite credits; exhausted upstream credits do not guarantee continuing service. Fallbacks run only where an operation has a compatible adapter and configured credentials.
+Verified initial routes include official YouTube metadata, keyless GitHub and Bluesky profiles, Hacker News search, and DataForSEO Google organic search. Verification applies to these representative operations, not every operation on their platforms.
+
+ScrapeCreators activation is pending. TwitterAPI.io currently needs upstream credits. Free trials have finite credits; exhausted upstream credits do not guarantee continuing service. Fallbacks run only where an operation has a compatible adapter and configured credentials.
+
+The official YouTube adapter supports channel metadata, uploads, channel playlists, playlist details and items, video metadata and thumbnails, batch channels/videos, trending videos, comments, and search. Use the returned cursor on the same route. YouTube-specific extras such as transcripts, Shorts-only filtering, contact emails, and AI labels require other providers and are not supplied by the official adapter.
 
 An unavailable operation returns `503`. We do not substitute an unrelated web search or synthetic example for a live result. Response field normalization is still being verified for beta routes. Build against the actual endpoint response and retain source identifiers.
