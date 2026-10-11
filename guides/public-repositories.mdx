@@ -1,17 +1,17 @@
 ---
 title: Public repositories
-description: Open-source MCP, agent skills, API examples, and documentation for SocialQuery.
+description: Find the source and setup instructions for SocialQuery’s public developer tools.
 ---
 
-SocialQuery maintains four public integration repositories under [ricciflow-api](https://github.com/ricciflow-api):
+The public integration code is organized into four repositories under [ricciflow-api](https://github.com/ricciflow-api):
 
 | Repository | What it contains |
 | --- | --- |
-| [socialquery-api-docs](https://github.com/ricciflow-api/socialquery-api-docs) | This Mintlify documentation site and public OpenAPI contract |
-| [socialquery-api-examples](https://github.com/ricciflow-api/socialquery-api-examples) | Runnable Node.js, Python, and curl examples with tests |
-| [socialquery-agent-skills](https://github.com/ricciflow-api/socialquery-agent-skills) | Installable `socialquery-data` skill and Python helper |
-| [socialquery-mcp](https://github.com/ricciflow-api/socialquery-mcp) | Hosted HTTP and local stdio MCP server, connection configs, and protocol tests |
+| [socialquery-api-docs](https://github.com/ricciflow-api/socialquery-api-docs) | Documentation source and the public request specification |
+| [socialquery-api-examples](https://github.com/ricciflow-api/socialquery-api-examples) | Tested request examples for Node.js, Python, and curl |
+| [socialquery-agent-skills](https://github.com/ricciflow-api/socialquery-agent-skills) | The `socialquery-data` instruction package and its Python helper |
+| [socialquery-mcp](https://github.com/ricciflow-api/socialquery-mcp) | MCP transports, client configurations, and protocol verification |
 
-The MCP, skill, and examples repositories are MIT licensed. They call the hosted SocialQuery API; provider credentials and the main API implementation are not part of these packages. Data requests use your normal SocialQuery credit balance.
+The MCP, skill, and example packages use the MIT license and connect to the hosted API. They do not distribute the main service implementation or its source-provider credentials. Calls are accounted against the requesting user’s SocialQuery balance.
 
-Start with [the quickstart](/quickstart) for direct API calls or [the agent guide](/guides/agents) for MCP and skill installation. Public catalog membership does not guarantee that a provider is live; see [availability](/concepts/availability).
+Choose [the quickstart](/quickstart) for an HTTP integration or [agent setup](/guides/agents) for a tool client. Before relying on an operation, review [availability](/concepts/availability) and verify the required call.

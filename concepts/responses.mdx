@@ -1,10 +1,10 @@
 ---
 title: Responses and pagination
-description: Read the shared envelope and endpoint-specific data.
+description: Handle the request wrapper, then parse the selected resource.
 ---
 
-Responses include `success`, `platform`, `endpoint`, `data`, and credit metadata. The HTTP status and error code indicate whether the operation succeeded.
+Start with the HTTP outcome and `success`. Responses identify the `platform` and `endpoint` and include usage metadata. Successful calls supply `data`; unsuccessful calls supply an `error` object.
 
-`data` is operation-specific. Lists may include `items`, `total`, and `next_cursor`; detail operations return a profile, post, or result object. `total` can be the number returned in this page, not the platform's complete result count. Missing upstream fields may be null or absent.
+Interpret `data` using the selected operation’s contract. A list can expose `items`, `total`, or `next_cursor`, while a detail call returns its resource object. A `total` may count only the current page. Preserve absent or null fields instead of assuming they describe zero-valued metrics.
 
-Pass a returned pagination cursor only to the same endpoint with the same search parameters. Never reuse cursors across providers or assume a cursor is a page number. Cursor behavior remains provider-specific during beta.
+Continue paging with the original endpoint and query inputs. Treat the returned cursor as an opaque continuation value, not a page number or a token transferable to another source. Paging behavior remains specific to the operation during preview.

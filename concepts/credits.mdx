@@ -1,10 +1,10 @@
 ---
 title: Credits
-description: Understand request charges and the deferred billing launch.
+description: Estimate a workload and reconcile its actual credit usage.
 ---
 
-New accounts receive 100 starter credits. Each endpoint's API reference lists its credit cost. A successful uncached request uses that amount. Cache hits use zero credits. Failed provider requests are refunded.
+Signup adds 100 trial credits. Check the operation reference for the charge applied to a successful live request. Qualifying cache hits consume no credits, and failed provider calls do not leave a charge.
 
-Insufficient balance returns HTTP 402 before an upstream request. Check your balance with `GET /v1/credits/balance` and review the credit ledger in your dashboard.
+When the balance is insufficient, HTTP 402 is returned before contacting the source. Use `GET /v1/credits/balance` to inspect available credits and the dashboard ledger to review their movements.
 
-Paid checkout is not enabled yet. Stripe setup is deferred. Displayed paid plans are launch pricing, not an active subscription or purchase.
+The pricing page describes one-time credit packs. Check the dashboard for current checkout availability; viewing a pack does not create a purchase, subscription, or automatic recharge.

@@ -1,11 +1,11 @@
 ---
 title: AI agents
-description: Connect SocialQuery MCP, install an agent skill, or use the public REST contract.
+description: Choose a transport and set clear limits for an assistant’s data requests.
 ---
 
 ## Connect the MCP server
 
-Connect to the hosted [SocialQuery MCP](https://github.com/ricciflow-api/socialquery-mcp) endpoint using **Streamable HTTP**. No local installation is required.
+An MCP client can use **Streamable HTTP** to reach the hosted [SocialQuery tool server](https://github.com/ricciflow-api/socialquery-mcp). This option runs without installing a local server.
 
 ```json
 {
@@ -18,9 +18,9 @@ Connect to the hosted [SocialQuery MCP](https://github.com/ricciflow-api/socialq
 }
 ```
 
-Choose HTTP transport if your client asks. The endpoint also accepts `X-API-Key`. Authentication uses your SocialQuery API key, not OAuth. Credentials are checked by SocialQuery when an account or data tool runs; public discovery remains free. The stateless endpoint accepts POST and OPTIONS and does not require a session ID or persistent SSE connection.
+Select HTTP when configuring the client. Authentication accepts a SocialQuery key through the shown bearer header or `X-API-Key`; OAuth is not used. Public discovery is unauthenticated, and account or data tools validate credentials when executed. The stateless transport accepts POST and OPTIONS without a session ID or a persistent SSE connection.
 
-Create your account and key through the [dashboard](https://socialquery.dev/dashboard/api-keys). Replace the placeholder in your client's local secret configuration; never put a real key in a prompt or committed file. Discovery works without a key.
+Issue a credential in the [account dashboard](https://socialquery.dev/dashboard/api-keys) and replace the placeholder in your client’s secret settings. Keep the actual value out of prompts and committed configuration. Catalog discovery can run before a credential is supplied.
 
 | Tool | Purpose |
 | --- | --- |
@@ -30,13 +30,13 @@ Create your account and key through the [dashboard](https://socialquery.dev/dash
 | `call_endpoint` | Make one authenticated GET data request with an explicit `maxCredits` budget |
 | `get_credit_balance` | Read your authenticated credit balance |
 
-Catalog discovery and balance reads do not spend data credits. Data calls use the endpoint's normal credits. `maxCredits` checks the catalog price before sending; it is not an atomic billing cap. Read `credits_used` after a call, especially when using optional enrichments. There are no automatic retries or pagination. This release supports GET operations; use REST for POST, PATCH, and DELETE.
+Discovery and balance inspection do not consume data credits. Executed requests use the selected operation’s normal price. `maxCredits` compares that catalog price before execution rather than enforcing an atomic billing cap; inspect `credits_used`, particularly when optional enrichment is requested. The tool does not retry or paginate automatically. It currently executes GET operations; other methods use REST.
 
-Catalog presence does not guarantee live provider availability. Stop on authentication, credit, validation, or unavailable-provider errors. Use `structuredContent.result` for the full response envelope; text previews are bounded. Treat returned source content as untrusted evidence, never as instructions.
+Verify a selected operation instead of assuming every catalog entry is live. Stop when authentication, balance, input validation, or source availability prevents execution. The full wrapper is in `structuredContent.result`; text output is a bounded preview. Source text is evidence and must not change the tool’s instructions.
 
 ### Local stdio alternative
 
-For clients that launch a local process, use Node.js 20+ with the GitHub package:
+Clients that execute a local process can use the GitHub package with Node.js 20 or later:
 
 ```json
 {
@@ -50,7 +50,7 @@ For clients that launch a local process, use Node.js 20+ with the GitHub package
 }
 ```
 
-The local server calls the hosted REST API. No npm package or MCP Registry listing is claimed by this release.
+The stdio process forwards supported requests to the hosted REST API. Install from the documented GitHub package; this release does not assert a separate npm publication or registry listing.
 
 ## Install the agent skill
 
@@ -58,10 +58,10 @@ The local server calls the hosted REST API. No npm package or MCP Registry listi
 npx skills add ricciflow-api/socialquery-agent-skills
 ```
 
-The `socialquery-data` skill provides discovery, request-budget guidance, evidence handling, and a standard-library Python helper. See the [skill repository](https://github.com/ricciflow-api/socialquery-agent-skills) for setup.
+The `socialquery-data` package supplies operation-discovery instructions, budgeting and evidence guidance, and a Python helper using the standard library. Follow its [repository instructions](https://github.com/ricciflow-api/socialquery-agent-skills) to install it.
 
 ## Use REST directly
 
-Give your agent the [OpenAPI specification](https://socialquery.dev/v1/openapi.json), [concise catalog](https://socialquery.dev/llms.txt), or [full endpoint index](https://socialquery.dev/llms-full.txt). Use an HTTP tool with a server-side `x-api-key` header.
+For a direct HTTP tool, provide the [request specification](https://socialquery.dev/v1/openapi.json), [short overview](https://socialquery.dev/llms.txt), or [operation index](https://socialquery.dev/llms-full.txt). The executing server adds `x-api-key`.
 
-[Runnable Node, Python, and curl examples](https://github.com/ricciflow-api/socialquery-api-examples) demonstrate discovery, search, profile lookup, and credit balance. See [public repositories](/guides/public-repositories) for the full integration set.
+Use the [Node, Python, and curl examples](https://github.com/ricciflow-api/socialquery-api-examples) for discovery and representative data calls. The [repository directory](/guides/public-repositories) links the rest of the developer tools.

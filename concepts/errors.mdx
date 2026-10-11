@@ -1,6 +1,6 @@
 ---
 title: Errors and limits
-description: Handle failures without treating them as empty data.
+description: Keep unsuccessful requests distinct from successful empty collections.
 ---
 
 | HTTP status | Meaning | Action |
@@ -15,4 +15,4 @@ description: Handle failures without treating them as empty data.
 | 429 | Request limit reached | Wait before retrying |
 | 503 | Provider or required service unavailable | Retry later or contact support |
 
-The default authenticated limit is 60 requests per minute per API key. Public website testing has separate per-visitor and global limits. Limits can be tighter upstream. Never treat a failed request as a successful empty collection.
+By default, authenticated traffic is limited to 60 requests per minute for each key. The browser tester has its own visitor and global limits, and source-side restrictions can be tighter. A failed collection must retain a failure status even when no records are returned.

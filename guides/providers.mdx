@@ -1,10 +1,10 @@
 ---
 title: Provider routing
-description: Operation-specific providers and fallbacks.
+description: Understand how a request reaches a supported source adapter.
 ---
 
-Provider routes are versioned TypeScript and JSON configuration deployed with the application. The admin dashboard displays route readiness and request metrics; it cannot edit credentials or provider routes.
+Routing definitions are versioned with the application in TypeScript and JSON. Administrators can inspect readiness and request metrics in the dashboard; route and credential editing is outside that view.
 
-A route lists its primary provider and compatible fallbacks in order. The server checks configuration before calling a provider and attempts a fallback on retryable failures. Validation failures are returned directly. Availability varies by operation, including within the same platform.
+An operation specifies a preferred provider followed by compatible alternatives. The server checks configuration and can try the next route after a retryable failure. Invalid input is returned directly to the caller. Requests for the same source may have different availability.
 
-Public API keys authenticate to SocialQuery only. You do not need to send upstream provider keys with requests.
+Your application authenticates to SocialQuery. Source-provider credentials are not part of the public request.

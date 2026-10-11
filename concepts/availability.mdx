@@ -1,14 +1,14 @@
 ---
 title: Endpoint availability
-description: Understand the beta catalog and provider activation.
+description: Distinguish a documented contract from a verified live request.
 ---
 
-The 68-platform catalog describes our compatibility target. Each operation has its own provider route. A route becomes usable only when an implementation, credentials, quota, and upstream access are available.
+The catalog is a set of documented contracts across 68 sources. Live use depends on the individual operation: its adapter, credentials, available quota, and source access must all be ready.
 
-Verified initial routes include official YouTube metadata, keyless GitHub and Bluesky profiles, Hacker News search, and DataForSEO Google organic search. Verification applies to these representative operations, not every operation on their platforms.
+Initial verification covered representative requests for YouTube metadata, GitHub and Bluesky profiles, Hacker News search, and Google organic search through DataForSEO. That evidence applies to the tested operations, not every request listed under each source.
 
-ScrapeCreators activation is pending. TwitterAPI.io currently needs upstream credits. Free trials have finite credits; exhausted upstream credits do not guarantee continuing service. Fallbacks run only where an operation has a compatible adapter and configured credentials.
+Readiness can change when a source credential, balance, or quota changes. A fallback is possible only where the operation has a compatible configured adapter. Verify current behavior with the request you intend to use rather than relying on a past activation note.
 
-The official YouTube adapter supports channel metadata, uploads, channel playlists, playlist details and items, video metadata and thumbnails, batch channels/videos, trending videos, comments, and search. Use the returned cursor on the same route. YouTube-specific extras such as transcripts, Shorts-only filtering, contact emails, and AI labels require other providers and are not supplied by the official adapter.
+YouTube’s official adapter covers channel and video metadata, uploads, playlists and their items, thumbnails, batch lookups, trending videos, comments, and search. A returned cursor belongs to the same request route. Transcripts, Shorts-only filters, contact-email lookups, and AI labels are outside that adapter’s output and require a different supported route.
 
-An unavailable operation returns `503`. We do not substitute an unrelated web search or synthetic example for a live result. Response field normalization is still being verified for beta routes. Build against the actual endpoint response and retain source identifiers.
+An operation that cannot run responds with `503`; it does not return an unrelated search or an invented record. During preview, inspect the actual payload and preserve source identifiers when implementing field handling.

@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "SocialQuery",
   "theme": "almond",
-  "description": "Public social data with one API key and a shared response envelope.",
+  "description": "Inspect public-source requests and build an integration with clear inputs and usage.",
   "colors": {
     "primary": "#447B39",
     "light": "#8AB54C",
@@ -15,6 +15,11 @@
     "color": {
       "light": "#FCFDF8",
       "dark": "#102D1C"
+    }
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-5S2T8S57W2"
     }
   },
   "logo": {
@@ -1092,11 +1097,6 @@
   "seo": {
     "metatags": {
       "canonical": "https://docs.socialquery.dev"
-    }
-  },
-  "integrations": {
-    "ga4": {
-      "measurementId": "G-5S2T8S57W2"
     }
   }
 }
