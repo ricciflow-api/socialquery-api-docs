@@ -2997,7 +2997,7 @@
       "post": {
         "operationId": "post_web_parse",
         "summary": "Web Parse",
-        "description": "Submit the documented input body for Web Parse. Inspect the required fields and stated credit amount before sending a request. Check current availability with a bounded test.",
+        "description": "Parse an uploaded document into data.page using Firecrawl. Accepts multipart file uploads or JSON with a standard base64 file value. Maximum decoded file size: 2 MiB. PDF parsing is bounded to 10 pages; page_count, total_page_count, truncated and warnings disclose partial coverage. The optional url is source attribution only and is never fetched. Preview operation; supported formats and upstream availability can vary.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -3075,16 +3075,47 @@
                 ],
                 "properties": {
                   "file": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "byte",
+                    "maxLength": 2796204,
+                    "description": "Standard padded base64 for a nonempty document up to 2 MiB. Use multipart form-data for binary upload."
                   },
                   "filename": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Document filename with a supported extension; no directory path. Required unless mime_type identifies the format."
                   },
                   "mime_type": {
                     "type": "string"
                   },
                   "url": {
+                    "type": "string",
+                    "description": "Optional source attribution only; this endpoint does not fetch URLs."
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Nonempty PDF, Office, ODT, HTML, CSV, RTF or EPUB document up to 2 MiB."
+                  },
+                  "filename": {
+                    "type": "string",
+                    "description": "Document filename with a supported extension; no directory path. Required unless mime_type identifies the format."
+                  },
+                  "mime_type": {
                     "type": "string"
+                  },
+                  "url": {
+                    "type": "string",
+                    "description": "Optional source attribution only; this endpoint does not fetch URLs."
                   }
                 }
               }
@@ -59755,7 +59786,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "美食",
+            "example": "\u7f8e\u98df",
             "schema": {
               "type": "string"
             }
@@ -60491,7 +60522,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "美食",
+            "example": "\u7f8e\u98df",
             "schema": {
               "type": "string"
             }
@@ -62799,7 +62830,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "소셜크롤",
+            "example": "\uc18c\uc15c\ud06c\ub864",
             "schema": {
               "type": "string"
             }
@@ -63075,7 +63106,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "삼성전자",
+            "example": "\uc0bc\uc131\uc804\uc790",
             "schema": {
               "type": "string"
             }
@@ -63351,7 +63382,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "양자역학",
+            "example": "\uc591\uc790\uc5ed\ud559",
             "schema": {
               "type": "string"
             }
@@ -63478,7 +63509,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "주식",
+            "example": "\uc8fc\uc2dd",
             "schema": {
               "type": "string"
             }
@@ -63754,7 +63785,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "코로나 증상",
+            "example": "\ucf54\ub85c\ub098 \uc99d\uc0c1",
             "schema": {
               "type": "string"
             }
@@ -63897,7 +63928,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "강남역 카페",
+            "example": "\uac15\ub0a8\uc5ed \uce74\ud398",
             "schema": {
               "type": "string"
             }
@@ -64003,7 +64034,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "한라산",
+            "example": "\ud55c\ub77c\uc0b0",
             "schema": {
               "type": "string"
             }
@@ -64164,7 +64195,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "기후변화",
+            "example": "\uae30\ud6c4\ubcc0\ud654",
             "schema": {
               "type": "string"
             }
@@ -64291,7 +64322,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "네이볘",
+            "example": "\ub124\uc774\ubcd8",
             "schema": {
               "type": "string"
             }
@@ -64376,7 +64407,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "성인영화",
+            "example": "\uc131\uc778\uc601\ud654",
             "schema": {
               "type": "string"
             }
@@ -64461,7 +64492,7 @@
             "name": "keywords",
             "in": "query",
             "required": false,
-            "example": "삼성전자,갤럭시",
+            "example": "\uc0bc\uc131\uc804\uc790,\uac24\ub7ed\uc2dc",
             "schema": {
               "type": "string"
             }
@@ -64799,7 +64830,7 @@
             "name": "keyword",
             "in": "query",
             "required": true,
-            "example": "코트",
+            "example": "\ucf54\ud2b8",
             "schema": {
               "type": "string"
             }
@@ -74836,7 +74867,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "삼성전자",
+            "example": "\uc0bc\uc131\uc804\uc790",
             "schema": {
               "type": "string"
             }
@@ -80610,7 +80641,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "护肤",
+            "example": "\u62a4\u80a4",
             "schema": {
               "type": "string"
             }

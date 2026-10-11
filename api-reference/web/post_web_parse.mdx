@@ -3,4 +3,15 @@ title: "Web Parse"
 openapi: "POST /web/parse"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Upload a document as multipart form-data, or pass standard base64 in the JSON `file` field. Include a filename or MIME type identifying its format.
+
+The current adapter accepts files up to **2 MiB** and parses up to **10 PDF pages**. Inspect `data.page.page_count`, `total_page_count`, `truncated`, and any `_warnings` before treating a document as complete. Unknown page counts remain null. Use `/web/scrape` for a document hosted at a URL; the optional `url` here records source attribution only.
+
+```bash
+curl https://socialquery.dev/v1/web/parse \
+  -H "x-api-key: $SOCIALQUERY_API_KEY" \
+  -H "Idempotency-Key: parse-document-001" \
+  -F "file=@report.pdf"
+```
+
+<Note>Preview coverage uses Firecrawl. Successful calls cost the catalog base price; failed calls refund that charge. Provider availability and the stated file/page limits apply.</Note>
