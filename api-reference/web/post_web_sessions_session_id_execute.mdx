@@ -1,6 +1,6 @@
 ---
-title: "Web Sessions {Session Id} Execute"
+title: "Execute browser code"
 openapi: "POST /web/sessions/{session_id}/execute"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1–30 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.

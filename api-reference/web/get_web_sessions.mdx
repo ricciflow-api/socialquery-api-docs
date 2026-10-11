@@ -1,6 +1,6 @@
 ---
-title: "Web Sessions"
+title: "List your browser sessions"
 openapi: "GET /web/sessions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+List up to 100 browser sessions created with the current API key, newest first. Other API keys cannot list or inspect these sessions. Metadata expires after 24 hours. Closed or expired sessions omit connection URLs. The truncated flag indicates that more records exist; pagination beyond the requested limit is not supported.

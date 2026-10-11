@@ -1825,8 +1825,8 @@
     "/web/agent": {
       "post": {
         "operationId": "post_web_agent",
-        "summary": "Web Agent",
-        "description": "Submit the documented input body for Web Agent. Inspect the required fields and stated credit amount before sending a request. Check current availability with a bounded test.",
+        "summary": "Run a bounded web agent",
+        "description": "Start an asynchronous agent task for one public URL. Send url and prompt, then poll GET /v1/web/jobs/{job_id}. The agent is restricted to the supplied URL, uses low effort, disables data exchange, and stops after 25 provider credits. Creation costs 25 SocialQuery credits; lifecycle reads are free. Results are populated only on completion; failed jobs may include explicitly incomplete partial data. Spark 1 model names are currently provider aliases for Spark 2; requested_model and the actual model are reported separately. Job metadata is retained for 24 hours and belongs to the authenticated account. Use an Idempotency-Key to avoid duplicate submissions.",
         "x-credit-cost": 25,
         "x-launch-status": "beta",
         "parameters": [
@@ -1905,19 +1905,24 @@
                 ],
                 "properties": {
                   "url": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uri"
                   },
                   "prompt": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 10000
                   },
                   "model": {
                     "type": "string",
                     "enum": [
                       "spark-1-mini",
                       "spark-1-pro"
-                    ]
+                    ],
+                    "default": "spark-1-mini"
                   }
-                }
+                },
+                "additionalProperties": false
               }
             }
           }
@@ -2528,8 +2533,8 @@
     "/web/sessions": {
       "post": {
         "operationId": "post_web_sessions",
-        "summary": "Web Sessions",
-        "description": "Submit the documented input body for Web Sessions. Inspect the required fields and stated credit amount before sending a request. Check current availability with a bounded test.",
+        "summary": "Create a browser session",
+        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30–60 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -2607,18 +2612,26 @@
                 ],
                 "properties": {
                   "url": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uri"
                   },
                   "ttl_seconds": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 30,
+                    "maximum": 60,
+                    "default": 60
                   },
                   "activity_ttl_seconds": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 10,
+                    "maximum": 60
                   },
                   "stream_web_view": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                   }
-                }
+                },
+                "additionalProperties": false
               }
             }
           }
@@ -2629,8 +2642,8 @@
       },
       "get": {
         "operationId": "get_web_sessions",
-        "summary": "Web Sessions",
-        "description": "Use Web Sessions to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "List your browser sessions",
+        "description": "List up to 100 browser sessions created with the current API key, newest first. Other API keys cannot list or inspect these sessions. Metadata expires after 24 hours. Closed or expired sessions omit connection URLs. The truncated flag indicates that more records exist; pagination beyond the requested limit is not supported.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2640,7 +2653,10 @@
             "required": false,
             "example": 20,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           },
           {
@@ -2714,8 +2730,8 @@
     "/web/sessions/{session_id}": {
       "get": {
         "operationId": "get_web_sessions_session_id",
-        "summary": "Web Sessions {Session Id}",
-        "description": "Use Web Sessions {Session Id} to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "Inspect a browser session",
+        "description": "Inspect a browser session created with the current API key. Unknown or differently owned IDs return 404. Closed or expired sessions omit connection URLs.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2723,7 +2739,7 @@
             "name": "session_id",
             "in": "path",
             "required": true,
-            "example": "ws_3g7x1v5m2",
+            "example": "ws_00000000-0000-4000-8000-000000000000",
             "schema": {
               "type": "string"
             }
@@ -2797,8 +2813,8 @@
       },
       "delete": {
         "operationId": "delete_web_sessions_session_id",
-        "summary": "Web Sessions {Session Id}",
-        "description": "Web Sessions {Session Id} uses a DELETE request. Confirm the target identifier and the documented effect before calling this operation. Availability must be verified during preview.",
+        "summary": "Close a browser session",
+        "description": "Close a browser session owned by the current API key. Closing an already closed or expired session succeeds without creating another provider request. Unknown or differently owned IDs return 404. No credits are charged.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2806,7 +2822,7 @@
             "name": "session_id",
             "in": "path",
             "required": true,
-            "example": "ws_3g7x1v5m2",
+            "example": "ws_00000000-0000-4000-8000-000000000000",
             "schema": {
               "type": "string"
             }
@@ -2882,8 +2898,8 @@
     "/web/sessions/{session_id}/execute": {
       "post": {
         "operationId": "post_web_sessions_session_id_execute",
-        "summary": "Web Sessions {Session Id} Execute",
-        "description": "Submit the documented input body for Web Sessions {Session Id} Execute. Inspect the required fields and stated credit amount before sending a request. Check current availability with a bounded test.",
+        "summary": "Execute browser code",
+        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1–30 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2891,7 +2907,7 @@
             "name": "session_id",
             "in": "path",
             "required": true,
-            "example": "ws_3g7x1v5m2",
+            "example": "ws_00000000-0000-4000-8000-000000000000",
             "schema": {
               "type": "string"
             }
@@ -2970,7 +2986,9 @@
                 ],
                 "properties": {
                   "code": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 16000
                   },
                   "language": {
                     "type": "string",
@@ -2978,12 +2996,17 @@
                       "node",
                       "python",
                       "bash"
-                    ]
+                    ],
+                    "default": "node"
                   },
                   "timeout": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 30,
+                    "default": 20
                   }
-                }
+                },
+                "additionalProperties": false
               }
             }
           }
@@ -59786,7 +59809,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -60522,7 +60545,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -62830,7 +62853,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc18c\uc15c\ud06c\ub864",
+            "example": "소셜크롤",
             "schema": {
               "type": "string"
             }
@@ -63106,7 +63129,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -63382,7 +63405,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc591\uc790\uc5ed\ud559",
+            "example": "양자역학",
             "schema": {
               "type": "string"
             }
@@ -63509,7 +63532,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc8fc\uc2dd",
+            "example": "주식",
             "schema": {
               "type": "string"
             }
@@ -63785,7 +63808,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ub85c\ub098 \uc99d\uc0c1",
+            "example": "코로나 증상",
             "schema": {
               "type": "string"
             }
@@ -63928,7 +63951,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uac15\ub0a8\uc5ed \uce74\ud398",
+            "example": "강남역 카페",
             "schema": {
               "type": "string"
             }
@@ -64034,7 +64057,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ud55c\ub77c\uc0b0",
+            "example": "한라산",
             "schema": {
               "type": "string"
             }
@@ -64195,7 +64218,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uae30\ud6c4\ubcc0\ud654",
+            "example": "기후변화",
             "schema": {
               "type": "string"
             }
@@ -64322,7 +64345,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ub124\uc774\ubcd8",
+            "example": "네이볘",
             "schema": {
               "type": "string"
             }
@@ -64407,7 +64430,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc131\uc778\uc601\ud654",
+            "example": "성인영화",
             "schema": {
               "type": "string"
             }
@@ -64492,7 +64515,7 @@
             "name": "keywords",
             "in": "query",
             "required": false,
-            "example": "\uc0bc\uc131\uc804\uc790,\uac24\ub7ed\uc2dc",
+            "example": "삼성전자,갤럭시",
             "schema": {
               "type": "string"
             }
@@ -64830,7 +64853,7 @@
             "name": "keyword",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ud2b8",
+            "example": "코트",
             "schema": {
               "type": "string"
             }
@@ -74867,7 +74890,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -80641,7 +80664,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u62a4\u80a4",
+            "example": "护肤",
             "schema": {
               "type": "string"
             }

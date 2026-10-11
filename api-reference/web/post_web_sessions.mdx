@@ -1,6 +1,6 @@
 ---
-title: "Web Sessions"
+title: "Create a browser session"
 openapi: "POST /web/sessions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30–60 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.

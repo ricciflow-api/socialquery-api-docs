@@ -1,6 +1,6 @@
 ---
-title: "Web Agent"
+title: "Run a bounded web agent"
 openapi: "POST /web/agent"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Start an asynchronous agent task for one public URL. Send url and prompt, then poll GET /v1/web/jobs/{job_id}. The agent is restricted to the supplied URL, uses low effort, disables data exchange, and stops after 25 provider credits. Creation costs 25 SocialQuery credits; lifecycle reads are free. Results are populated only on completion; failed jobs may include explicitly incomplete partial data. Spark 1 model names are currently provider aliases for Spark 2; requested_model and the actual model are reported separately. Job metadata is retained for 24 hours and belongs to the authenticated account. Use an Idempotency-Key to avoid duplicate submissions.

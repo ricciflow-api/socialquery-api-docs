@@ -1,6 +1,6 @@
 ---
-title: "Web Sessions {Session Id}"
+title: "Inspect a browser session"
 openapi: "GET /web/sessions/{session_id}"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Inspect a browser session created with the current API key. Unknown or differently owned IDs return 404. Closed or expired sessions omit connection URLs.

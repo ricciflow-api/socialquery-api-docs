@@ -1,6 +1,6 @@
 ---
-title: "Web Sessions {Session Id}"
+title: "Close a browser session"
 openapi: "DELETE /web/sessions/{session_id}"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Close a browser session owned by the current API key. Closing an already closed or expired session succeeds without creating another provider request. Unknown or differently owned IDs return 404. No credits are charged.
