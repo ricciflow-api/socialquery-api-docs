@@ -3,4 +3,10 @@ title: "LinkedIn Job"
 openapi: "GET /linkedin/job"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read a public LinkedIn guest job page. Job descriptions and source criteria are returned when available. Member-only fields, skills enrichment and exact counts unavailable from the source remain null. Posting times retain the source relative display text.
+
+A successful uncached request costs **5 credits**. Cached requests are free. Invalid requests and upstream failures are refunded.
+
+`include_skills=true` is unavailable from guest pages and returns 422 without a charge.
+
+This source is the public LinkedIn guest website, not a member-authenticated API. Page structure and availability can change. Missing fields are not estimated.

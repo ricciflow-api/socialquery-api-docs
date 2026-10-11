@@ -3,4 +3,10 @@ title: "LinkedIn Search Jobs"
 openapi: "GET /linkedin/search/jobs"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search LinkedIn public guest job listings. Returns one changing source page, normally ten listings; no exact total. Pagination follows source offsets up to 1,000 listings and may repeat rows. Keyword matching follows LinkedIn relevance and may include related results. Member-only metadata remains null.
+
+A successful uncached request costs **10 credits**. Cached requests are free. Invalid requests and upstream failures are refunded.
+
+Use `data.next_cursor` unchanged to continue. The cursor contains the original filters; changing them or supplying both `page` and `cursor` returns 422. Pages 1–100 are also supported on the LinkedIn platform routes. Keyword results follow LinkedIn relevance, not literal text matching.
+
+This source is the public LinkedIn guest website, not a member-authenticated API. Page structure and availability can change. Missing fields are not estimated.
