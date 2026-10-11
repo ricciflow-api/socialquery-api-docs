@@ -3,4 +3,10 @@ title: "Instagram Engagement"
 openapi: "GET /instagram/engagement"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Calculate engagement from one current page of public Instagram posts and the account follower count. Ratios are not percentages. Unknown counts and invalid publication times remain null.
+
+A successful uncached call costs **5 credits**. Engagement requires both profile and posts; if either is unavailable, the request fails and is refunded.
+
+Rates are decimal ratios: 0.05 means 5%. The view-based rate uses `(likes + comments + available shares) / views`; absent shares remain null in the post and are excluded from the numerator. The follower-based rate uses `(likes + comments) / followers`. Each average includes only eligible sampled posts. Facebook likes represent total source reactions. Photo-only Instagram posts have no view count.
+
+Cadence is `(dated posts - 1) / days between the oldest and newest sampled posts`, including pinned posts. The measured window and dated sample size are returned. Missing and future timestamps are excluded; velocity is cumulative likes/comments divided by post age, not a measured hourly change. The top post is ranked by follower-based engagement within this page. Unknown lifetime post counts stay null.

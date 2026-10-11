@@ -3,4 +3,12 @@ title: "Facebook Profile Full"
 openapi: "GET /facebook/profile/full"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Combine the public profile with one page of recent posts. Returns sampled engagement ratios, cadence with an explicit window, top post and format mix. The profile is required; post-source failure returns status=partial with post-dependent metrics null.
+
+A successful uncached call costs **5 credits**. A post-source failure preserves the valid profile as an explicit partial result at the same flat price. Read `legs` and `_warnings`.
+
+Rates are decimal ratios: 0.05 means 5%. The view-based rate uses `(likes + comments + available shares) / views`; absent shares remain null in the post and are excluded from the numerator. The follower-based rate uses `(likes + comments) / followers`. Each average includes only eligible sampled posts. Facebook likes represent total source reactions. Photo-only Instagram posts have no view count.
+
+Cadence is `(dated posts - 1) / days between the oldest and newest sampled posts`, including pinned posts. The measured window and dated sample size are returned. Missing and future timestamps are excluded; velocity is cumulative likes/comments divided by post age, not a measured hourly change. The top post is ranked by follower-based engagement within this page. Unknown lifetime post counts stay null.
+
+One source page is normally 10 TikTok, 12 Instagram or 3 Facebook posts. `posts` can shorten it but cannot fetch more pages. A truncation discards the rest of that page; `posts_cursor` advances beyond the whole source page. Pass it with the same account identity. `include=computed` omits raw post rows without changing the calculation.
