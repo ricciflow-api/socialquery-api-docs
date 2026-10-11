@@ -2815,7 +2815,7 @@
       "post": {
         "operationId": "post_web_sessions",
         "summary": "Create a browser session",
-        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30\u201360 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
+        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30–60 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -3180,7 +3180,7 @@
       "post": {
         "operationId": "post_web_sessions_session_id_execute",
         "summary": "Execute browser code",
-        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1\u201330 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
+        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1–30 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -21759,7 +21759,7 @@
       "get": {
         "operationId": "get_tiktok_search_music",
         "summary": "TikTok Search Music",
-        "description": "Find records through TikTok Search Music using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search TikTok sounds by keyword, region and ordering. Returns one provider page of up to ten sounds. Pass next_cursor unchanged with the same query and filters. since/until are applied locally to each page; an empty page can still have a next cursor. Sound usage is reported as video_count; engagement views remain null.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -21769,7 +21769,9 @@
             "required": true,
             "example": "espresso",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -21778,7 +21780,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque SocialQuery continuation token from next_cursor. Must be used with the same query and filters; raw provider offsets are rejected."
           },
           {
             "name": "sort_by",
@@ -21813,8 +21816,11 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[A-Za-z]{2}$",
+              "default": "US"
+            },
+            "description": "Two-letter country code."
           },
           {
             "name": "since",
@@ -21822,7 +21828,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "ISO date or timestamp with explicit timezone. Filter applies locally to each page. Date-only until is inclusive through the end of that UTC day."
           },
           {
             "name": "until",
@@ -21830,7 +21837,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "ISO date or timestamp with explicit timezone. Filter applies locally to each page. Date-only until is inclusive through the end of that UTC day."
           },
           {
             "name": "Cache-Control",
@@ -21853,7 +21861,146 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "One music-search page. Unknown or unsupported fields are null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "media_urls": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uri",
+                                            "description": "Single audio preview URL, when available."
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uri"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "number",
+                                            "nullable": true
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "display_name": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "avatar_url": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uri"
+                                          },
+                                          "verified": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "description": "Unknown engagement metrics remain null. Usage count is not a view count."
+                                      },
+                                      "flags": {
+                                        "type": "object"
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "format": "date-time"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "music_id": {
+                                            "type": "string"
+                                          },
+                                          "published_at_epoch": {
+                                            "type": "number",
+                                            "nullable": true
+                                          },
+                                          "video_count": {
+                                            "type": "number",
+                                            "nullable": true,
+                                            "description": "Number of videos using the sound."
+                                          },
+                                          "dsp_ids": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object"
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": "number",
+                              "nullable": true,
+                              "description": "Upstream total before local date filtering."
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "next_cursor": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -38724,7 +38871,7 @@
       "get": {
         "operationId": "get_finance_news",
         "summary": "Recent articles for a stock ticker",
-        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1\u201350 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
+        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1–50 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -39268,7 +39415,7 @@
       "get": {
         "operationId": "get_finance_fundamentals",
         "summary": "Reported US company fundamentals",
-        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1\u201340 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
+        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1–40 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -60213,7 +60360,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -60949,7 +61096,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -63257,7 +63404,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc18c\uc15c\ud06c\ub864",
+            "example": "소셜크롤",
             "schema": {
               "type": "string"
             }
@@ -63533,7 +63680,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -63809,7 +63956,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc591\uc790\uc5ed\ud559",
+            "example": "양자역학",
             "schema": {
               "type": "string"
             }
@@ -63936,7 +64083,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc8fc\uc2dd",
+            "example": "주식",
             "schema": {
               "type": "string"
             }
@@ -64212,7 +64359,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ub85c\ub098 \uc99d\uc0c1",
+            "example": "코로나 증상",
             "schema": {
               "type": "string"
             }
@@ -64355,7 +64502,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uac15\ub0a8\uc5ed \uce74\ud398",
+            "example": "강남역 카페",
             "schema": {
               "type": "string"
             }
@@ -64461,7 +64608,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ud55c\ub77c\uc0b0",
+            "example": "한라산",
             "schema": {
               "type": "string"
             }
@@ -64622,7 +64769,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uae30\ud6c4\ubcc0\ud654",
+            "example": "기후변화",
             "schema": {
               "type": "string"
             }
@@ -64749,7 +64896,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ub124\uc774\ubcd8",
+            "example": "네이볘",
             "schema": {
               "type": "string"
             }
@@ -64834,7 +64981,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc131\uc778\uc601\ud654",
+            "example": "성인영화",
             "schema": {
               "type": "string"
             }
@@ -64919,7 +65066,7 @@
             "name": "keywords",
             "in": "query",
             "required": false,
-            "example": "\uc0bc\uc131\uc804\uc790,\uac24\ub7ed\uc2dc",
+            "example": "삼성전자,갤럭시",
             "schema": {
               "type": "string"
             }
@@ -65257,7 +65404,7 @@
             "name": "keyword",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ud2b8",
+            "example": "코트",
             "schema": {
               "type": "string"
             }
@@ -75294,7 +75441,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -81068,7 +81215,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u62a4\u80a4",
+            "example": "护肤",
             "schema": {
               "type": "string"
             }
@@ -81756,7 +81903,7 @@
       "get": {
         "operationId": "get_economy_consumer_spend",
         "summary": "Household spending by country and category",
-        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990\u20132100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
+        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990–2100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -81890,7 +82037,7 @@
     "/economy/tourism-spend": {
       "get": {
         "operationId": "get_economy_tourism_spend",
-        "summary": "Residents\u2019 travel spending by country and category",
+        "summary": "Residents’ travel spending by country and category",
         "description": "Read annual tourism expenditure directly from Eurostat tour_dem_extot. Supports up to 10 reporting European countries or EU27, purpose, destination, measure and spending-category filters. Values are euro, with no millions conversion. This is spending by residents aged 15 or over on trips of at least one night, not spending received by destinations. Total excludes durable goods; other may include restaurant spending when not reported separately. Missing observations remain null and source status flags are retained. Default from_year is the current year minus five; default to_year is the latest dataset year.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",

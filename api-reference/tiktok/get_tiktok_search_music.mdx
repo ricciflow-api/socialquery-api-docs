@@ -3,4 +3,10 @@ title: "TikTok Search Music"
 openapi: "GET /tiktok/search/music"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search TikTok sounds by keyword with a two-letter region, ordering, and an optional title or creator filter. Each successful uncached request costs **1 credit** and returns one source page of up to ten sounds.
+
+Pass `next_cursor` unchanged, with the same query and filters, to fetch the next page. The cursor is bound to this query; raw provider offsets and cursors from another search are rejected.
+
+`since` and `until` filter each retrieved page locally. Sounds without a source publication date are retained. Continue paging when a filtered page is empty but still has `next_cursor`. Date-only `until` includes that entire UTC day. `total` is the upstream total before local filtering.
+
+Music identifiers are strings to preserve TikTok's 64-bit IDs. `post.ext.video_count` counts videos using the sound. Views, likes, and other unavailable engagement metrics remain `null`. `post.content.media_urls` contains a single audio preview URL when available; playback URLs may expire. Provider access tokens are never included.
