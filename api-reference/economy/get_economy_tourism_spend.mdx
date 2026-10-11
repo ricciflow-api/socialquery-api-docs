@@ -1,6 +1,8 @@
 ---
-title: "Economy Tourism Spend"
+title: "Residents’ travel spending by country and category"
 openapi: "GET /economy/tourism-spend"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read annual tourism expenditure directly from Eurostat tour_dem_extot. Supports up to 10 reporting European countries or EU27, purpose, destination, measure and spending-category filters. Values are euro, with no millions conversion. This is spending by residents aged 15 or over on trips of at least one night, not spending received by destinations. Total excludes durable goods; other may include restaurant spending when not reported separately. Missing observations remain null and source status flags are retained. Default from_year is the current year minus five; default to_year is the latest dataset year.
+
+Source: [Eurostat Statistics API](https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-getting-started/api).

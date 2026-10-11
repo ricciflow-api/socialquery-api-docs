@@ -38442,8 +38442,8 @@
     "/finance/news": {
       "get": {
         "operationId": "get_finance_news",
-        "summary": "Finance News",
-        "description": "Use Finance News to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "Recent articles for a stock ticker",
+        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1–50 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -81351,8 +81351,8 @@
     "/economy/consumer-spend": {
       "get": {
         "operationId": "get_economy_consumer_spend",
-        "summary": "Economy Consumer Spend",
-        "description": "Use Economy Consumer Spend to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "Household spending by country and category",
+        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990–2100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -81363,7 +81363,8 @@
             "example": "DE,FR",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated reporting-country codes, up to 10. Accepts GR/EL, GB/UK and EU27. Coverage depends on the selected dataset."
           },
           {
             "name": "category",
@@ -81372,7 +81373,8 @@
             "example": "transport,food",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated spending categories. Omit to return every supported category. See the endpoint description for differences in legacy categories."
           },
           {
             "name": "from_year",
@@ -81383,7 +81385,8 @@
               "type": "integer",
               "minimum": 1990,
               "maximum": 2100
-            }
+            },
+            "description": "First requested year, inclusive. Defaults to the current calendar year minus five."
           },
           {
             "name": "to_year",
@@ -81394,7 +81397,8 @@
               "type": "integer",
               "minimum": 1990,
               "maximum": 2100
-            }
+            },
+            "description": "Last requested year, inclusive. Defaults to the latest published year in the dataset; individual countries may have no observation for that year."
           },
           {
             "name": "unit",
@@ -81408,7 +81412,8 @@
                 "eur_per_capita",
                 "share_of_total"
               ]
-            }
+            },
+            "description": "Choose current-price million euros, euros per person, or percentage of total household consumption."
           },
           {
             "name": "Cache-Control",
@@ -81481,8 +81486,8 @@
     "/economy/tourism-spend": {
       "get": {
         "operationId": "get_economy_tourism_spend",
-        "summary": "Economy Tourism Spend",
-        "description": "Use Economy Tourism Spend to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "Residents’ travel spending by country and category",
+        "description": "Read annual tourism expenditure directly from Eurostat tour_dem_extot. Supports up to 10 reporting European countries or EU27, purpose, destination, measure and spending-category filters. Values are euro, with no millions conversion. This is spending by residents aged 15 or over on trips of at least one night, not spending received by destinations. Total excludes durable goods; other may include restaurant spending when not reported separately. Missing observations remain null and source status flags are retained. Default from_year is the current year minus five; default to_year is the latest dataset year.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -81493,7 +81498,8 @@
             "example": "DE,FR",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated reporting-country codes, up to 10. Accepts GR/EL, GB/UK and EU27. Coverage depends on the selected dataset."
           },
           {
             "name": "category",
@@ -81502,7 +81508,8 @@
             "example": "total,accommodation,transport",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated spending categories. Omit to return every supported category. See the endpoint description for differences in legacy categories."
           },
           {
             "name": "purpose",
@@ -81516,7 +81523,8 @@
                 "personal",
                 "business"
               ]
-            }
+            },
+            "description": "Select all trips, personal travel, or business travel. Default: total."
           },
           {
             "name": "destination",
@@ -81529,7 +81537,8 @@
                 "domestic",
                 "foreign"
               ]
-            }
+            },
+            "description": "Select all destinations, trips within the reporting country, or trips abroad. Default: world."
           },
           {
             "name": "measure",
@@ -81543,7 +81552,8 @@
                 "per_trip",
                 "per_night"
               ]
-            }
+            },
+            "description": "Select total euros spent, average euros for each trip, or average euros for each night. Default: total."
           },
           {
             "name": "from_year",
@@ -81554,7 +81564,8 @@
               "type": "integer",
               "minimum": 1990,
               "maximum": 2100
-            }
+            },
+            "description": "First requested year, inclusive. Defaults to the current calendar year minus five."
           },
           {
             "name": "to_year",
@@ -81564,7 +81575,8 @@
               "type": "integer",
               "minimum": 1990,
               "maximum": 2100
-            }
+            },
+            "description": "Last requested year, inclusive. Defaults to the latest published year in the dataset; individual countries may have no observation for that year."
           },
           {
             "name": "Cache-Control",

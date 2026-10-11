@@ -1,6 +1,8 @@
 ---
-title: "Economy Consumer Spend"
+title: "Household spending by country and category"
 openapi: "GET /economy/consumer-spend"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990–2100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.
+
+Source: [Eurostat Statistics API](https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-getting-started/api).

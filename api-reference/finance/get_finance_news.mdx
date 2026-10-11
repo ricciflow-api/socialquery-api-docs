@@ -1,6 +1,6 @@
 ---
-title: "Finance News"
+title: "Recent articles for a stock ticker"
 openapi: "GET /finance/news"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1–50 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.
