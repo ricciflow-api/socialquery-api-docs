@@ -3,4 +3,8 @@ title: "Google Play Search Suggestions"
 openapi: "GET /google_play/search-suggestions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get the current Google Play search-box suggestions in source order for a query, country and language. Each item has term and a one-based priority, not a numeric demand score.
+
+Each successful uncached request costs **1 credit**. The response has one current source window and no continuation cursor. Invalid requests and unavailable sources are refunded.
+
+Country defaults to `us` and language to `en`. The adapter reads the public store autocomplete response. An empty suggestion list is valid; malformed source responses fail instead of becoming fabricated suggestions.

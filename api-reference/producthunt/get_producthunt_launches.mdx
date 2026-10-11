@@ -3,4 +3,8 @@ title: "Product Hunt Launches"
 openapi: "GET /producthunt/launches"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the current public Product Hunt Atom feed, optionally narrowed by a verified topic slug. query and date filters apply to this feed window. Feed order is not vote ranking. Publication timestamps are post creation times, not launch days; votes, comments and maker handles remain null.
+
+Each successful uncached request costs **1 credit**. The response has one current source window and no continuation cursor. Invalid requests and unavailable sources are refunded.
+
+The feed usually contains 50 entries before local filtering. `since` and `until` accept ISO dates or timestamps with a timezone; date-only `until` includes the whole UTC day. Undated entries are retained. An unknown topic returns HTTP 404 rather than silently returning general launches. Product Hunt may change this public feed.

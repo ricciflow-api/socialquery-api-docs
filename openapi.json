@@ -41349,7 +41349,7 @@
       "get": {
         "operationId": "get_google_play_search_suggestions",
         "summary": "Google Play Search Suggestions",
-        "description": "Find records through Google Play Search Suggestions using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Get the current Google Play search-box suggestions in source order for a query, country and language. Each item has term and a one-based priority, not a numeric demand score.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -41359,7 +41359,9 @@
             "required": true,
             "example": "reverse",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -41368,7 +41370,9 @@
             "required": false,
             "example": "us",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[A-Za-z]{2}$",
+              "default": "us"
             }
           },
           {
@@ -41377,7 +41381,9 @@
             "required": false,
             "example": "en",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[A-Za-z]{2,3}([-_][A-Za-z]{2,4})?$",
+              "default": "en"
             }
           },
           {
@@ -41401,7 +41407,56 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Get the current Google Play search-box suggestions in source order for a query, country and language. Each item has term and a one-based priority, not a numeric demand score.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "term": {
+                                    "type": "string"
+                                  },
+                                  "priority": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "next_cursor": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -81098,7 +81153,7 @@
       "get": {
         "operationId": "get_producthunt_launches",
         "summary": "Product Hunt Launches",
-        "description": "Use Product Hunt Launches to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the current public Product Hunt Atom feed, optionally narrowed by a verified topic slug. query and date filters apply to this feed window. Feed order is not vote ranking. Publication timestamps are post creation times, not launch days; votes, comments and maker handles remain null.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -81108,7 +81163,9 @@
             "required": false,
             "example": "artificial-intelligence",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+              "maxLength": 100
             }
           },
           {
@@ -81116,7 +81173,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -81156,7 +81215,134 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the current public Product Hunt Atom feed, optionally narrowed by a verified topic slug. query and date filters apply to this feed window. Feed order is not vote ranking. Publication timestamps are post creation times, not launch days; votes, comments and maker handles remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "media_urls": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uri",
+                                            "description": "Unavailable in the Atom feed; null."
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uri"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "number",
+                                            "nullable": true
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "display_name": {
+                                            "type": "string",
+                                            "nullable": true
+                                          },
+                                          "avatar_url": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uri"
+                                          },
+                                          "verified": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "description": "Unknown engagement metrics remain null. Usage count is not a view count."
+                                      },
+                                      "flags": {
+                                        "type": "object"
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "format": "date-time"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": "string"
+                                          },
+                                          "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "nullable": true
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object"
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "next_cursor": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
