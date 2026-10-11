@@ -1,6 +1,8 @@
 ---
-title: "Finance Fundamentals"
+title: "Reported US company fundamentals"
 openapi: "GET /finance/fundamentals"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1–40 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.
+
+Source: [SEC EDGAR public APIs](https://www.sec.gov/search-filings/edgar-application-programming-interfaces).
