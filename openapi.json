@@ -81165,8 +81165,37 @@
             "schema": {
               "type": "string",
               "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-              "maxLength": 100
-            }
+              "maxLength": 100,
+              "enum": [
+                "3d-modeling",
+                "3d-printer",
+                "a-b-testing",
+                "accessories",
+                "accounting",
+                "action-games",
+                "ad-blockers",
+                "adult-coloring-books",
+                "adventure-games",
+                "advertising",
+                "affiliate-marketing",
+                "alarms",
+                "alcohol",
+                "alexa-skills",
+                "alpha",
+                "amazon",
+                "analytics",
+                "android",
+                "animation",
+                "anonymous",
+                "artificial-intelligence",
+                "design-tools",
+                "developer-tools",
+                "email-marketing",
+                "social-media",
+                "web3"
+              ]
+            },
+            "description": "Verified public-directory topic slug as of 2026-10-11. Other slugs return 404; the adapter does not silently return the general feed."
           },
           {
             "name": "query",
