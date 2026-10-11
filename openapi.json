@@ -138,6 +138,287 @@
             }
           }
         }
+      },
+      "FinancialStatement": {
+        "type": "object",
+        "required": [
+          "revenue",
+          "operating_expense",
+          "net_income",
+          "net_profit_margin",
+          "earnings_per_share",
+          "ebitda",
+          "effective_tax_rate",
+          "cash_and_short_term_investments",
+          "total_assets",
+          "total_liabilities",
+          "total_equity",
+          "shares_outstanding",
+          "cash_from_operations",
+          "cash_from_investing",
+          "cash_from_financing",
+          "net_change_in_cash",
+          "free_cash_flow",
+          "revenue_delta",
+          "operating_expense_delta",
+          "net_income_delta",
+          "net_profit_margin_delta",
+          "earnings_per_share_delta",
+          "ebitda_delta",
+          "cash_and_short_term_investments_delta",
+          "total_assets_delta",
+          "total_liabilities_delta",
+          "cash_from_operations_delta",
+          "cash_from_investing_delta",
+          "cash_from_financing_delta",
+          "net_change_in_cash_delta",
+          "free_cash_flow_delta",
+          "price_to_book",
+          "return_on_assets",
+          "return_on_capital",
+          "id",
+          "symbol",
+          "statement",
+          "period_type",
+          "period_end",
+          "currency"
+        ],
+        "properties": {
+          "revenue": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "operating_expense": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_income": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_profit_margin": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "earnings_per_share": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "ebitda": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "effective_tax_rate": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_and_short_term_investments": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "total_assets": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "total_liabilities": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "total_equity": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "shares_outstanding": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_from_operations": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_from_investing": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_from_financing": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_change_in_cash": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "free_cash_flow": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "revenue_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "operating_expense_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_income_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_profit_margin_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "earnings_per_share_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "ebitda_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_and_short_term_investments_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "total_assets_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "total_liabilities_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_from_operations_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_from_investing_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cash_from_financing_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "net_change_in_cash_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "free_cash_flow_delta": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "price_to_book": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "return_on_assets": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "return_on_capital": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string",
+            "enum": [
+              "combined"
+            ]
+          },
+          "period_type": {
+            "type": "string",
+            "enum": [
+              "annual",
+              "quarterly",
+              "ttm"
+            ]
+          },
+          "period_end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
       }
     },
     "responses": {
@@ -2534,7 +2815,7 @@
       "post": {
         "operationId": "post_web_sessions",
         "summary": "Create a browser session",
-        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30–60 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
+        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30\u201360 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -2899,7 +3180,7 @@
       "post": {
         "operationId": "post_web_sessions_session_id_execute",
         "summary": "Execute browser code",
-        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1–30 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
+        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1\u201330 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -38443,7 +38724,7 @@
       "get": {
         "operationId": "get_finance_news",
         "summary": "Recent articles for a stock ticker",
-        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1–50 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
+        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1\u201350 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -38672,7 +38953,7 @@
       "get": {
         "operationId": "get_finance_statements",
         "summary": "Finance Statements",
-        "description": "Use Finance Statements to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns canonical combined income, balance-sheet and cash-flow statements for US-listed companies with recent USD US-GAAP reports. Google Finance line items are matched to exact SEC fiscal closing dates and corroborated against reported revenue. Annual and quarterly responses normally cover five periods; trailing responses calculate rolling totals from four contiguous quarters. Each delta is a fractional change from the adjacent returned period; missing or zero denominators remain null. Restatements replace prior values, so this is not point-in-time data. Currency and the price-to-book, return-on-assets and return-on-capital fields remain null.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -38683,7 +38964,8 @@
             "example": "AAPL",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "US-listed ticker, optionally followed by :EXCHANGE. SEC dates require recent USD US-GAAP filings."
           },
           {
             "name": "type",
@@ -38697,7 +38979,8 @@
                 "quarterly",
                 "trailing"
               ]
-            }
+            },
+            "description": "annual (default), quarterly, or trailing. Trailing sums four contiguous quarters; stock balances come from the latest quarter."
           },
           {
             "name": "Cache-Control",
@@ -38720,7 +39003,128 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Request completed. Interpret data using the selected resource contract.",
+            "headers": {
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Credits-Used": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-Credits-Remaining": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Cache": {
+                "schema": {
+                  "type": "string",
+                  "enum": [
+                    "HIT",
+                    "MISS",
+                    "BYPASS"
+                  ]
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "platform",
+                    "endpoint",
+                    "credits_used",
+                    "credits_remaining",
+                    "request_id",
+                    "cached",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "const": true
+                    },
+                    "platform": {
+                      "type": "string"
+                    },
+                    "endpoint": {
+                      "type": "string"
+                    },
+                    "credits_used": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "credits_remaining": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "cached": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "items",
+                        "total",
+                        "next_cursor",
+                        "dropped"
+                      ],
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "financial_statement"
+                            ],
+                            "properties": {
+                              "financial_statement": {
+                                "$ref": "#/components/schemas/FinancialStatement"
+                              }
+                            }
+                          }
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "next_cursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "dropped": {
+                          "type": "integer"
+                        },
+                        "sources": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "_warnings": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -38864,7 +39268,7 @@
       "get": {
         "operationId": "get_finance_fundamentals",
         "summary": "Reported US company fundamentals",
-        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1–40 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
+        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1\u201340 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -59809,7 +60213,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "美食",
+            "example": "\u7f8e\u98df",
             "schema": {
               "type": "string"
             }
@@ -60545,7 +60949,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "美食",
+            "example": "\u7f8e\u98df",
             "schema": {
               "type": "string"
             }
@@ -62853,7 +63257,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "소셜크롤",
+            "example": "\uc18c\uc15c\ud06c\ub864",
             "schema": {
               "type": "string"
             }
@@ -63129,7 +63533,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "삼성전자",
+            "example": "\uc0bc\uc131\uc804\uc790",
             "schema": {
               "type": "string"
             }
@@ -63405,7 +63809,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "양자역학",
+            "example": "\uc591\uc790\uc5ed\ud559",
             "schema": {
               "type": "string"
             }
@@ -63532,7 +63936,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "주식",
+            "example": "\uc8fc\uc2dd",
             "schema": {
               "type": "string"
             }
@@ -63808,7 +64212,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "코로나 증상",
+            "example": "\ucf54\ub85c\ub098 \uc99d\uc0c1",
             "schema": {
               "type": "string"
             }
@@ -63951,7 +64355,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "강남역 카페",
+            "example": "\uac15\ub0a8\uc5ed \uce74\ud398",
             "schema": {
               "type": "string"
             }
@@ -64057,7 +64461,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "한라산",
+            "example": "\ud55c\ub77c\uc0b0",
             "schema": {
               "type": "string"
             }
@@ -64218,7 +64622,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "기후변화",
+            "example": "\uae30\ud6c4\ubcc0\ud654",
             "schema": {
               "type": "string"
             }
@@ -64345,7 +64749,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "네이볘",
+            "example": "\ub124\uc774\ubcd8",
             "schema": {
               "type": "string"
             }
@@ -64430,7 +64834,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "성인영화",
+            "example": "\uc131\uc778\uc601\ud654",
             "schema": {
               "type": "string"
             }
@@ -64515,7 +64919,7 @@
             "name": "keywords",
             "in": "query",
             "required": false,
-            "example": "삼성전자,갤럭시",
+            "example": "\uc0bc\uc131\uc804\uc790,\uac24\ub7ed\uc2dc",
             "schema": {
               "type": "string"
             }
@@ -64853,7 +65257,7 @@
             "name": "keyword",
             "in": "query",
             "required": true,
-            "example": "코트",
+            "example": "\ucf54\ud2b8",
             "schema": {
               "type": "string"
             }
@@ -74890,7 +75294,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "삼성전자",
+            "example": "\uc0bc\uc131\uc804\uc790",
             "schema": {
               "type": "string"
             }
@@ -80664,7 +81068,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "护肤",
+            "example": "\u62a4\u80a4",
             "schema": {
               "type": "string"
             }
@@ -81352,7 +81756,7 @@
       "get": {
         "operationId": "get_economy_consumer_spend",
         "summary": "Household spending by country and category",
-        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990–2100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
+        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990\u20132100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -81486,7 +81890,7 @@
     "/economy/tourism-spend": {
       "get": {
         "operationId": "get_economy_tourism_spend",
-        "summary": "Residents’ travel spending by country and category",
+        "summary": "Residents\u2019 travel spending by country and category",
         "description": "Read annual tourism expenditure directly from Eurostat tour_dem_extot. Supports up to 10 reporting European countries or EU27, purpose, destination, measure and spending-category filters. Values are euro, with no millions conversion. This is spending by residents aged 15 or over on trips of at least one night, not spending received by destinations. Total excludes durable goods; other may include restaurant spending when not reported separately. Missing observations remain null and source status flags are retained. Default from_year is the current year minus five; default to_year is the latest dataset year.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",

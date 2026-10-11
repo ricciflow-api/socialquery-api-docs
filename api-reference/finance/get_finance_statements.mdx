@@ -3,4 +3,12 @@ title: "Finance Statements"
 openapi: "GET /finance/statements"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+<Note>Coverage is limited to US-listed companies with recent USD US-GAAP filings. Statement values come from Google Finance; SEC filings supply exact fiscal closing dates and corroborating revenue. Rows that cannot be matched reliably are omitted.</Note>
+
+The response contains `items[].financial_statement`, with income, balance-sheet and cash-flow fields together for each period. `type` supports annual (default), quarterly and trailing. The current source normally provides five annual and five quarterly periods.
+
+Trailing values require four contiguous quarters. Flow fields and earnings per share are summed; balance-sheet fields use the latest quarter. Profit margin is calculated from the summed income and revenue. The trailing effective tax rate remains null because the source does not supply the components needed to weight it.
+
+Deltas compare adjacent periods as `(current - prior) / abs(prior)`. A missing or zero prior value produces null, as does the earliest available period. Profit margins and tax rates use percent units. Currency, price-to-book, return-on-assets and return-on-capital remain null on this surface.
+
+<Warning>Period ends are reporting dates, not filing dates. Restatements can replace older figures. This endpoint does not reconstruct the information available at a historical date. Google Finance cash-flow and EBITDA definitions may differ from issuer-defined measures.</Warning>
