@@ -1,6 +1,8 @@
 ---
-title: "TikTok Ads Top"
+title: "TikTok Top Ads"
 openapi: "GET /tiktok/ads/top"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read TikTok Creative Center Top Ads. Supports country (default US), period (7, 30 or 180 days), keyword, industry, and for_you/impression/ctr/like sorting. limit defaults to 20 and accepts 1–100; the adapter reads at most five source pages. Ad-format, language, like-tier, date filters, and other sorting options return 422 without net charge. Source CTR and cost-index values remain in ext without assuming percentage or currency units. Media URLs can expire. next_cursor is null; increase limit for a larger first window. A successful live request costs 10 credits; cached responses and idempotent replays cost zero.
+
+[Source documentation](https://docs.piloterr.com/tiktoktopads-search).

@@ -1,6 +1,8 @@
 ---
-title: "Aliexpress Product"
+title: "AliExpress Product"
 openapi: "GET /aliexpress/product"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Retrieve a public AliExpress product by product_id or an HTTPS /item/{id}.html URL. If both identifiers are supplied they must agree. Returns source title, images, decimal price and currency, rating, seller when available, and specifications. Stock and sold totals remain null because source zero defaults were inconsistent during verification. Original-price and delivery text are preserved without guessing a numeric discount, destination or delivery guarantee. Country, currency and language overrides are unavailable and return 422 without net charge. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.
+
+[Source documentation](https://docs.piloterr.com/aliexpress-product).
