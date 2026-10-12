@@ -3,8 +3,8 @@ title: "LinkedIn Profile Educations"
 openapi: "GET /linkedin/profile/educations"
 ---
 
-One public education window with observed school names, URLs and years. Only page=1 is supported. Numeric school IDs, degrees and complete history are unavailable.
+Visible public LinkedIn education entries with observed school, degree, field and year labels when available. Only page=1 is supported. Numeric school IDs and complete history are unavailable; school URLs may be null depending on the source.
 
 A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
 
-This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.
+Dates preserve source month/year labels, not invented timestamps. Unavailable values remain null. Public visibility can change. Sign-in placeholders and malformed responses are rejected, never treated as empty successful profiles. Unsupported filters return 422.

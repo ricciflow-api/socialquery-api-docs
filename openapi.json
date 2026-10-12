@@ -13935,117 +13935,7 @@
       "get": {
         "operationId": "get_linkedin_profile_experiences",
         "summary": "LinkedIn Profile Experiences",
-        "description": "Use LinkedIn Profile Experiences to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
-        "x-credit-cost": 5,
-        "x-launch-status": "beta",
-        "parameters": [
-          {
-            "name": "url",
-            "in": "query",
-            "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          {
-            "name": "urn",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Cache-Control",
-            "in": "header",
-            "required": false,
-            "example": "no-cache",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": false,
-            "example": "7a5e1b4c-2d8f-4a3b-9c1e-6e8b4d2a1f3c",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/Success"
-          },
-          "400": {
-            "$ref": "#/components/responses/Error400"
-          },
-          "401": {
-            "$ref": "#/components/responses/Error401"
-          },
-          "402": {
-            "$ref": "#/components/responses/Error402"
-          },
-          "403": {
-            "$ref": "#/components/responses/Error403"
-          },
-          "404": {
-            "$ref": "#/components/responses/Error404"
-          },
-          "405": {
-            "$ref": "#/components/responses/Error405"
-          },
-          "409": {
-            "$ref": "#/components/responses/Error409"
-          },
-          "422": {
-            "$ref": "#/components/responses/Error422"
-          },
-          "429": {
-            "$ref": "#/components/responses/Error429"
-          },
-          "500": {
-            "$ref": "#/components/responses/Error500"
-          },
-          "502": {
-            "$ref": "#/components/responses/Error502"
-          },
-          "503": {
-            "$ref": "#/components/responses/Error503"
-          },
-          "504": {
-            "$ref": "#/components/responses/Error504"
-          }
-        },
-        "tags": [
-          "LinkedIn"
-        ]
-      }
-    },
-    "/linkedin/profile/educations": {
-      "get": {
-        "operationId": "get_linkedin_profile_educations",
-        "summary": "LinkedIn Profile Educations",
-        "description": "One public education window with observed school names, URLs and years. Only page=1 is supported. Numeric school IDs, degrees and complete history are unavailable.",
+        "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile\u2019s selected top position.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -14066,7 +13956,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 1
-            }
+            },
+            "description": "Only the visible public section; no pagination."
           },
           {
             "name": "urn",
@@ -14075,7 +13966,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
+            "description": "Unsupported by the current public sources; supplying this parameter returns 422."
           },
           {
             "name": "cursor",
@@ -14084,7 +13975,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
+            "description": "Unsupported by the current public sources; supplying this parameter returns 422."
           },
           {
             "name": "Cache-Control",
@@ -14107,7 +13998,7 @@
         ],
         "responses": {
           "200": {
-            "description": "One public education window with observed school names, URLs and years. Only page=1 is supported. Numeric school IDs, degrees and complete history are unavailable.",
+            "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile\u2019s selected top position.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14121,31 +14012,25 @@
                         "data": {
                           "type": "object",
                           "properties": {
-                            "coverage_note": {
-                              "type": "string"
-                            },
                             "items": {
                               "type": "array",
                               "items": {
                                 "type": "object",
                                 "properties": {
-                                  "id": {
-                                    "type": "null"
-                                  },
-                                  "school": {
+                                  "title": {
                                     "type": "string"
                                   },
-                                  "url": {
+                                  "description": {
                                     "type": [
                                       "string",
                                       "null"
                                     ]
                                   },
-                                  "degree": {
-                                    "type": "null"
-                                  },
-                                  "field_of_study": {
-                                    "type": "null"
+                                  "location": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
                                   },
                                   "date": {
                                     "type": "object",
@@ -14163,26 +14048,54 @@
                                         ]
                                       }
                                     }
+                                  },
+                                  "duration_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "employment_type": {
+                                    "type": "null"
+                                  },
+                                  "skills": {
+                                    "type": "null"
+                                  },
+                                  "company": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "null"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "logo": {
+                                        "type": "null"
+                                      }
+                                    }
                                   }
                                 }
                               }
                             },
                             "total": {
-                              "type": [
-                                "integer",
-                                "null"
-                              ],
-                              "minimum": 0
+                              "type": "null"
                             },
                             "returned_count": {
-                              "type": [
-                                "integer",
-                                "null"
-                              ],
+                              "type": "integer",
                               "minimum": 0
                             },
                             "next_cursor": {
                               "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
                             }
                           }
                         }
@@ -14236,7 +14149,205 @@
         "tags": [
           "LinkedIn"
         ],
-        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call. Failed requests and cache hits cost zero."
+      }
+    },
+    "/linkedin/profile/educations": {
+      "get": {
+        "operationId": "get_linkedin_profile_educations",
+        "summary": "LinkedIn Profile Educations",
+        "description": "Visible public LinkedIn education entries with observed school, degree, field and year labels when available. Only page=1 is supported. Numeric school IDs and complete history are unavailable; school URLs may be null depending on the source.",
+        "x-credit-cost": 5,
+        "x-launch-status": "beta",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "example": "https://www.linkedin.com/in/williamhgates/",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "description": "Only the visible public section; no pagination."
+          },
+          {
+            "name": "urn",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unsupported by the current public sources; supplying this parameter returns 422."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unsupported by the current public sources; supplying this parameter returns 422."
+          },
+          {
+            "name": "Cache-Control",
+            "in": "header",
+            "required": false,
+            "example": "no-cache",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "example": "7a5e1b4c-2d8f-4a3b-9c1e-6e8b4d2a1f3c",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Visible public LinkedIn education entries with observed school, degree, field and year labels when available. Only page=1 is supported. Numeric school IDs and complete history are unavailable; school URLs may be null depending on the source.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "null"
+                                  },
+                                  "school": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "degree": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "field_of_study": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "date": {
+                                    "type": "object",
+                                    "properties": {
+                                      "start": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "end": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "402": {
+            "$ref": "#/components/responses/Error402"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error409"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error422"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error500"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error503"
+          },
+          "504": {
+            "$ref": "#/components/responses/Error504"
+          }
+        },
+        "tags": [
+          "LinkedIn"
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/profile/skills": {

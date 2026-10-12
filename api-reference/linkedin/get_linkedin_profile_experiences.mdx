@@ -3,4 +3,8 @@ title: "LinkedIn Profile Experiences"
 openapi: "GET /linkedin/profile/experiences"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile’s selected top position.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+Dates preserve source month/year labels, not invented timestamps. Unavailable values remain null. Public visibility can change. Sign-in placeholders and malformed responses are rejected, never treated as empty successful profiles. Unsupported filters return 422.
