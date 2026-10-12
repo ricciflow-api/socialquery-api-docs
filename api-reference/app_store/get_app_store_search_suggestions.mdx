@@ -1,6 +1,14 @@
 ---
-title: "App Store Search Suggestions"
+title: "App Store search suggestions"
 openapi: "GET /app_store/search-suggestions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get native App Store **autocomplete suggestions** for a partial keyword. Each `items` entry contains `{ term, priority }`: the suggested phrase and its one-based position in Apple's response. This endpoint returns suggestions, not app search records. Rank is not a search-volume or popularity score.
+
+`query` is required and accepts 1–200 characters without control characters; surrounding whitespace is removed. `country` defaults to `us`, is case-insensitive, and selects the requested Apple storefront. Use **`gb`, not `uk`**, for the United Kingdom. Unsupported countries return a free **400 `UNSUPPORTED_COUNTRY`** before contacting Apple. Unsupported options such as `cursor` or `limit` return 422.
+
+The country map matches the 175 codes in [Apple's App Store region picker](https://apps.apple.com/us/iphone/today), captured October 12, 2026. Apple's public storefront directory supplied 174 numeric mappings; the mainland China mapping was checked separately with a live Chinese-language response. This dated mapping is not a guarantee that every country is available continuously. Apple's hints response does not echo its country.
+
+A fresh nonempty response costs **1 credit**. A validated empty suggestion list, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1` to cap the charge. Exact requests cache for five minutes; `Cache-Control: no-cache` requests fresh suggestions.
+
+`total` and `returned_count` count the returned suggestions, `dropped` is zero and `next_cursor` is null. Malformed or failed upstream responses remain errors; they are never reported as an empty successful list. Suggestions represent the current store response, not historical keyword demand.

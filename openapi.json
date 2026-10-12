@@ -57615,7 +57615,7 @@
       "get": {
         "operationId": "get_app_store_search_suggestions",
         "summary": "App Store Search Suggestions",
-        "description": "Find records through App Store Search Suggestions using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Return native App Store autocomplete suggestions for a keyword stem and country. Each item contains term and priority, the one-based source rank; no popularity score or search-volume estimate is invented. query accepts 1–200 characters. country defaults to us and is case-insensitive; use gb, not uk. Unsupported storefronts return a free 400 before a source call. A nonempty fresh response costs one credit; validated empty results, errors, cache hits and idempotent replays are free. Exact requests cache for five minutes. No pagination.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -57625,8 +57625,11 @@
             "required": true,
             "example": "reverse",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Partial search keyword to autocomplete, without control characters. Surrounding whitespace is removed."
           },
           {
             "name": "country",
@@ -57634,8 +57637,10 @@
             "required": false,
             "example": "us",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "default": "us"
+            },
+            "description": "Case-insensitive App Store country code, default us. Use gb for the United Kingdom; uk and unsupported codes return free 400. Country mappings match the 175 codes in the Apple region picker captured October 12, 2026."
           },
           {
             "name": "Cache-Control",
@@ -57668,7 +57673,91 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return native App Store autocomplete suggestions for a keyword stem and country. Each item contains term and priority, the one-based source rank; no popularity score or search-volume estimate is invented. query accepts 1–200 characters. country defaults to us and is case-insensitive; use gb, not uk. Unsupported storefronts return a free 400 before a source call. A nonempty fresh response costs one credit; validated empty results, errors, cache hits and idempotent replays are free. Exact requests cache for five minutes. No pagination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 100,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "term": {
+                                    "type": "string"
+                                  },
+                                  "priority": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 100
+                                  }
+                                },
+                                "required": [
+                                  "term",
+                                  "priority"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "const": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "country": {
+                              "type": "string"
+                            },
+                            "source_url": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "dropped",
+                            "next_cursor",
+                            "query",
+                            "country",
+                            "source_url",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
