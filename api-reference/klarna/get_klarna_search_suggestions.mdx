@@ -3,4 +3,16 @@ title: "Klarna Search Suggestions"
 openapi: "GET /klarna/search/suggestions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns anonymous native autocomplete products and nested category/feature suggestions in source order, including fuzzy matches. The source has no total count. Supports all 13 catalog regions. No pagination or additional filters are accepted. UK, Sweden and Denmark preserve legacy paths with null absolute URLs; prices and stock flags are source snapshots.
+
+Supply `query`, such as `headphone`. Text is trimmed and must contain 1–100 characters without control characters. Regions are `usa` (default), `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. Prices use the regional source currency: USD, GBP, EUR, SEK, NOK or DKK.
+
+Each `items` entry contains `product` with its native `id`, `title`, category, source path, price, rating, images, condition and stock flag. Null values remain unknown. Prices and availability are snapshots of the upstream shopping data, not checkout quotes or a guarantee of merchant stock. Ratings retain their native scale of 0–5 and count when provided.
+
+Autocomplete also returns `suggestions`, preserving nested category groups and feature links. Suggestion IDs retain their native format and can be null. Search returns an empty suggestions list. `returned_count` counts product rows; `suggestion_count` counts top-level suggestions. Search exposes the source product-hit `total`; autocomplete sets `total` to null. Neither endpoint supports pagination; `next_cursor` is null. No personalized or account search history is accessed.
+
+UK, Swedish and Danish data uses legacy paths. Its absolute product/category `url` is null rather than an inferred working link. `source_path` preserves the original value. Other regions expose source-based Klarna shopping links.
+
+A fresh successful request with products or suggestions costs **1 SocialQuery credit**. When both lists are empty, the hold is fully refunded. Cached responses, successful idempotent replays and failures have no net charge. Source errors are not reported as empty results. Set `X-Max-Credits: 1` to cap the request hold.
+
+The adapter reads Klarna's public anonymous search service, with a shared 20-source-request/minute ceiling, 20-second timeout and 2 MiB response limit. It checks query identity for search, unique product IDs, product/category links, currency and rating fields. It rejects malformed or mismatched data instead of silently truncating it.
