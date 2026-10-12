@@ -491,6 +491,50 @@
             }
           }
         }
+      },
+      "KohlsNavigationCategory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "seoURL": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KohlsNavigationCategory"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "level",
+          "type",
+          "seoURL",
+          "url",
+          "categories"
+        ]
       }
     },
     "responses": {
@@ -60302,7 +60346,7 @@
       "get": {
         "operationId": "get_target_stores",
         "summary": "Target Stores",
-        "description": "Use Target Stores to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read Target's public store-locator results for a ZIP, city or state query, preserving source store IDs, addresses, phones, timezone and dated local opening intervals. Results are the native page window, not an exhaustive geographic directory. Unavailable distance, coordinates and current open/closed status remain null.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -60312,8 +60356,10 @@
             "required": true,
             "example": "10001",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "maxLength": 100
+            },
+            "description": "US ZIP code, city or state, up to 100 characters. The native locator resolves this location and returns its current result window."
           },
           {
             "name": "Cache-Control",
@@ -60346,7 +60392,174 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read Target's public store-locator results for a ZIP, city or state query, preserving source store IDs, addresses, phones, timezone and dated local opening intervals. Results are the native page window, not an exhaustive geographic directory. Unavailable distance, coordinates and current open/closed status remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "place": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "category": {
+                                        "const": "retail"
+                                      },
+                                      "address": {
+                                        "type": "string"
+                                      },
+                                      "phone": {
+                                        "type": "string"
+                                      },
+                                      "latitude": {
+                                        "type": "null"
+                                      },
+                                      "longitude": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "hours": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "date": {
+                                                  "type": "string",
+                                                  "format": "date"
+                                                },
+                                                "day_name": {
+                                                  "type": "string"
+                                                },
+                                                "is_open": {
+                                                  "type": "boolean"
+                                                },
+                                                "intervals": {
+                                                  "type": "array",
+                                                  "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                      "opens_at": {
+                                                        "type": "string"
+                                                      },
+                                                      "closes_at": {
+                                                        "type": "string"
+                                                      },
+                                                      "closes_on": {
+                                                        "type": "string",
+                                                        "format": "date"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "opens_at",
+                                                      "closes_at",
+                                                      "closes_on"
+                                                    ]
+                                                  }
+                                                }
+                                              },
+                                              "required": [
+                                                "date",
+                                                "day_name",
+                                                "is_open",
+                                                "intervals"
+                                              ]
+                                            }
+                                          },
+                                          "distance": {
+                                            "type": "null"
+                                          },
+                                          "status": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "timezone",
+                                          "hours",
+                                          "distance",
+                                          "status"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "url",
+                                      "category",
+                                      "address",
+                                      "phone",
+                                      "latitude",
+                                      "longitude",
+                                      "ext"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "place"
+                                ]
+                              }
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "query",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -69968,7 +70181,7 @@
       "get": {
         "operationId": "get_kohls_categories",
         "summary": "Kohls Categories",
-        "description": "Use Kohls Categories to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read Kohl's current public navigation taxonomy with source content-path IDs, labels, URLs and nested categories. Header-only groups may have no URL. This is navigation reference data, not product inventory.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -70003,7 +70216,63 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read Kohl's current public navigation taxonomy with source content-path IDs, labels, URLs and nested categories. Header-only groups may have no URL. This is navigation reference data, not product inventory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "payload": {
+                              "type": "object",
+                              "properties": {
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/KohlsNavigationCategory"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "categories"
+                              ]
+                            },
+                            "root_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "node_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "payload",
+                            "root_count",
+                            "node_count",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

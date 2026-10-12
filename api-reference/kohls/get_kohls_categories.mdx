@@ -1,6 +1,12 @@
 ---
-title: "Kohls Categories"
+title: "Kohl's Categories"
 openapi: "GET /kohls/categories"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns the current public Kohl's navigation taxonomy. This operation takes no query parameters.
+
+`payload.categories` preserves department order and nested `categories`. Every node has its source `id`, name, level and type. IDs are current content paths rather than legacy numeric category IDs. `seoURL` preserves the source link; `url` resolves it to the Kohl's website. Header-only groups have null URLs. Promotional destinations and query strings are retained.
+
+`root_count` counts top-level departments; `node_count` includes every descendant. The source can change its seasonal taxonomy. Navigation entries do not establish product counts, availability or the complete merchandise catalog.
+
+Each fresh request uses one basic Firecrawl fetch of the exact anonymous navigation JSON published by Kohl's. Duplicate or inconsistent IDs, hierarchy drift and unexpected link destinations fail validation. Cached responses and successful idempotent replays are free.

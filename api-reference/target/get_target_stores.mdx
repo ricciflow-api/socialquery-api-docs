@@ -3,4 +3,10 @@ title: "Target Stores"
 openapi: "GET /target/stores"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a US ZIP code, city or state in `query`, for example `94040`, `New York, NY` or `Rhode Island`. The adapter reads the exact public Target locator page for that query and corroborates its structured page data against the visible store cards.
+
+`items[].place` contains the source store ID, name, store-detail URL, full address and phone. `ext.timezone` is the source IANA time zone. `ext.hours` preserves each dated opening-day record and all local `intervals`, including each interval's closing date. The source currently commonly supplies fourteen days; future store exceptions may change those hours.
+
+Coordinates, distance and current open/closed status are not exposed by this source surface and remain null. The adapter does not calculate an open-now label. This result is the native locator window, commonly twenty stores; it is not every store in a state or radius. `returned_count` describes that window, while `total` and `next_cursor` remain null.
+
+Each fresh call uses one basic Firecrawl fetch. Invalid queries return 422. If no public store cards are exposed, the operation returns 404 rather than fabricating an empty directory. Source failures leave no net SocialQuery charge; cache hits and successful idempotent replays are free.
