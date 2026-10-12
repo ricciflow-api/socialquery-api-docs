@@ -7,7 +7,7 @@ Resolve a public item link and retrieve it through the corresponding SocialQuery
 
 ## Billing
 
-A fresh successful lookup costs the resolved endpoint’s normal price, with no lookup surcharge: **1 credit**, or **5 credits** for a LinkedIn post or Amazon product. Use `X-Max-Credits` to set a hard cap. A cap below the resolved price returns `422 CREDIT_BUDGET_EXCEEDED` before a provider call. Successful cache hits and idempotent replays cost zero. Failed requests are refunded.
+A fresh successful lookup costs the resolved endpoint’s normal price, with no lookup surcharge: **1 credit**, or **5 credits** for a LinkedIn post or Amazon product. Use `X-Max-Credits` to set a hard cap. A cap below the resolved price returns `422 CREDIT_BUDGET_EXCEEDED` before a provider call. Lookup requests currently bypass the response cache. Successful idempotent replays cost zero. Failed requests are refunded.
 
 The public catalog exposes `creditPricing.type = resolved_endpoint` and `maxCredits = 5`; the scalar `creditCost` is the minimum price. MCP and the Python skill pass your explicit cap to the server for exact enforcement.
 

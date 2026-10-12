@@ -3,4 +3,10 @@ title: "LinkedIn Company Employees Count"
 openapi: "GET /linkedin/company/employees-count"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Headline LinkedIn member/staff count reported on the public company page. Geography and demographic group breakdowns are unavailable and geocode is rejected. This is not a verified payroll count; source precision is unknown.
+
+The response keeps `byGroup: null` and `count_is_exact: null`. Zero is retained when explicitly reported. A missing or invalid count is a source failure, not a fabricated zero. The count reflects LinkedIn member/page data and may differ from a company’s reported payroll.
+
+A successful fresh call costs **5 SocialQuery credits**. Cache hits and successful idempotent replays cost zero. Failed requests are refunded. Use `X-Max-Credits: 5` to cap the charge.
+
+Source: [Piloterr company information](https://docs.piloterr.com/linkedin-company-info) and [public profile information](https://docs.piloterr.com/linkedin-profile-info). Public availability and fields vary; this does not establish full LinkedIn feature parity.

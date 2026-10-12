@@ -11667,7 +11667,7 @@
       "get": {
         "operationId": "get_linkedin_company_employees_count",
         "summary": "LinkedIn Company Employees Count",
-        "description": "Use LinkedIn Company Employees Count to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Headline LinkedIn member/staff count reported on the public company page. Geography and demographic group breakdowns are unavailable and geocode is rejected. This is not a verified payroll count; source precision is unknown.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -11686,7 +11686,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unsupported by the configured source; supplying geocode returns 422 before a provider request."
           },
           {
             "name": "Cache-Control",
@@ -11719,7 +11720,50 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Headline LinkedIn member/staff count reported on the public company page. Geography and demographic group breakdowns are unavailable and geocode is rejected. This is not a verified payroll count; source precision is unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "byGroup": {
+                              "type": "null"
+                            },
+                            "company_id": {
+                              "type": "string"
+                            },
+                            "count_is_exact": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "piloterr"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -12184,7 +12228,7 @@
       "get": {
         "operationId": "get_linkedin_profile_top_position",
         "summary": "LinkedIn Profile Top Position",
-        "description": "Use LinkedIn Profile Top Position to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Resolve the company explicitly linked by a public profile’s top-position card, then retrieve its public company details. Returns the employer page, not a role title or employment dates. Profile and company identity must match the source links. Missing cards return 404; unknown company fields remain null.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -12192,7 +12236,7 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/adamselipsky/",
+            "example": "https://www.linkedin.com/in/williamhgates/",
             "schema": {
               "type": "string"
             }
@@ -12228,7 +12272,183 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Resolve the company explicitly linked by a public profile’s top-position card, then retrieve its public company details. Returns the employer page, not a role title or employment dates. Profile and company identity must match the source links. Missing cards return 404; unknown company fields remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "universalName": {
+                              "type": "string"
+                            },
+                            "linkedinUrl": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "tagline": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "type": {
+                              "type": "null"
+                            },
+                            "website": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "staffCount": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "staffCountRange": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "followerCount": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "industries": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "specialities": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "headquarter": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "city": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "line1": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "country": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "postal_code": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "locations": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "logos": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "width": {
+                                    "type": "null"
+                                  },
+                                  "height": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "founded": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "pageVerification": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "piloterr"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -86894,7 +87114,7 @@
       "get": {
         "operationId": "get_prism_lookup",
         "summary": "Prism Lookup",
-        "description": "Resolve one supported public item URL and call its platform endpoint. Charges the resolved endpoint price: 1 credit for ordinary items, 5 for LinkedIn posts and Amazon products, with no lookup surcharge. A successful cache hit or idempotent replay costs zero. Provider availability and field coverage match the resolved endpoint. Profiles, channels, shortened redirects, unsupported URLs and include flags return 422 before a provider call.",
+        "description": "Resolve one supported public item URL and call its platform endpoint. Charges the resolved endpoint price: 1 credit for ordinary items, 5 for LinkedIn posts and Amazon products, with no lookup surcharge. Lookups bypass the response cache; a successful idempotent replay costs zero. Provider availability and field coverage match the resolved endpoint. Profiles, channels, shortened redirects, unsupported URLs and include flags return 422 before a provider call.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [

@@ -3,4 +3,10 @@ title: "LinkedIn Profile Top Position"
 openapi: "GET /linkedin/profile/top-position"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Resolve the company explicitly linked by a public profile’s top-position card, then retrieve its public company details. Returns the employer page, not a role title or employment dates. Profile and company identity must match the source links. Missing cards return 404; unknown company fields remain null.
+
+This performs two bounded source requests: profile card, then the company page it names. The card URL must match the returned company URL. An absent card returns 404 with no net SocialQuery charge; an unrelated company is rejected. Type and page-verification status are unknown. `staffCountRange` and `locations` retain source display formats, not normalized numeric bounds or structured address lists. No job title or employment dates are inferred.
+
+A successful fresh call costs **5 SocialQuery credits**. Cache hits and successful idempotent replays cost zero. Failed requests are refunded. Use `X-Max-Credits: 5` to cap the charge.
+
+Source: [Piloterr company information](https://docs.piloterr.com/linkedin-company-info) and [public profile information](https://docs.piloterr.com/linkedin-profile-info). Public availability and fields vary; this does not establish full LinkedIn feature parity.
