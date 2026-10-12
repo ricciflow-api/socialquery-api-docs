@@ -72834,7 +72834,8 @@
         "x-one-of-parameters": [
           [
             "product_id",
-            "url"
+            "url",
+            "cursor"
           ]
         ],
         "tags": [
@@ -73401,7 +73402,8 @@
         "x-one-of-parameters": [
           [
             "product_id",
-            "url"
+            "url",
+            "cursor"
           ]
         ],
         "tags": [
