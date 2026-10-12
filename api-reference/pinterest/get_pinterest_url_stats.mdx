@@ -1,6 +1,8 @@
 ---
-title: "Pinterest Url Stats"
+title: "Pinterest URL Save Counts"
 openapi: "GET /pinterest/url-stats"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Return Pinterest Save Button counts for 1–10 comma-separated public HTTP(S) URLs. Each URL is passed unchanged to the count source: scheme, trailing slash and query string affect its count. Input order and duplicate rows are preserved. Zero can mean either never pinned or nonexistent, and pages outside the Save Button ecosystem may undercount. A malformed or unavailable source response fails the whole request without charging credits. The service requests only Pinterest; it never fetches the supplied external pages.
+
+One successful uncached request costs **1 credit**, including all supplied URLs. Failed requests and cache hits cost zero. This is one page with no cursor. For a literal comma inside a URL, supply the URL-encoded `%2C` form.
