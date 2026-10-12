@@ -1,6 +1,24 @@
 ---
-title: "Jobs Xing Search"
+title: "Xing Job Search"
 openapi: "GET /jobs/xing/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search Xing's public job index with `query` and optional `location`, both 1–200 characters. Location names in German are recommended. The source uses **semantic ranking**: a listing need not contain the literal keyword, and an unusual query does not necessarily produce no matches.
+
+Optional native filters:
+
+- `date_posted`: `day`, `week`, or `month`, using Xing's own freshness filter.
+- `employment_types`: semicolon-separated `contractor`, `fulltime`, `intern`, `parttime`, `seasonal`, `temporary`, `voluntary`.
+- `career_levels`: semicolon-separated `student`, `entry`, `professional`, `manager`, `executive`, `seniorExecutive`.
+- `remote_options`: semicolon-separated `remote`, `hybrid`, `onSite`.
+- `minimum_salary`: integer 0–200,000 EUR/year. A positive floor uses Xing's native **[floor, 200000]** range. This excludes ranges wholly above that upper bound and is not an unbounded minimum-income filter. Zero leaves the salary filter off. Displayed salaries may be estimates.
+
+Each call reads one native page, normally 20 listings. Pass `data.next_cursor` as `cursor` to continue. The one-hour cursor binds all filters and the preceding page's IDs; changed filters, source offset drift or repeated prior rows fail rather than silently duplicate data. At most 50 pages are available. This is a changing search index, not a frozen snapshot.
+
+`total` is populated only when Xing labels it exact. A native lower bound is returned as `total_lower_bound` with `total_relation: "at_least"` and `total: null`. An empty native result is valid. No results are fabricated from a challenge, login page or provider failure.
+
+Items use base64 job slugs as `id`; pass these unchanged to `/v1/jobs/xing`. Native IDs are preserved in `ext.native_id`. Search rows omit full descriptions and initial publication time. `ext.refreshed_at` is explicitly a refresh time, not the original listing time. Available company, salary and application fields are preserved; private member interactions, tracking IDs, guessed verification and applicant counts are omitted. External application links are returned without following them.
+
+Public source only: no member account, cookie, new API key or paid provider. The adapter checks query metadata, pagination and rendered title/link identities. It has a 22-second deadline, 2 MiB HTML limit and 20 shared reads/minute. Redirects are rejected.
+
+A fresh nonempty page costs **10 credits**; empty results, failures, cache hits and identical successful replays cost zero. Use `X-Max-Credits: 10`.

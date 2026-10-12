@@ -1,6 +1,12 @@
 ---
-title: "Jobs Xing"
+title: "Xing Job Details"
 openapi: "GET /jobs/xing"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass the `id` returned by `/v1/jobs/xing/search`. This is the canonical base64 encoding of a public Xing job slug, not its numeric native ID.
+
+The adapter verifies the requested slug, source query, native job identity and canonical URL before returning the public description and available company, location, salary, employment, career, workplace and application fields. Description sections are converted to plain text without executing scripts. The original activation time and later refresh time remain separate. Source salary ranges may be estimates; company verification and applicant totals remain unknown.
+
+Some public search listings send applicants directly to an external job board. Their `apply_url` remains available from search, but an external-only detail redirect or missing full description fails without charging. The adapter never follows arbitrary application links or submits applications.
+
+One anonymous public read, 22-second deadline, 2 MiB bound and 20 shared reads/minute. No account, cookie or new provider key. A successful fresh detail costs **5 credits**; errors, cached responses and successful identical replays cost zero. Use `X-Max-Credits: 5`.

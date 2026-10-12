@@ -110117,7 +110117,7 @@
       "get": {
         "operationId": "get_jobs_xing_search",
         "summary": "Jobs Xing Search",
-        "description": "Find records through Jobs Xing Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Native public Xing semantic job search with source-corroborated filters. Twenty results per page, cursor continuation for up to fifty pages. Salary filters use the native EUR 200,000 upper bound. Search is semantic, not strict keyword matching.",
         "x-credit-cost": 10,
         "x-launch-status": "beta",
         "parameters": [
@@ -110127,7 +110127,9 @@
             "required": false,
             "example": "software engineer",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -110136,7 +110138,9 @@
             "required": false,
             "example": "Berlin",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -110183,8 +110187,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 200000
+            },
+            "description": "Integer floor 0–200,000 EUR/year. Native filtering uses [floor, 200000]; this is not an unbounded salary filter. Displayed source ranges can be estimated."
           },
           {
             "name": "cursor",
@@ -110192,7 +110198,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour opaque cursor bound to query and filters. Use alone to continue; changed filters or repeated previous-page rows fail closed. At most 50 pages."
           },
           {
             "name": "Cache-Control",
@@ -110225,7 +110232,262 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native public Xing semantic job search with source-corroborated filters. Twenty results per page, cursor continuation for up to fifty pages. Salary filters use the native EUR 200,000 upper bound. Search is semantic, not strict keyword matching.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 20,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "company": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "verified": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  },
+                                  "location": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "listed_at": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "easy_apply": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "remote": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "employment_type": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "experience_level": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "apply_url": {
+                                    "type": "string"
+                                  },
+                                  "ext": {
+                                    "type": "object",
+                                    "properties": {
+                                      "board": {
+                                        "type": "string",
+                                        "const": "xing"
+                                      },
+                                      "native_id": {
+                                        "type": "string"
+                                      },
+                                      "refreshed_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "active_until": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "salary_min": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "salary_max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "salary_currency": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "salary_basis": {
+                                        "type": "string"
+                                      },
+                                      "country_code": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "industries": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "job_function": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "is_promote": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "applicant_count": {
+                                        "type": "null"
+                                      },
+                                      "accepting_applications": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "url",
+                                  "company",
+                                  "location",
+                                  "listed_at",
+                                  "easy_apply",
+                                  "remote",
+                                  "employment_type",
+                                  "experience_level",
+                                  "description",
+                                  "apply_url",
+                                  "ext"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "total_relation": {
+                              "type": "string",
+                              "enum": [
+                                "exact",
+                                "at_least"
+                              ]
+                            },
+                            "total_lower_bound": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "total_relation",
+                            "total_lower_bound",
+                            "next_cursor",
+                            "page",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -110282,7 +110544,7 @@
       "get": {
         "operationId": "get_jobs_xing",
         "summary": "Jobs Xing",
-        "description": "Use Jobs Xing to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public Xing job detail identified by the base64 slug returned in search items. Returns the full available description, source dates, company, salary and application link. External-only redirects fail without charging.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -110293,7 +110555,8 @@
             "example": "YmVybGluLXNlbmlvci1zb2x1dGlvbi1lbmdpbmVlci0xNTY3NTI5MTA=",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical base64 encoding of the Xing public job slug, returned as item.id by search. Not the numeric native ID."
           },
           {
             "name": "Cache-Control",
@@ -110326,7 +110589,208 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public Xing job detail identified by the base64 slug returned in search items. Returns the full available description, source dates, company, salary and application link. External-only redirects fail without charging.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "company": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "verified": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "location": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "listed_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "easy_apply": {
+                              "type": [
+                                "boolean",
+                                "null"
+                              ]
+                            },
+                            "remote": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "employment_type": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "experience_level": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "apply_url": {
+                              "type": "string"
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "board": {
+                                  "type": "string",
+                                  "const": "xing"
+                                },
+                                "native_id": {
+                                  "type": "string"
+                                },
+                                "refreshed_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "active_until": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "salary_min": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "salary_max": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "salary_currency": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "salary_basis": {
+                                  "type": "string"
+                                },
+                                "country_code": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "industries": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "job_function": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "is_promote": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "applicant_count": {
+                                  "type": "null"
+                                },
+                                "accepting_applications": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "url",
+                            "company",
+                            "location",
+                            "listed_at",
+                            "easy_apply",
+                            "remote",
+                            "employment_type",
+                            "experience_level",
+                            "description",
+                            "apply_url",
+                            "ext",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
