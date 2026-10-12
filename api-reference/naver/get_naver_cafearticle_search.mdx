@@ -1,6 +1,8 @@
 ---
-title: "Naver Cafearticle Search"
+title: "Naver Cafe Search"
 openapi: "GET /naver/cafearticle/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1–30, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported.
+
+One uncached successful request costs **1 SocialQuery credit**. Cache hits and failed requests cost zero. Initial upstream verification has a shared 200-credit provider cap; exhausted or unavailable budget storage prevents a new provider request. This does not activate NAVER Cloud billing or provide native API coverage.

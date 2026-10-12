@@ -3,4 +3,6 @@ title: "Gumtree Categories"
 openapi: "GET /gumtree/categories"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Browse one level of the Gumtree UK category tree. Omit category_id for the root, or supply a positive numeric category ID. Child flags are source-reported hints; false does not guarantee the category has no descendants.
+
+One uncached successful request costs **1 SocialQuery credits**. Cache hits and failed requests cost zero. Initial provider verification shares a fixed 200-credit allowance; an exhausted allowance prevents further upstream calls. Unknown values remain null.

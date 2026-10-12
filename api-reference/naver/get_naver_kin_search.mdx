@@ -1,6 +1,8 @@
 ---
-title: "Naver Kin Search"
+title: "Naver Knowledge iN Search"
 openapi: "GET /naver/kin/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search the first public Knowledge iN result window through ScrapeBadger, with up to ten records and no continuation. Answers are snippets, not full answers or certified accepted answers. Dates retain day precision and published_at remains null. Only sim sorting is available. start above 1 and question-only filtering are unsupported.
+
+One uncached successful request costs **1 SocialQuery credit**. Cache hits and failed requests cost zero. Initial upstream verification has a shared 200-credit provider cap; exhausted or unavailable budget storage prevents a new provider request. This does not activate NAVER Cloud billing or provide native API coverage.

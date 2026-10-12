@@ -63893,7 +63893,7 @@
       "get": {
         "operationId": "get_gumtree_product_similar",
         "summary": "Gumtree Product Similar",
-        "description": "Use Gumtree Product Similar to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Get one bounded window of Gumtree UK recommendations attached to a listing, in source order. Supply a numeric product_id or canonical HTTPS gumtree.com/p/... URL; both must agree if supplied. No continuation or similarity scores. Prices retain source-reported GBP; relative posting labels are preserved without invented publication timestamps. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -63901,10 +63901,12 @@
             "name": "product_id",
             "in": "query",
             "required": false,
-            "example": "1515115590",
+            "example": "1486650029",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Positive numeric Gumtree identifier."
           },
           {
             "name": "url",
@@ -63935,7 +63937,120 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Get one bounded window of Gumtree UK recommendations attached to a listing, in source order. Supply a numeric product_id or canonical HTTPS gumtree.com/p/... URL; both must agree if supplied. No continuation or similarity scores. Prices retain source-reported GBP; relative posting labels are preserved without invented publication timestamps.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "product_id": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "price": {
+                                    "type": "object",
+                                    "properties": {
+                                      "amount": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "currency": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "formatted": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "frequency": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "location": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "category_id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "posted_text": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_at": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64224,7 +64339,7 @@
       "get": {
         "operationId": "get_gumtree_search_suggestions",
         "summary": "Gumtree Search Suggestions",
-        "description": "Find records through Gumtree Search Suggestions using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Get the current Gumtree UK search-box suggestions for a query. Each suggestion can include matching categories. Category-scoped ranking is unavailable; category_id returns 422. Highlight markup is omitted. No pagination. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -64234,7 +64349,9 @@
             "required": true,
             "example": "iphone",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -64242,8 +64359,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Unsupported: category-specific suggestion ranking is unavailable. Omit this field."
           },
           {
             "name": "Cache-Control",
@@ -64266,7 +64385,75 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Get the current Gumtree UK search-box suggestions for a query. Each suggestion can include matching categories. Category-scoped ranking is unavailable; category_id returns 422. Highlight markup is omitted. No pagination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "query": {
+                                    "type": "string"
+                                  },
+                                  "categories": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "slug": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64393,7 +64580,7 @@
       "get": {
         "operationId": "get_gumtree_categories",
         "summary": "Gumtree Categories",
-        "description": "Use Gumtree Categories to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Browse one level of the Gumtree UK category tree. Omit category_id for the root, or supply a positive numeric category ID. Child flags are source-reported hints; false does not guarantee the category has no descendants. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -64402,8 +64589,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Positive numeric Gumtree identifier."
           },
           {
             "name": "Cache-Control",
@@ -64426,7 +64615,78 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Browse one level of the Gumtree UK category tree. Omit category_id for the root, or supply a positive numeric category ID. Child flags are source-reported hints; false does not guarantee the category has no descendants.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "category": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "has_children": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64477,7 +64737,7 @@
       "get": {
         "operationId": "get_gumtree_filters",
         "summary": "Gumtree Filters",
-        "description": "Use Gumtree Filters to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery’s separate search adapter. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -64485,10 +64745,12 @@
             "name": "category_id",
             "in": "query",
             "required": true,
-            "example": "10205",
+            "example": "9311",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Positive numeric Gumtree identifier."
           },
           {
             "name": "Cache-Control",
@@ -64511,7 +64773,185 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery’s separate search adapter.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "category_id": {
+                              "type": "string"
+                            },
+                            "category": {
+                              "type": "string"
+                            },
+                            "category_name": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "filters": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "key": {
+                                    "type": "string"
+                                  },
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "min_key": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "max_key": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "options": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        },
+                                        "count": {
+                                          "type": [
+                                            "integer",
+                                            "null"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "min_options": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        },
+                                        "count": {
+                                          "type": [
+                                            "integer",
+                                            "null"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "max_options": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        },
+                                        "count": {
+                                          "type": [
+                                            "integer",
+                                            "null"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "sort_options": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "label": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "distance_options": {
+                              "type": "array",
+                              "items": {
+                                "type": "number"
+                              }
+                            },
+                            "category_facets": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64562,7 +65002,7 @@
       "get": {
         "operationId": "get_gumtree_locations",
         "summary": "Gumtree Locations",
-        "description": "Use Gumtree Locations to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Resolve a town or postcode prefix into a Gumtree UK autocomplete window. Query must contain 2–200 characters. location_type filters that fetched window and does not widen the search. Coordinates are null if unavailable. No pagination. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -64572,7 +65012,9 @@
             "required": true,
             "example": "london",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 200
             }
           },
           {
@@ -64609,7 +65051,84 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Resolve a town or postcode prefix into a Gumtree UK autocomplete window. Query must contain 2–200 characters. location_type filters that fetched window and does not widen the search. Coordinates are null if unavailable. No pagination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "LOCATION",
+                                      "OUTCODE",
+                                      "POSTCODE"
+                                    ]
+                                  },
+                                  "latitude": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  },
+                                  "longitude": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "source_window_count": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -73329,7 +73848,7 @@
       "get": {
         "operationId": "get_naver_cafearticle_search",
         "summary": "Naver Cafearticle Search",
-        "description": "Find records through Naver Cafearticle Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1–30, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported. Initial provider verification is capped at 200 shared provider credits; the route returns an uncharged availability error once exhausted.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -73337,7 +73856,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "주식",
+            "example": "아이폰",
             "schema": {
               "type": "string"
             }
@@ -73348,16 +73867,22 @@
             "required": false,
             "example": 10,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "description": "Maximum rows from one source page. Fewer rows may be returned."
           },
           {
             "name": "start",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 990
+            },
+            "description": "One-based source offset. Prefer next_cursor; keep all filters unchanged."
           },
           {
             "name": "sort",
@@ -73369,7 +73894,8 @@
                 "sim",
                 "date"
               ]
-            }
+            },
+            "description": "Only the default value is supported (sim for Cafe/Knowledge iN, random for local). This selects source relevance order, not native API ranking parity."
           },
           {
             "name": "relevance",
@@ -73381,7 +73907,8 @@
                 "score",
                 "filter"
               ]
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "relevance_threshold",
@@ -73389,7 +73916,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "relevant_to",
@@ -73397,7 +73925,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "judgments",
@@ -73409,7 +73938,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "dry_run",
@@ -73420,7 +73950,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "fit",
@@ -73431,7 +73962,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "goal",
@@ -73439,7 +73971,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "fit_tokens",
@@ -73447,7 +73980,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "label",
@@ -73455,7 +73989,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "exclude",
@@ -73463,7 +73998,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "brand",
@@ -73471,7 +74007,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "brand_description",
@@ -73479,7 +74016,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "offer",
@@ -73487,7 +74025,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "label_evidence",
@@ -73498,7 +74037,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "since",
@@ -73506,7 +74046,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD only. Filter the fetched source window, keeping undated results. No full archive traversal."
           },
           {
             "name": "until",
@@ -73514,7 +74055,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD only. Filter the fetched source window, keeping undated results. No full archive traversal."
           },
           {
             "name": "cursor",
@@ -73522,7 +74064,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque source cursor. Keep query, display/limit and dates unchanged. Knowledge iN has no continuation."
           },
           {
             "name": "limit",
@@ -73530,8 +74073,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 30
+            },
+            "description": "Maximum rows from one source page. Fewer rows may be returned."
           },
           {
             "name": "Cache-Control",
@@ -73554,7 +74099,181 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1–30, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "link": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "category": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "road_address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "phone": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_date": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "date_precision": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "author": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "community_name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "question": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "answer_snippet": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_at": {
+                                    "type": "null"
+                                  },
+                                  "rating": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  },
+                                  "review_count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "comment_count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "is_open": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "is_ad": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "excluded_ads": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -73605,7 +74324,7 @@
       "get": {
         "operationId": "get_naver_kin_search",
         "summary": "Naver Kin Search",
-        "description": "Find records through Naver Kin Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search the first public Knowledge iN result window through ScrapeBadger, with up to ten records and no continuation. Answers are snippets, not full answers or certified accepted answers. Dates retain day precision and published_at remains null. Only sim sorting is available. start above 1 and question-only filtering are unsupported. Initial provider verification is capped at 200 shared provider credits; the route returns an uncharged availability error once exhausted.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -73613,7 +74332,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "코로나 증상",
+            "example": "노트북 발열 해결",
             "schema": {
               "type": "string"
             }
@@ -73624,16 +74343,22 @@
             "required": false,
             "example": 10,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "description": "Maximum rows from one source page. Fewer rows may be returned."
           },
           {
             "name": "start",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "description": "One-based source offset. Prefer next_cursor; keep all filters unchanged."
           },
           {
             "name": "sort",
@@ -73646,7 +74371,8 @@
                 "date",
                 "point"
               ]
-            }
+            },
+            "description": "Only the default value is supported (sim for Cafe/Knowledge iN, random for local). This selects source relevance order, not native API ranking parity."
           },
           {
             "name": "group",
@@ -73657,7 +74383,8 @@
               "enum": [
                 "question"
               ]
-            }
+            },
+            "description": "Unsupported by the current provider; omit this field. Only judgments=off is accepted. Unsupported options return 422 without charging."
           },
           {
             "name": "cursor",
@@ -73665,7 +74392,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque source cursor. Keep query, display/limit and dates unchanged. Knowledge iN has no continuation."
           },
           {
             "name": "limit",
@@ -73673,8 +74401,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 10
+            },
+            "description": "Maximum rows from one source page. Fewer rows may be returned."
           },
           {
             "name": "Cache-Control",
@@ -73697,7 +74427,181 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search the first public Knowledge iN result window through ScrapeBadger, with up to ten records and no continuation. Answers are snippets, not full answers or certified accepted answers. Dates retain day precision and published_at remains null. Only sim sorting is available. start above 1 and question-only filtering are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "link": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "category": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "road_address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "phone": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_date": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "date_precision": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "author": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "community_name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "question": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "answer_snippet": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_at": {
+                                    "type": "null"
+                                  },
+                                  "rating": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  },
+                                  "review_count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "comment_count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "is_open": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "is_ad": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "excluded_ads": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -73748,7 +74652,7 @@
       "get": {
         "operationId": "get_naver_local_search",
         "summary": "Naver Local Search",
-        "description": "Find records through Naver Local Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Verification limitation: repeated live source checks returned an empty result window after an earlier successful fixture. Nonempty production readiness is unresolved. Search the first public Naver local-result window through ScrapeBadger. Returns up to five organic places after excluding marked advertisements, so the result may contain fewer than requested. Addresses, phones, exact totals and other unavailable fields remain null. Source relevance order is used; native random/comment ranking parity is not claimed. No continuation. Initial provider verification is capped at 200 shared provider credits; the route returns an uncharged availability error once exhausted.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -73756,7 +74660,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "강남역 카페",
+            "example": "강남 파스타",
             "schema": {
               "type": "string"
             }
@@ -73767,8 +74671,11 @@
             "required": false,
             "example": 5,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "description": "Maximum rows from one source page. Fewer rows may be returned."
           },
           {
             "name": "sort",
@@ -73780,7 +74687,8 @@
                 "random",
                 "comment"
               ]
-            }
+            },
+            "description": "Only the default value is supported (sim for Cafe/Knowledge iN, random for local). This selects source relevance order, not native API ranking parity."
           },
           {
             "name": "Cache-Control",
@@ -73803,7 +74711,181 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search the first public Naver local-result window through ScrapeBadger. Returns up to five organic places after excluding marked advertisements, so the result may contain fewer than requested. Addresses, phones, exact totals and other unavailable fields remain null. Source relevance order is used; native random/comment ranking parity is not claimed. No continuation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "link": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "category": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "road_address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "phone": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_date": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "date_precision": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "author": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "community_name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "question": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "answer_snippet": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_at": {
+                                    "type": "null"
+                                  },
+                                  "rating": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  },
+                                  "review_count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "comment_count": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
+                                  "is_open": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "is_ad": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "excluded_ads": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

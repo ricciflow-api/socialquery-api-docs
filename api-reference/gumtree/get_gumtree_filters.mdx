@@ -1,6 +1,8 @@
 ---
-title: "Gumtree Filters"
+title: "Gumtree Search Filters"
 openapi: "GET /gumtree/filters"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery’s separate search adapter.
+
+One uncached successful request costs **1 SocialQuery credits**. Cache hits and failed requests cost zero. Initial provider verification shares a fixed 200-credit allowance; an exhausted allowance prevents further upstream calls. Unknown values remain null.

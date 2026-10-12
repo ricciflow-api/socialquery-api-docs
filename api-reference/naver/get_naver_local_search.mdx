@@ -3,4 +3,8 @@ title: "Naver Local Search"
 openapi: "GET /naver/local/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search the first public Naver local-result window through ScrapeBadger. Returns up to five organic places after excluding marked advertisements, so the result may contain fewer than requested. Addresses, phones, exact totals and other unavailable fields remain null. Source relevance order is used; native random/comment ranking parity is not claimed. No continuation.
+
+One uncached successful request costs **1 SocialQuery credit**. Cache hits and failed requests cost zero. Initial upstream verification has a shared 200-credit provider cap; exhausted or unavailable budget storage prevents a new provider request. This does not activate NAVER Cloud billing or provide native API coverage.
+
+<Warning>Repeated production and direct-source checks returned an empty source window after an earlier successful fixture. Nonempty production readiness is unresolved; this route is not certified as reliable coverage.</Warning>

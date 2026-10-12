@@ -1,6 +1,8 @@
 ---
-title: "Gumtree Product Similar"
+title: "Similar Gumtree Listings"
 openapi: "GET /gumtree/product/similar"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get one bounded window of Gumtree UK recommendations attached to a listing, in source order. Supply a numeric product_id or canonical HTTPS gumtree.com/p/... URL; both must agree if supplied. No continuation or similarity scores. Prices retain source-reported GBP; relative posting labels are preserved without invented publication timestamps.
+
+One uncached successful request costs **5 SocialQuery credits**. Cache hits and failed requests cost zero. Initial provider verification shares a fixed 200-credit allowance; an exhausted allowance prevents further upstream calls. Unknown values remain null.
