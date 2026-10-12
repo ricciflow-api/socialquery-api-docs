@@ -3,4 +3,8 @@ title: "Web Monitors {Monitor Id}"
 openapi: "GET /web/monitors/{monitor_id}"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.
+
+Snapshot history is retained for 1–30 days (default 7). Scrape snapshots retain at most 200,000 characters and compare a hash of the full source text. Search snapshots contain at most five results. `changed` is null on the first successful check and on failures; later successful checks compare with the last successful snapshot. Three consecutive source failures pause the monitor. Insufficient credits also pause it. Resume with PATCH after correcting the cause.
+
+Monitors belong to the creating API key. Other keys, including those for the same user, cannot read or change them. DELETE stops future checks and preserves history until retention expiry. List pagination uses a key-bound cursor; changes during pagination can shift results. Check history returns the latest requested number of checks (up to 100).

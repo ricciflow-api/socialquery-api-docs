@@ -2217,7 +2217,7 @@
       "post": {
         "operationId": "post_web_monitors",
         "summary": "Web Monitors",
-        "description": "Submit the documented input body for Web Monitors. Inspect the required fields and stated credit amount before sending a request. Check current availability with a bounded test.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2242,7 +2242,116 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current monitor configuration or retained check history. Configuration calls are free; scheduled usage is recorded separately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "monitor_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "schedule_kind": {
+                              "type": "string"
+                            },
+                            "delivery": {
+                              "type": "string"
+                            },
+                            "timezone": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "scrape",
+                                "search"
+                              ]
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "active",
+                                "paused",
+                                "deleted"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "pause_reason": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "cadence_minutes": {
+                              "type": "integer"
+                            },
+                            "retention_days": {
+                              "type": "integer"
+                            },
+                            "credits_booked": {
+                              "type": "integer"
+                            },
+                            "credits_per_check": {
+                              "type": "integer"
+                            },
+                            "consecutive_failures": {
+                              "type": "integer"
+                            },
+                            "next_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "last_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": true
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "_warnings": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -2308,31 +2417,51 @@
                     ]
                   },
                   "cadence_minutes": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 15,
+                    "maximum": 10080,
+                    "default": 1440
                   },
                   "schedule_text": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not supported by the current adapter; supplying this field returns 422."
                   },
                   "schedule_cron": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not supported by the current adapter; supplying this field returns 422."
                   },
                   "timezone": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "UTC"
+                    ]
                   },
                   "webhook_url": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not supported by the current adapter; supplying this field returns 422."
                   },
                   "query": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required for search mode. Results are scoped to the URL hostname."
                   },
                   "goal": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not supported by the current adapter; supplying this field returns 422."
                   },
                   "retention_days": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 30,
+                    "default": 7
                   },
                   "judge_enabled": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "enum": [
+                      false
+                    ],
+                    "default": false
                   }
                 }
               }
@@ -2346,7 +2475,7 @@
       "get": {
         "operationId": "get_web_monitors",
         "summary": "Web Monitors",
-        "description": "Use Web Monitors to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2364,7 +2493,10 @@
             "required": false,
             "example": 20,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           },
           {
@@ -2388,7 +2520,128 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current monitor configuration or retained check history. Configuration calls are free; scheduled usage is recorded separately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "monitor_id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "provider": {
+                                    "type": "string"
+                                  },
+                                  "schedule_kind": {
+                                    "type": "string"
+                                  },
+                                  "delivery": {
+                                    "type": "string"
+                                  },
+                                  "timezone": {
+                                    "type": "string"
+                                  },
+                                  "mode": {
+                                    "type": "string",
+                                    "enum": [
+                                      "scrape",
+                                      "search"
+                                    ]
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "active",
+                                      "paused",
+                                      "deleted"
+                                    ]
+                                  },
+                                  "query": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "pause_reason": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "cadence_minutes": {
+                                    "type": "integer"
+                                  },
+                                  "retention_days": {
+                                    "type": "integer"
+                                  },
+                                  "credits_booked": {
+                                    "type": "integer"
+                                  },
+                                  "credits_per_check": {
+                                    "type": "integer"
+                                  },
+                                  "consecutive_failures": {
+                                    "type": "integer"
+                                  },
+                                  "next_check_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": false
+                                  },
+                                  "last_check_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true
+                                  },
+                                  "created_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": false
+                                  },
+                                  "updated_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": false
+                                  },
+                                  "_warnings": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "next_cursor": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -2439,7 +2692,7 @@
       "get": {
         "operationId": "get_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "Use Web Monitors {Monitor Id} to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2473,7 +2726,116 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current monitor configuration or retained check history. Configuration calls are free; scheduled usage is recorded separately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "monitor_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "schedule_kind": {
+                              "type": "string"
+                            },
+                            "delivery": {
+                              "type": "string"
+                            },
+                            "timezone": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "scrape",
+                                "search"
+                              ]
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "active",
+                                "paused",
+                                "deleted"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "pause_reason": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "cadence_minutes": {
+                              "type": "integer"
+                            },
+                            "retention_days": {
+                              "type": "integer"
+                            },
+                            "credits_booked": {
+                              "type": "integer"
+                            },
+                            "credits_per_check": {
+                              "type": "integer"
+                            },
+                            "consecutive_failures": {
+                              "type": "integer"
+                            },
+                            "next_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "last_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": true
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "_warnings": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -2522,7 +2884,7 @@
       "patch": {
         "operationId": "patch_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "Web Monitors {Monitor Id} uses a PATCH request with the fields defined below. Review the target and accepted changes before execution; this preview contract does not guarantee live availability.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2556,7 +2918,116 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current monitor configuration or retained check history. Configuration calls are free; scheduled usage is recorded separately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "monitor_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "schedule_kind": {
+                              "type": "string"
+                            },
+                            "delivery": {
+                              "type": "string"
+                            },
+                            "timezone": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "scrape",
+                                "search"
+                              ]
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "active",
+                                "paused",
+                                "deleted"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "pause_reason": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "cadence_minutes": {
+                              "type": "integer"
+                            },
+                            "retention_days": {
+                              "type": "integer"
+                            },
+                            "credits_booked": {
+                              "type": "integer"
+                            },
+                            "credits_per_check": {
+                              "type": "integer"
+                            },
+                            "consecutive_failures": {
+                              "type": "integer"
+                            },
+                            "next_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "last_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": true
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "_warnings": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -2614,16 +3085,24 @@
                     ]
                   },
                   "cadence_minutes": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 15,
+                    "maximum": 10080,
+                    "default": 1440
                   },
                   "schedule_text": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not supported by the current adapter; supplying this field returns 422."
                   },
                   "schedule_cron": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not supported by the current adapter; supplying this field returns 422."
                   },
                   "timezone": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "UTC"
+                    ]
                   }
                 }
               }
@@ -2637,7 +3116,7 @@
       "delete": {
         "operationId": "delete_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "Web Monitors {Monitor Id} uses a DELETE request. Confirm the target identifier and the documented effect before calling this operation. Availability must be verified during preview.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2671,7 +3150,116 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current monitor configuration or retained check history. Configuration calls are free; scheduled usage is recorded separately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "monitor_id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "schedule_kind": {
+                              "type": "string"
+                            },
+                            "delivery": {
+                              "type": "string"
+                            },
+                            "timezone": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "scrape",
+                                "search"
+                              ]
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "active",
+                                "paused",
+                                "deleted"
+                              ]
+                            },
+                            "query": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "pause_reason": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "cadence_minutes": {
+                              "type": "integer"
+                            },
+                            "retention_days": {
+                              "type": "integer"
+                            },
+                            "credits_booked": {
+                              "type": "integer"
+                            },
+                            "credits_per_check": {
+                              "type": "integer"
+                            },
+                            "consecutive_failures": {
+                              "type": "integer"
+                            },
+                            "next_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "last_check_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": true
+                            },
+                            "created_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "updated_at": {
+                              "type": "string",
+                              "format": "date-time",
+                              "nullable": false
+                            },
+                            "_warnings": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -2722,7 +3310,7 @@
       "get": {
         "operationId": "get_web_monitors_monitor_id_checks",
         "summary": "Web Monitors {Monitor Id} Checks",
-        "description": "Use Web Monitors {Monitor Id} Checks to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2740,7 +3328,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           },
           {
@@ -2764,7 +3355,125 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current monitor configuration or retained check history. Configuration calls are free; scheduled usage is recorded separately.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "monitor_id": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "monitor_id": {
+                                    "type": "string"
+                                  },
+                                  "scheduled_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": false
+                                  },
+                                  "started_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": false
+                                  },
+                                  "finished_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "nullable": true
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "running",
+                                      "completed",
+                                      "failed"
+                                    ]
+                                  },
+                                  "credits_used": {
+                                    "type": "integer"
+                                  },
+                                  "changed": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                  },
+                                  "error_code": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "result": {
+                                    "nullable": true,
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "markdown": {
+                                            "type": "string"
+                                          },
+                                          "truncated": {
+                                            "type": "boolean"
+                                          },
+                                          "title": {
+                                            "type": "string",
+                                            "nullable": true
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "items": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "url": {
+                                                  "type": "string"
+                                                },
+                                                "title": {
+                                                  "type": "string"
+                                                },
+                                                "description": {
+                                                  "type": "string",
+                                                  "nullable": true
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "retention_days": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
