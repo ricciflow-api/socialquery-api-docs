@@ -1,6 +1,14 @@
 ---
-title: "Walmart Offers"
+title: "Walmart seller offers"
 openapi: "GET /walmart/offers"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Costs **5 credits** for a successful live response containing offers. A validated empty response, error, cache hit, or successful idempotent replay costs zero credits. Numeric IDs use one provider read; alphanumeric IDs require an additional product-ID resolution read at the same customer price.
+
+This release supports **Walmart US**, using **store 1554 in Stockton, California** as the explicit location context. The response includes `store_id`, `store_url`, and the source's `shipping_destination`. Prices and stock are location-dependent; they are not nationwide quotes. `country=CA` currently returns an uncharged 422. No store override or pagination is available.
+
+Each item includes a seller, offer ID, source stock label, price, and available return-policy text. `first_party` comes from the source's seller type. `pickup_available`, `condition`, ratings, tax, and shipping remain null when absent. `price.total` remains null because a complete checkout total is unavailable. `return_window_days` is populated only from an explicit day-based policy.
+
+`returned_count` describes the returned offers. The source does not expose a complete global count or continuation, so `total` and `next_cursor` remain null. Products, store context, offer IDs, and formatted/extracted prices must agree; blocked or malformed pages fail instead of returning a fabricated empty list.
+
+Source: [SerpApi Walmart Sellers API](https://serpapi.com/walmart-product-sellers-api), with the existing free search allowance. [Walmart's store page](https://www.walmart.com/store/1554-stockton-ca/) identifies the selected context. This is a snapshot of visible offers, not a stock reservation or a guaranteed purchase price.
