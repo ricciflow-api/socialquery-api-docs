@@ -1,6 +1,16 @@
 ---
-title: "Us Congress Trades Politician Trades"
+title: "Congressional Trades by Politician"
 openapi: "GET /us_congress_trades/politician/trades"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns public disclosures from the [Capitol Trades index](https://www.capitoltrades.com/trades) for `handle=Pelosi`, a full display name such as `Nancy Pelosi`, or a native member ID such as `P000197`. A surname must resolve to one indexed member and agree with returned disclosure surnames. Ambiguous surnames return 422; use the full display name or member ID. Unindexed members return an empty result. This directory reflects the source index, not a complete current Congress roster.
+
+`sort` accepts `pub_date` (default), `tx_date`, `reporting_gap` and `value`; `order` is `asc` or `desc` (default). Dates and delay use native source ordering, corroborated across every fetched row. **Value sorting is supported only when the member's complete indexed history fits in 100 disclosures.** The adapter fetches that complete result, then sorts and slices it. Larger histories return an unbilled `422 UNSUPPORTED_PARAMETER`; a partial page is never presented as globally sorted.
+
+Use `limit` 1–100 (default 20), `offset` 0–1,000,000, or a returned `next_cursor` alone. Cursors bind member, sort/order, size and offset for one hour and recheck the preceding trade. New or edited source records can require restarting. Use a full display name/member ID for a terminal offset without a previous surname-verified cursor: an empty source page cannot independently corroborate a surname.
+
+The source says its available history is restricted to the past **three years**. `total` means the current indexed matching count, not lifetime filings or complete government coverage. Rows preserve source IDs, member name/party/state/chamber, issuer/ticker/sector, publication and trade dates, transaction type, owner, reporting gap, estimated value and nullable price. Values are estimates. Birth dates and gender are omitted.
+
+Requests reuse the existing Firecrawl basic transport: one anonymous public directory read and at most two disclosure pages, a shared 55-second deadline, a 4 MiB decoded HTML limit per page and 20 source reads/minute. Page data is parsed without executing scripts. No new account, key or purchase is required.
+
+A fresh nonempty response costs **1 credit**. Empty results, errors, cached responses and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. Existing approved provider free allowance only.
