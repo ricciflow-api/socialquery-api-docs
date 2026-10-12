@@ -104895,7 +104895,7 @@
       "get": {
         "operationId": "get_xiaohongshu_post_comments",
         "summary": "Xiaohongshu Post Comments",
-        "description": "Inspect discussion records with Xiaohongshu Post Comments. Supply the accepted resource identifier and follow the operation's paging rules. Returned records may represent only part of the discussion.",
+        "description": "Public top-level Xiaohongshu comments from a canonical note URL, optionally carrying its public share token. Returns source order, one to twenty comments per page, up to three pages from a fresh bounded source window. Cursors exclude previously returned IDs. Sorting, nested replies, short links and complete thread history are unavailable. Date filters apply only within that window and exclude unknown absolute dates. Relative source timestamps stay in ext.source_time_display; published_at remains null. Empty or invalid upstream results are failures, not proof that a post has no comments.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -104906,7 +104906,8 @@
             "example": "https://www.xiaohongshu.com/explore/6aac8143000000002a007389",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical HTTPS xiaohongshu.com note URL: explore, discovery/item or user/profile/<user>/<note>. Public xsec_token and xsec_source query values are supported; short links are unavailable."
           },
           {
             "name": "limit",
@@ -104924,7 +104925,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque cursor bound to this note, limit and date filters. Up to three pages; source ordering may change between requests."
           },
           {
             "name": "sort",
@@ -104937,7 +104939,8 @@
                 "latest",
                 "most_liked"
               ]
-            }
+            },
+            "description": "Not implemented by the current source. Omit; any supplied value returns 422 without net charge."
           },
           {
             "name": "since",
@@ -104945,7 +104948,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Inclusive YYYY-MM-DD filter applied within the bounded source window; rows without an absolute timestamp are excluded."
           },
           {
             "name": "until",
@@ -104953,7 +104957,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Inclusive YYYY-MM-DD filter applied within the bounded source window; rows without an absolute timestamp are excluded."
           },
           {
             "name": "Cache-Control",
@@ -104986,7 +104991,193 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public top-level Xiaohongshu comments from a canonical note URL, optionally carrying its public share token. Returns source order, one to twenty comments per page, up to three pages from a fresh bounded source window. Cursors exclude previously returned IDs. Sorting, nested replies, short links and complete thread history are unavailable. Date filters apply only within that window and exclude unknown absolute dates. Relative source timestamps stay in ext.source_time_display; published_at remains null. Empty or invalid upstream results are failures, not proof that a post has no comments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "window_truncated",
+                            "coverage_note"
+                          ],
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "comment": {
+                                    "type": "object",
+                                    "required": [
+                                      "id",
+                                      "post_id",
+                                      "parent_id",
+                                      "url",
+                                      "text",
+                                      "author",
+                                      "engagement",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "post_id": {
+                                        "type": "string"
+                                      },
+                                      "parent_id": {
+                                        "type": "null"
+                                      },
+                                      "url": {
+                                        "type": "null"
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "username": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "replies": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "source_time_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "ip_location": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_position": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "source_provider": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "comment"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

@@ -3,4 +3,14 @@ title: "Xiaohongshu Post Comments"
 openapi: "GET /xiaohongshu/post/comments"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read public top-level comments from a canonical Xiaohongshu note URL. This adapter uses the pinned [Xiaohongshu Comments Scraper on Apify](https://apify.com/khadinakbar/xiaohongshu-comments-scraper). It verifies the note and comment identities before returning canonical comments.
+
+Pass an HTTPS `xiaohongshu.com` URL with an `/explore/`, `/discovery/item/`, or `/user/profile/<user>/<note>` path. A public `xsec_token` and `xsec_source` from the shared note URL may improve source access. Redirecting short links are unavailable. No account cookies or private content are accepted.
+
+`limit` is 1–20, default 20. Follow `next_cursor` with the same note, limit and date filters for at most three pages. Each call reads a fresh bounded source window and excludes IDs from earlier pages. Source changes can still affect coverage; this is not a complete thread export. `window_truncated` indicates that the third page has additional visible source rows.
+
+Comments retain source order. Omit `sort`; every explicit sorting option returns 422 without net charge. Nested replies are unavailable. `since` and `until` are inclusive YYYY-MM-DD filters within the current window, so a filtered page can be empty and still have a cursor. Rows with unknown absolute dates are excluded when a date filter is present.
+
+Absolute source timestamps become `published_at`. Relative text such as `03-10` stays in `ext.source_time_display`, with `published_at: null`. Likes, reply counts, verification and total counts remain null when the source does not expose them. Public IP-location labels are retained as source text in `ext.ip_location`.
+
+Failed or empty source output returns an error with no net SocialQuery charge; it does not prove that a note has no comments. Upstream access and trial capacity can change. Identical cached requests and idempotent replays are free; consult the response for actual credits used.
