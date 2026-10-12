@@ -8126,18 +8126,19 @@
       "get": {
         "operationId": "get_youtube_video_comment_replies",
         "summary": "YouTube Video Comment Replies",
-        "description": "Inspect discussion records with YouTube Video Comment Replies. Supply the accepted resource identifier and follow the operation's paging rules. Returned records may represent only part of the discussion.",
+        "description": "Replies to a public top-level YouTube comment. Pass a top-level comment ID for the first page and the returned data.next_cursor unchanged for subsequent pages. The configured official provider returns up to ten replies per page. Label judgments and date filtering are not implemented; explicit unsupported options return 422. This operation does not provide downloaded media or transcript access.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "continuationToken",
             "in": "query",
-            "required": true,
-            "example": "Ugzge340dBgB75hWBm54AaABAg",
+            "required": false,
+            "example": "Ugw1tpIYg_PAwdPneep4AaABAg",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Top-level comment ID or data.next_cursor returned by this operation. Required unless cursor is supplied."
           },
           {
             "name": "format",
@@ -8149,7 +8150,8 @@
                 "html",
                 "plainText"
               ]
-            }
+            },
+            "description": "Reply text format: html (default) or plainText."
           },
           {
             "name": "label",
@@ -8157,7 +8159,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Only none is supported to omit judgment fields. Other label presets return 422."
           },
           {
             "name": "exclude",
@@ -8165,7 +8168,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "judgments",
@@ -8177,7 +8181,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "off omits computed judgment fields. Without this option, labels remain null with a skipped status; explicit on is unsupported."
           },
           {
             "name": "dry_run",
@@ -8188,7 +8193,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "label_evidence",
@@ -8199,7 +8205,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "fit",
@@ -8210,7 +8217,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "goal",
@@ -8218,7 +8226,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "fit_tokens",
@@ -8226,7 +8235,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "since",
@@ -8234,7 +8244,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "until",
@@ -8242,7 +8253,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this configured provider; returns 422 rather than silently ignoring the requested behavior."
           },
           {
             "name": "cursor",
@@ -8250,7 +8262,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Exact data.next_cursor returned by the previous replies call; it carries the original parent comment and provider page token."
           },
           {
             "name": "Cache-Control",
@@ -8283,7 +8296,152 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Replies to a public top-level YouTube comment. Pass a top-level comment ID for the first page and the returned data.next_cursor unchanged for subsequent pages. The configured official provider returns up to ten replies per page. Label judgments and date filtering are not implemented; explicit unsupported options return 422. This operation does not provide downloaded media or transcript access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "text": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "parent_id": {
+                                    "type": "string"
+                                  },
+                                  "post_id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_at": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "updated_at": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "author": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "username": {
+                                        "type": "null"
+                                      },
+                                      "display_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "avatar_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "verified": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  },
+                                  "engagement": {
+                                    "type": "object",
+                                    "properties": {
+                                      "likes": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "replies": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "labels": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "parent_id": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "labels": {
+                              "type": "object",
+                              "properties": {
+                                "status": {
+                                  "type": "string",
+                                  "enum": [
+                                    "skipped"
+                                  ]
+                                },
+                                "reason": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -8327,6 +8485,12 @@
         },
         "tags": [
           "YouTube"
+        ],
+        "x-one-of-parameters": [
+          [
+            "continuationToken",
+            "cursor"
+          ]
         ]
       }
     },

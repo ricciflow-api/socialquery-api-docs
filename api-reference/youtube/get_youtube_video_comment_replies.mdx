@@ -3,4 +3,10 @@ title: "YouTube Video Comment Replies"
 openapi: "GET /youtube/video/comment/replies"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read replies through the [official YouTube comments API](https://developers.google.com/youtube/v3/docs/comments/list). Start with a top-level `id` returned by `/v1/youtube/video/comments`, using `continuationToken`. The returned `data.next_cursor` can be passed unchanged as either `continuationToken` or `cursor` for the next page. Tokens from other providers are not interchangeable.
+
+The current adapter returns up to ten replies per page. `data.returned_count` is the current page size; `total` is the provider's reported total when present, otherwise null. `has_more` follows the returned cursor. Parent IDs are checked on every reply. `format` accepts `html` (default) or `plainText`; callers rendering HTML should sanitize it.
+
+Fresh successful pages cost **1 SocialQuery credit**. Cache hits and successful idempotent replays cost zero; failed calls are refunded. Use `X-Max-Credits: 1`.
+
+Judgments are not yet implemented: the default response reports skipped labels and null values. `judgments=off` or `label=none` omits judgment fields. Explicit labeling, date filters, fitting and dry-run requests return 422. Reply counts and account verification remain null when the provider does not supply them. This verifies public reply access and pagination, not full SocialCrawl enrichment parity.
