@@ -91015,18 +91015,19 @@
       "get": {
         "operationId": "get_naver_encyc_search",
         "summary": "Naver Encyc Search",
-        "description": "Find records through Naver Encyc Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Anonymous Naver Knowledge Encyclopedia search excerpts and links, with native relevance/latest order and bounded continuation. No Naver Cloud key required. Includes Korean text, source categories and thumbnails without inventing dates or totals. Query corrections/adult gates fail closed.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "query",
             "in": "query",
-            "required": true,
-            "example": "양자역학",
+            "required": false,
+            "example": "인공지능",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Search text up to 500 characters; alternatively return next_cursor alone."
           },
           {
             "name": "display",
@@ -91034,24 +91035,35 @@
             "required": false,
             "example": 10,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Requested source rows, 1–100; default 10. Aliases must agree. Deduplication may reduce returned_count."
           },
           {
             "name": "start",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "description": "One-based native source position, 1–1000; windows stop at position 1000."
           },
           {
             "name": "sort",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "enum": [
+                "sim",
+                "date"
+              ]
+            },
+            "description": "Native relevance order (sim, default) or latest order (date)."
           },
           {
             "name": "cursor",
@@ -91059,7 +91071,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque one-hour next_cursor; binds query, display and sort. Can be used alone; explicit conflicts are rejected."
           },
           {
             "name": "limit",
@@ -91067,8 +91080,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Requested source rows, 1–100; default 10. Aliases must agree. Deduplication may reduce returned_count."
           },
           {
             "name": "Cache-Control",
@@ -91101,7 +91116,148 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Anonymous Naver Knowledge Encyclopedia search excerpts and links, with native relevance/latest order and bounded continuation. No Naver Cloud key required. Includes Korean text, source categories and thumbnails without inventing dates or totals. Query corrections/adult gates fail closed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "link": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "thumbnail": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "category": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "source_name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "content_type": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "link",
+                                  "description",
+                                  "thumbnail",
+                                  "category",
+                                  "source_name",
+                                  "content_type"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "display": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 1000
+                            },
+                            "sort": {
+                              "type": "string",
+                              "enum": [
+                                "sim",
+                                "date"
+                              ]
+                            },
+                            "source_rows_scanned": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string",
+                              "const": "naver_terms"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "query",
+                            "display",
+                            "start",
+                            "sort",
+                            "source_rows_scanned",
+                            "dropped",
+                            "has_more",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -91145,6 +91301,12 @@
         },
         "tags": [
           "Naver"
+        ],
+        "x-one-of-parameters": [
+          [
+            "query",
+            "cursor"
+          ]
         ]
       }
     },
