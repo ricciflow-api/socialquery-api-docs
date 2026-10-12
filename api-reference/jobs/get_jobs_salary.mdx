@@ -3,4 +3,6 @@ title: "Jobs Salary"
 openapi: "GET /jobs/salary"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read national Indeed salary aggregates for a job title or title slug. Currently supports country_code us and fr (case-insensitive). Each pay period preserves its source mean, median, minimum, maximum and sample size; hourly and annual figures are not converted or combined. Unsupported countries, URLs and extra filters return 422 with no net charge. Unknown update dates and absent statistics remain null. Related titles are source suggestions, not a complete searchable directory. A successful live lookup costs 1 credit; cache hits and idempotent replays cost zero.
+
+[Source contract](https://docs.piloterr.com/indeed-job-salary).

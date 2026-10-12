@@ -1,6 +1,8 @@
 ---
-title: "LinkedIn Profile Similar"
+title: "LinkedIn Similar Profiles"
 openapi: "GET /linkedin/profile/similar"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the public People also viewed cards for a LinkedIn profile URL. These are source recommendations, not a scored similarity search. Mixed location/follower display text is preserved in ext.source_location_display; geographic location, follower count and similarity score remain null. No exhaustive directory or pagination is claimed. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.
+
+[Source contract](https://docs.piloterr.com/linkedin-profile-info).

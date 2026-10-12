@@ -3,4 +3,6 @@ title: "LinkedIn Profile Articles"
 openapi: "GET /linkedin/profile/articles"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the first visible article-title window for a LinkedIn profile URL. Returns article links, titles and author names. Full text, dates, deeper pages and date filters are unavailable; only omitted page or page=1 is accepted. Other options return 422 without net charge. This is not complete article history. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.
+
+[Source contract](https://docs.piloterr.com/linkedin-profile-info).

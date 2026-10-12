@@ -3,4 +3,29 @@ title: "Prism Lookup"
 openapi: "GET /prism/lookup"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Resolve a public item link and retrieve it through the corresponding SocialQuery endpoint. The response identifies the selected platform, endpoint and parameters, then includes that endpoint’s data.
+
+## Billing
+
+A fresh successful lookup costs the resolved endpoint’s normal price, with no lookup surcharge: **1 credit**, or **5 credits** for a LinkedIn post or Amazon product. Use `X-Max-Credits` to set a hard cap. A cap below the resolved price returns `422 CREDIT_BUDGET_EXCEEDED` before a provider call. Successful cache hits and idempotent replays cost zero. Failed requests are refunded.
+
+The public catalog exposes `creditPricing.type = resolved_endpoint` and `maxCredits = 5`; the scalar `creditCost` is the minimum price. MCP and the Python skill pass your explicit cap to the server for exact enforcement.
+
+## Supported links
+
+- YouTube videos; TikTok videos; Instagram posts/reels; X/Twitter status links.
+- Facebook posts, videos and reels; LinkedIn activity posts; Threads posts; Pinterest pins.
+- Reddit posts; Bluesky posts; Truth Social posts; Rumble videos.
+- Hacker News stories; GitHub repositories and issues; Spotify tracks; Amazon products in the 13 documented Amazon markets.
+
+Profiles, channels, storefronts, shortened redirect links and unrecognized item paths are rejected. GitHub pull-request links resolve through the issue representation. LinkedIn and Amazon fields, availability and limits follow their underlying endpoints.
+
+`include` accepts only the documented boolean options for the resolved platform. Unsupported flags return 422 instead of silently changing the query. Successful resolution does not guarantee that the underlying provider has the requested item, nor that every optional field is available.
+
+## Example
+
+```bash
+curl 'https://socialquery.dev/v1/prism/lookup?url=https%3A%2F%2Fgithub.com%2Foctocat%2FHello-World' \
+  -H "x-api-key: $SOCIALQUERY_API_KEY" \
+  -H 'X-Max-Credits: 1'
+```

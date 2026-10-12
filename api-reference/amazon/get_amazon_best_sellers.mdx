@@ -1,8 +1,8 @@
 ---
-title: "Amazon Best Sellers and New Releases"
+title: "Amazon Best Sellers"
 openapi: "GET /amazon/best-sellers"
 ---
 
-Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Page 1 and page 2 are supported. Verified US pages returned 30 rows from each 50-rank window (ranks 1–30 and 51–80); this is partial board coverage. A cursor appears only when the source confirms another page, so use page=2 when the source total is unknown. Other list types are rejected with 422 and no net charge. A nonempty live page costs 1 credit; a successful empty page costs zero after the initial 1-credit hold is refunded. Prices preserve decimals; missing stock, rating counts and totals remain null. US boards have been checked live; other configured marketplaces still need production verification.
+Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Pages 1 and 2 are supported. Oxylabs Best Sellers checks returned 50 rows on each US source page; the alternative source returned 30 rows from each 50-rank window. Exact coverage and rank availability depend on the source; do not infer a global rank from page-relative position. NEW_RELEASES uses the alternative source. A cursor appears only when the source confirms another page; cursors stay with their original provider. Other list types return 422 with no net charge. A nonempty live page costs 1 credit; a successful empty page refunds the hold. Missing stock, original prices and totals remain null. Other marketplaces require production verification.
 
-The provider allowance is finite and has no automatic refill. Coverage remains in preview while remaining filters, markets and source limitations are verified.
+Provider trials have finite allowances and fail closed when exhausted. The existing alternative provider remains available within its separate approved budget.

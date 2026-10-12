@@ -2317,7 +2317,7 @@
       "post": {
         "operationId": "post_web_monitors",
         "summary": "Web Monitors",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2585,7 +2585,7 @@
       "get": {
         "operationId": "get_web_monitors",
         "summary": "Web Monitors",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2812,7 +2812,7 @@
       "get": {
         "operationId": "get_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3014,7 +3014,7 @@
       "patch": {
         "operationId": "patch_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3256,7 +3256,7 @@
       "delete": {
         "operationId": "delete_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3460,7 +3460,7 @@
       "get": {
         "operationId": "get_web_monitors_monitor_id_checks",
         "summary": "Web Monitors {Monitor Id} Checks",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3684,7 +3684,7 @@
       "post": {
         "operationId": "post_web_sessions",
         "summary": "Create a browser session",
-        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30\u201360 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
+        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30–60 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -4089,7 +4089,7 @@
       "post": {
         "operationId": "post_web_sessions_session_id_execute",
         "summary": "Execute browser code",
-        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1\u201330 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
+        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1–30 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -9783,7 +9783,7 @@
       "get": {
         "operationId": "get_linkedin_company_by_domain",
         "summary": "LinkedIn Company By Domain",
-        "description": "Use LinkedIn Company By Domain to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Look up one indexed LinkedIn company by its bare public website domain. The returned company website must match that domain or a subdomain. This is not an exhaustive domain-to-subsidiary search. Employee and follower counts remain source-reported with unknown precision. Supply domain without a URL scheme or path. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -9827,7 +9827,143 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Look up one indexed LinkedIn company by its bare public website domain. The returned company website must match that domain or a subdomain. This is not an exhaustive domain-to-subsidiary search. Employee and follower counts remain source-reported with unknown precision. Supply domain without a URL scheme or path. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "username": {
+                                  "type": "string"
+                                },
+                                "display_name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "bio": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "verified": {
+                                  "type": "null"
+                                },
+                                "followers": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ]
+                                },
+                                "following": {
+                                  "type": "null"
+                                },
+                                "posts_count": {
+                                  "type": "null"
+                                },
+                                "likes_count": {
+                                  "type": "null"
+                                },
+                                "location": {
+                                  "type": "null"
+                                },
+                                "external_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "private": {
+                                  "type": "null"
+                                },
+                                "joined_at": {
+                                  "type": "null"
+                                },
+                                "last_post_at": {
+                                  "type": "null"
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "company_id": {
+                                      "type": "string"
+                                    },
+                                    "employee_count": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count_display": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "industry": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "founded_year": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "count_is_exact": {
+                                      "type": "null"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "requested_domain": {
+                              "type": "string"
+                            },
+                            "matched_website_host": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -9878,7 +10014,7 @@
       "get": {
         "operationId": "get_linkedin_profile_similar",
         "summary": "LinkedIn Profile Similar",
-        "description": "Use LinkedIn Profile Similar to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the public People also viewed cards for a LinkedIn profile URL. These are source recommendations, not a scored similarity search. Mixed location/follower display text is preserved in ext.source_location_display; geographic location, follower count and similarity score remain null. No exhaustive directory or pagination is claimed. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -9922,7 +10058,101 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the public People also viewed cards for a LinkedIn profile URL. These are source recommendations, not a scored similarity search. Mixed location/follower display text is preserved in ext.source_location_display; geographic location, follower count and similarity score remain null. No exhaustive directory or pagination is claimed. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "author": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "username": {
+                                        "type": "string"
+                                      },
+                                      "display_name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "bio": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "location": {
+                                        "type": "null"
+                                      },
+                                      "followers": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "source_location_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "similarity_score": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "const": false
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -10331,7 +10561,7 @@
       "get": {
         "operationId": "get_linkedin_profile_articles",
         "summary": "LinkedIn Profile Articles",
-        "description": "Use LinkedIn Profile Articles to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the first visible article-title window for a LinkedIn profile URL. Returns article links, titles and author names. Full text, dates, deeper pages and date filters are unavailable; only omitted page or page=1 is accepted. Other options return 422 without net charge. This is not complete article history. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -10408,7 +10638,81 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the first visible article-title window for a LinkedIn profile URL. Returns article links, titles and author names. Full text, dates, deeper pages and date filters are unavailable; only omitted page or page=1 is accepted. Other options return 422 without net charge. This is not complete article history. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "article": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "null"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "author_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "text": {
+                                        "type": "null"
+                                      },
+                                      "published_at": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "const": false
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -14007,7 +14311,7 @@
       "get": {
         "operationId": "get_linkedin_profile_posts",
         "summary": "LinkedIn Profile Posts",
-        "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1\u201350, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
+        "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1–50, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -14088,7 +14392,7 @@
         ],
         "responses": {
           "200": {
-            "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1\u201350, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
+            "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1–50, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14769,7 +15073,7 @@
       "get": {
         "operationId": "get_linkedin_company_affiliated_pages",
         "summary": "LinkedIn Company Affiliated Pages",
-        "description": "Use LinkedIn Company Affiliated Pages to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the visible affiliated-page cards for a numeric LinkedIn company ID. Includes company, school and showcase links, preserving their page types. This is a bounded public window, not a complete ownership tree. Related numeric IDs, total and continuation remain unknown. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -14813,7 +15117,92 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the visible affiliated-page cards for a numeric LinkedIn company ID. Includes company, school and showcase links, preserving their page types. This is a bounded public window, not a complete ownership tree. Related numeric IDs, total and continuation remain unknown. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "author": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "username": {
+                                        "type": "string"
+                                      },
+                                      "display_name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "avatar_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "page_type": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "const": false
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "company_id": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -14992,7 +15381,7 @@
       "get": {
         "operationId": "get_linkedin_profile_experiences",
         "summary": "LinkedIn Profile Experiences",
-        "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile\u2019s selected top position.",
+        "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile’s selected top position.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -15065,7 +15454,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile\u2019s selected top position.",
+            "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile’s selected top position.",
             "content": {
               "application/json": {
                 "schema": {
@@ -16915,7 +17304,7 @@
               "minimum": 1,
               "maximum": 100
             },
-            "description": "Page 1\u2013100. Cannot be combined with cursor."
+            "description": "Page 1–100. Cannot be combined with cursor."
           },
           {
             "name": "date_posted",
@@ -17303,7 +17692,7 @@
               "minimum": 1,
               "maximum": 100
             },
-            "description": "Page 1\u2013100. Cannot be combined with cursor."
+            "description": "Page 1–100. Cannot be combined with cursor."
           },
           {
             "name": "date_posted",
@@ -21400,7 +21789,7 @@
               "minimum": 1,
               "maximum": 25
             },
-            "description": "Maximum preview rows to return, 1\u201325. Larger requests fail without charging."
+            "description": "Maximum preview rows to return, 1–25. Larger requests fail without charging."
           },
           {
             "name": "since",
@@ -27769,7 +28158,7 @@
       "get": {
         "operationId": "get_tiktok_ads_top",
         "summary": "TikTok Top Ads",
-        "description": "Read TikTok Creative Center Top Ads. Supports country (default US), period (7, 30 or 180 days), keyword, industry, and for_you/impression/ctr/like sorting. limit defaults to 20 and accepts 1\u2013100; the adapter reads at most five source pages. Ad-format, language, like-tier, date filters, and other sorting options return 422 without net charge. Source CTR and cost-index values remain in ext without assuming percentage or currency units. Media URLs can expire. next_cursor is null; increase limit for a larger first window. A successful live request costs 10 credits; cached responses and idempotent replays cost zero.",
+        "description": "Read TikTok Creative Center Top Ads. Supports country (default US), period (7, 30 or 180 days), keyword, industry, and for_you/impression/ctr/like sorting. limit defaults to 20 and accepts 1–100; the adapter reads at most five source pages. Ad-format, language, like-tier, date filters, and other sorting options return 422 without net charge. Source CTR and cost-index values remain in ext without assuming percentage or currency units. Media URLs can expire. next_cursor is null; increase limit for a larger first window. A successful live request costs 10 credits; cached responses and idempotent replays cost zero.",
         "x-credit-cost": 10,
         "x-launch-status": "beta",
         "parameters": [
@@ -27958,7 +28347,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Read TikTok Creative Center Top Ads. Supports country (default US), period (7, 30 or 180 days), keyword, industry, and for_you/impression/ctr/like sorting. limit defaults to 20 and accepts 1\u2013100; the adapter reads at most five source pages. Ad-format, language, like-tier, date filters, and other sorting options return 422 without net charge. Source CTR and cost-index values remain in ext without assuming percentage or currency units. Media URLs can expire. next_cursor is null; increase limit for a larger first window. A successful live request costs 10 credits; cached responses and idempotent replays cost zero.",
+            "description": "Read TikTok Creative Center Top Ads. Supports country (default US), period (7, 30 or 180 days), keyword, industry, and for_you/impression/ctr/like sorting. limit defaults to 20 and accepts 1–100; the adapter reads at most five source pages. Ad-format, language, like-tier, date filters, and other sorting options return 422 without net charge. Source CTR and cost-index values remain in ext without assuming percentage or currency units. Media URLs can expire. next_cursor is null; increase limit for a larger first window. A successful live request costs 10 credits; cached responses and idempotent replays cost zero.",
             "content": {
               "application/json": {
                 "schema": {
@@ -42373,7 +42762,7 @@
       "get": {
         "operationId": "get_reddit_profile_comments",
         "summary": "Reddit account comment history",
-        "description": "Read an account's public comment listing newest first. limit controls returned depth (1\u2013100, default 25). Reserve 2 \u00d7 limit credits, then charge 2 per comment actually returned; unused held credits are refunded. Successful empty results, cache hits and failed requests cost zero. before is exclusive at midnight UTC; since and until are inclusive. Dates and source order are validated; duplicate rows across source pages are removed. The source walk is bounded to 500 rows and 45 seconds. An incomplete walk returns HISTORY_WINDOW_EXCEEDED rather than a partial success. Unknown/private history and nonexistent-account behavior are not verified. Reddit score remains ext.score; likes, reply counts and author avatars are unknown. parent_id preserves t1_ reply parents and t3_ top-level parents. No public cursor is returned.",
+        "description": "Read an account's public comment listing newest first. limit controls returned depth (1–100, default 25). Reserve 2 × limit credits, then charge 2 per comment actually returned; unused held credits are refunded. Successful empty results, cache hits and failed requests cost zero. before is exclusive at midnight UTC; since and until are inclusive. Dates and source order are validated; duplicate rows across source pages are removed. The source walk is bounded to 500 rows and 45 seconds. An incomplete walk returns HISTORY_WINDOW_EXCEEDED rather than a partial success. Unknown/private history and nonexistent-account behavior are not verified. Reddit score remains ext.score; likes, reply counts and author avatars are unknown. parent_id preserves t1_ reply parents and t3_ top-level parents. No public cursor is returned.",
         "x-credit-cost": 2,
         "x-launch-status": "beta",
         "parameters": [
@@ -42397,7 +42786,7 @@
               "maximum": 100,
               "default": 25
             },
-            "description": "Maximum comments returned, not a source page size. Holds 2 \u00d7 limit credits and refunds unused credits."
+            "description": "Maximum comments returned, not a source page size. Holds 2 × limit credits and refunds unused credits."
           },
           {
             "name": "before",
@@ -42458,7 +42847,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Read an account's public comment listing newest first. limit controls returned depth (1\u2013100, default 25). Reserve 2 \u00d7 limit credits, then charge 2 per comment actually returned; unused held credits are refunded. Successful empty results, cache hits and failed requests cost zero. before is exclusive at midnight UTC; since and until are inclusive. Dates and source order are validated; duplicate rows across source pages are removed. The source walk is bounded to 500 rows and 45 seconds. An incomplete walk returns HISTORY_WINDOW_EXCEEDED rather than a partial success. Unknown/private history and nonexistent-account behavior are not verified. Reddit score remains ext.score; likes, reply counts and author avatars are unknown. parent_id preserves t1_ reply parents and t3_ top-level parents. No public cursor is returned.",
+            "description": "Read an account's public comment listing newest first. limit controls returned depth (1–100, default 25). Reserve 2 × limit credits, then charge 2 per comment actually returned; unused held credits are refunded. Successful empty results, cache hits and failed requests cost zero. before is exclusive at midnight UTC; since and until are inclusive. Dates and source order are validated; duplicate rows across source pages are removed. The source walk is bounded to 500 rows and 45 seconds. An incomplete walk returns HISTORY_WINDOW_EXCEEDED rather than a partial success. Unknown/private history and nonexistent-account behavior are not verified. Reddit score remains ext.score; likes, reply counts and author avatars are unknown. parent_id preserves t1_ reply parents and t3_ top-level parents. No public cursor is returned.",
             "content": {
               "application/json": {
                 "schema": {
@@ -42682,7 +43071,7 @@
           "defaultLimit": 25,
           "maxLimit": 100
         },
-        "x-credit-cost-formula": "Reserve 2 \u00d7 limit; settle at 2 \u00d7 returned_count. Empty successful results cost zero.",
+        "x-credit-cost-formula": "Reserve 2 × limit; settle at 2 × returned_count. Empty successful results cost zero.",
         "x-credit-cost-min": 0,
         "x-credit-cost-max": 200
       }
@@ -42831,7 +43220,7 @@
       "get": {
         "operationId": "get_reddit_subreddits_search",
         "summary": "Reddit Subreddits Search",
-        "description": "Find communities by topic. Each request reads one 25-community source page; limit (1\u201325) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities. Initial upstream verification shares a fixed 200-provider-credit allowance; exhaustion blocks new provider calls.",
+        "description": "Find communities by topic. Each request reads one 25-community source page; limit (1–25) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities. Initial upstream verification shares a fixed 200-provider-credit allowance; exhaustion blocks new provider calls.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -42909,7 +43298,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Find communities by topic. Each request reads one 25-community source page; limit (1\u201325) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities.",
+            "description": "Find communities by topic. Each request reads one 25-community source page; limit (1–25) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities.",
             "content": {
               "application/json": {
                 "schema": {
@@ -43465,7 +43854,7 @@
       "get": {
         "operationId": "get_pinterest_url_stats",
         "summary": "Pinterest URL Save Counts",
-        "description": "Return Pinterest Save Button counts for 1\u201310 comma-separated public HTTP(S) URLs. Each URL is passed unchanged to the count source: scheme, trailing slash and query string affect its count. Input order and duplicate rows are preserved. Zero can mean either never pinned or nonexistent, and pages outside the Save Button ecosystem may undercount. A malformed or unavailable source response fails the whole request without charging credits. The service requests only Pinterest; it never fetches the supplied external pages.",
+        "description": "Return Pinterest Save Button counts for 1–10 comma-separated public HTTP(S) URLs. Each URL is passed unchanged to the count source: scheme, trailing slash and query string affect its count. Input order and duplicate rows are preserved. Zero can mean either never pinned or nonexistent, and pages outside the Save Button ecosystem may undercount. A malformed or unavailable source response fails the whole request without charging credits. The service requests only Pinterest; it never fetches the supplied external pages.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -43477,7 +43866,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "1\u201310 comma-separated URLs, each up to 2,048 characters, without whitespace or embedded credentials. Use %2C for literal commas inside a URL."
+            "description": "1–10 comma-separated URLs, each up to 2,048 characters, without whitespace or embedded credentials. Use %2C for literal commas inside a URL."
           },
           {
             "name": "Cache-Control",
@@ -43510,7 +43899,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Return Pinterest Save Button counts for 1\u201310 comma-separated public HTTP(S) URLs. Each URL is passed unchanged to the count source: scheme, trailing slash and query string affect its count. Input order and duplicate rows are preserved. Zero can mean either never pinned or nonexistent, and pages outside the Save Button ecosystem may undercount. A malformed or unavailable source response fails the whole request without charging credits. The service requests only Pinterest; it never fetches the supplied external pages.",
+            "description": "Return Pinterest Save Button counts for 1–10 comma-separated public HTTP(S) URLs. Each URL is passed unchanged to the count source: scheme, trailing slash and query string affect its count. Input order and duplicate rows are preserved. Zero can mean either never pinned or nonexistent, and pages outside the Save Button ecosystem may undercount. A malformed or unavailable source response fails the whole request without charging credits. The service requests only Pinterest; it never fetches the supplied external pages.",
             "content": {
               "application/json": {
                 "schema": {
@@ -46292,7 +46681,7 @@
       "get": {
         "operationId": "get_amazon_best_sellers",
         "summary": "Amazon Best Sellers",
-        "description": "Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Page 1 and page 2 are supported. Verified US pages returned 30 rows from each 50-rank window (ranks 1\u201330 and 51\u201380); this is partial board coverage. A cursor appears only when the source confirms another page, so use page=2 when the source total is unknown. Other list types are rejected with 422 and no net charge. A nonempty live page costs 1 credit; a successful empty page costs zero after the initial 1-credit hold is refunded. Prices preserve decimals; missing stock, rating counts and totals remain null. US boards have been checked live; other configured marketplaces still need production verification.",
+        "description": "Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Pages 1 and 2 are supported. Oxylabs Best Sellers checks returned 50 rows on each US source page; the alternative source returned 30 rows from each 50-rank window. Exact coverage and rank availability depend on the source; do not infer a global rank from page-relative position. NEW_RELEASES uses the alternative source. A cursor appears only when the source confirms another page; cursors stay with their original provider. Other list types return 422 with no net charge. A nonempty live page costs 1 credit; a successful empty page refunds the hold. Missing stock, original prices and totals remain null. Other marketplaces require production verification.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -46394,7 +46783,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Page 1 and page 2 are supported. Verified US pages returned 30 rows from each 50-rank window (ranks 1\u201330 and 51\u201380); this is partial board coverage. A cursor appears only when the source confirms another page, so use page=2 when the source total is unknown. Other list types are rejected with 422 and no net charge. A nonempty live page costs 1 credit; a successful empty page costs zero after the initial 1-credit hold is refunded. Prices preserve decimals; missing stock, rating counts and totals remain null. US boards have been checked live; other configured marketplaces still need production verification.",
+            "description": "Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Pages 1 and 2 are supported. Oxylabs Best Sellers checks returned 50 rows on each US source page; the alternative source returned 30 rows from each 50-rank window. Exact coverage and rank availability depend on the source; do not infer a global rank from page-relative position. NEW_RELEASES uses the alternative source. A cursor appears only when the source confirms another page; cursors stay with their original provider. Other list types return 422 with no net charge. A nonempty live page costs 1 credit; a successful empty page refunds the hold. Missing stock, original prices and totals remain null. Other marketplaces require production verification.",
             "content": {
               "application/json": {
                 "schema": {
@@ -46535,6 +46924,19 @@
                                                 ]
                                               }
                                             }
+                                          },
+                                          "price_text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "price_upper": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "description": "Source upper price of a range, not an original or list price."
                                           }
                                         }
                                       }
@@ -48417,7 +48819,7 @@
       "get": {
         "operationId": "get_finance_news",
         "summary": "Recent articles for a stock ticker",
-        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1\u201350 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
+        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1–50 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -49001,7 +49403,7 @@
       "get": {
         "operationId": "get_finance_fundamentals",
         "summary": "Reported US company fundamentals",
-        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1\u201340 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
+        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1–40 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -50129,7 +50531,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window, page 1\u20133; do not combine with cursor."
+            "description": "Bounded source window, page 1–3; do not combine with cursor."
           },
           {
             "name": "industry",
@@ -60278,7 +60680,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "limit",
@@ -60716,7 +61118,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -61375,7 +61777,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -61790,7 +62192,7 @@
       "get": {
         "operationId": "get_sephora_categories",
         "summary": "Sephora Categories",
-        "description": "List the root categories in Sephora\u2019s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category\u2019s children. This is not a flattened list of the entire category tree.",
+        "description": "List the root categories in Sephora’s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category’s children. This is not a flattened list of the entire category tree.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -61825,7 +62227,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List the root categories in Sephora\u2019s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category\u2019s children. This is not a flattened list of the entire category tree.",
+            "description": "List the root categories in Sephora’s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category’s children. This is not a flattened list of the entire category tree.",
             "content": {
               "application/json": {
                 "schema": {
@@ -62115,7 +62517,7 @@
       "get": {
         "operationId": "get_sephora_brands",
         "summary": "Sephora Brands",
-        "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint\u2019s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
+        "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint’s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -62150,7 +62552,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint\u2019s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
+            "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint’s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
             "content": {
               "application/json": {
                 "schema": {
@@ -62279,7 +62681,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -62705,7 +63107,7 @@
       "get": {
         "operationId": "get_sephora_stores",
         "summary": "Sephora Stores",
-        "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1\u2013100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU\u2019s inventory.",
+        "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1–100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU’s inventory.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -62717,7 +63119,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Decimal latitude,longitude, in that order. Latitude \u221290 to 90; longitude \u2212180 to 180."
+            "description": "Decimal latitude,longitude, in that order. Latitude −90 to 90; longitude −180 to 180."
           },
           {
             "name": "radius",
@@ -62762,7 +63164,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1\u2013100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU\u2019s inventory.",
+            "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1–100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU’s inventory.",
             "content": {
               "application/json": {
                 "schema": {
@@ -63472,7 +63874,7 @@
       "get": {
         "operationId": "get_aliexpress_search",
         "summary": "AliExpress Search",
-        "description": "Search live AliExpress listings by keyword. Supports page and page_size (1\u201350, default 20). Use next_cursor with the same query and page_size to consume unreturned rows before advancing to the next source page; do not combine cursor and page. Pages are fetched live and can change between requests. Country, currency, language, sort, price, category and delivery filters are currently unavailable and return 422 without net charge. Preserve each product\u2019s returned currency and language; source defaults can vary. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
+        "description": "Search live AliExpress listings by keyword. Supports page and page_size (1–50, default 20). Use next_cursor with the same query and page_size to consume unreturned rows before advancing to the next source page; do not combine cursor and page. Pages are fetched live and can change between requests; deduplicate product IDs across pages because source windows can overlap. Country, currency, language, sort, price, category and delivery filters are currently unavailable and return 422 without net charge. Preserve each product’s returned currency and language; source defaults can vary. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -63615,7 +64017,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Search live AliExpress listings by keyword. Supports page and page_size (1\u201350, default 20). Use next_cursor with the same query and page_size to consume unreturned rows before advancing to the next source page; do not combine cursor and page. Pages are fetched live and can change between requests. Country, currency, language, sort, price, category and delivery filters are currently unavailable and return 422 without net charge. Preserve each product\u2019s returned currency and language; source defaults can vary. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
+            "description": "Search live AliExpress listings by keyword. Supports page and page_size (1–50, default 20). Use next_cursor with the same query and page_size to consume unreturned rows before advancing to the next source page; do not combine cursor and page. Pages are fetched live and can change between requests; deduplicate product IDs across pages because source windows can overlap. Country, currency, language, sort, price, category and delivery filters are currently unavailable and return 422 without net charge. Preserve each product’s returned currency and language; source defaults can vary. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.",
             "content": {
               "application/json": {
                 "schema": {
@@ -69553,7 +69955,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window, page 1\u20133; do not combine with cursor."
+            "description": "Bounded source window, page 1–3; do not combine with cursor."
           },
           {
             "name": "sort_by",
@@ -71132,7 +71534,7 @@
       "get": {
         "operationId": "get_gumtree_filters",
         "summary": "Gumtree Filters",
-        "description": "Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery\u2019s separate search adapter. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
+        "description": "Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery’s separate search adapter. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -71178,7 +71580,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery\u2019s separate search adapter.",
+            "description": "Get live Gumtree UK filter metadata and national listing counts for a positive numeric category_id. The adapter resolves the ID to a source category slug before requesting filters. Values describe source capabilities; they do not add support for those filters to SocialQuery’s separate search adapter.",
             "content": {
               "application/json": {
                 "schema": {
@@ -71407,7 +71809,7 @@
       "get": {
         "operationId": "get_gumtree_locations",
         "summary": "Gumtree Locations",
-        "description": "Resolve a town or postcode prefix into a Gumtree UK autocomplete window. Query must contain 2\u2013200 characters. location_type filters that fetched window and does not widen the search. Coordinates are null if unavailable. No pagination. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
+        "description": "Resolve a town or postcode prefix into a Gumtree UK autocomplete window. Query must contain 2–200 characters. location_type filters that fetched window and does not widen the search. Coordinates are null if unavailable. No pagination. Initial upstream verification shares a fixed 200-credit allowance; exhausted allowance prevents new provider requests.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -71466,7 +71868,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Resolve a town or postcode prefix into a Gumtree UK autocomplete window. Query must contain 2\u2013200 characters. location_type filters that fetched window and does not widen the search. Coordinates are null if unavailable. No pagination.",
+            "description": "Resolve a town or postcode prefix into a Gumtree UK autocomplete window. Query must contain 2–200 characters. location_type filters that fetched window and does not widen the search. Coordinates are null if unavailable. No pagination.",
             "content": {
               "application/json": {
                 "schema": {
@@ -76898,7 +77300,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -77694,7 +78096,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -80182,7 +80584,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc18c\uc15c\ud06c\ub864",
+            "example": "소셜크롤",
             "schema": {
               "type": "string"
             }
@@ -80468,7 +80870,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -80754,7 +81156,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc591\uc790\uc5ed\ud559",
+            "example": "양자역학",
             "schema": {
               "type": "string"
             }
@@ -80883,7 +81285,7 @@
       "get": {
         "operationId": "get_naver_cafearticle_search",
         "summary": "Naver Cafearticle Search",
-        "description": "Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1\u201330, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported. Initial provider verification is capped at 200 shared provider credits; the route returns an uncharged availability error once exhausted.",
+        "description": "Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1–30, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported. Initial provider verification is capped at 200 shared provider credits; the route returns an uncharged availability error once exhausted.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -80891,7 +81293,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc544\uc774\ud3f0",
+            "example": "아이폰",
             "schema": {
               "type": "string"
             }
@@ -81144,7 +81546,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1\u201330, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported.",
+            "description": "Search public Naver Cafe snippets through ScrapeBadger. Each request reads at most one 30-row source page; display/limit is 1–30, and a cursor resumes unread rows or later source pages up to source offset 990. The relevance index can move and repeat records between pages; deduplicate by id. Dates retain source day precision, with published_at=null. Date filters apply only to fetched rows, not a complete archive. Only sim sorting is available; AI enrichment is unsupported.",
             "content": {
               "application/json": {
                 "schema": {
@@ -81377,7 +81779,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ub178\ud2b8\ubd81 \ubc1c\uc5f4 \ud574\uacb0",
+            "example": "노트북 발열 해결",
             "schema": {
               "type": "string"
             }
@@ -81715,7 +82117,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uac15\ub0a8 \ud30c\uc2a4\ud0c0",
+            "example": "강남 파스타",
             "schema": {
               "type": "string"
             }
@@ -82009,7 +82411,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ud55c\ub77c\uc0b0",
+            "example": "한라산",
             "schema": {
               "type": "string"
             }
@@ -82180,7 +82582,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uae30\ud6c4\ubcc0\ud654",
+            "example": "기후변화",
             "schema": {
               "type": "string"
             }
@@ -82317,7 +82719,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ub124\uc774\ubcd8",
+            "example": "네이볘",
             "schema": {
               "type": "string"
             }
@@ -82412,7 +82814,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc131\uc778\uc601\ud654",
+            "example": "성인영화",
             "schema": {
               "type": "string"
             }
@@ -82507,7 +82909,7 @@
             "name": "keywords",
             "in": "query",
             "required": false,
-            "example": "\uc0bc\uc131\uc804\uc790,\uac24\ub7ed\uc2dc",
+            "example": "삼성전자,갤럭시",
             "schema": {
               "type": "string"
             }
@@ -82865,7 +83267,7 @@
             "name": "keyword",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ud2b8",
+            "example": "코트",
             "schema": {
               "type": "string"
             }
@@ -86492,8 +86894,8 @@
       "get": {
         "operationId": "get_prism_lookup",
         "summary": "Prism Lookup",
-        "description": "Specification preview: Prism Lookup. Review the proposed inputs for this research recipe. Its composite execution service is still in development.",
-        "x-credit-cost": 0,
+        "description": "Resolve one supported public item URL and call its platform endpoint. Charges the resolved endpoint price: 1 credit for ordinary items, 5 for LinkedIn posts and Amazon products, with no lookup surcharge. A successful cache hit or idempotent replay costs zero. Provider availability and field coverage match the resolved endpoint. Profiles, channels, shortened redirects, unsupported URLs and include flags return 422 before a provider call.",
+        "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
           {
@@ -86503,7 +86905,8 @@
             "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Public item URL on one of the supported platforms. Profiles, channels and shortened redirect links are unsupported."
           },
           {
             "name": "include",
@@ -86511,7 +86914,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated supported boolean options passed to the resolved endpoint: trim for Twitter, TikTok, Instagram, Pinterest or Threads; download_media for TikTok or Instagram; get_comments/get_transcript for Facebook. Unknown or unrelated flags return 422. Field support follows the target endpoint."
           },
           {
             "name": "Cache-Control",
@@ -86588,7 +86992,11 @@
         },
         "tags": [
           "Prism"
-        ]
+        ],
+        "x-credit-pricing": {
+          "type": "resolved_endpoint",
+          "maxCredits": 5
+        }
       }
     },
     "/prism/comments": {
@@ -95381,7 +95789,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -99572,7 +99980,7 @@
       "get": {
         "operationId": "get_jobs_salary",
         "summary": "Jobs Salary",
-        "description": "Use Jobs Salary to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read national Indeed salary aggregates for a job title or title slug. Currently supports country_code us and fr (case-insensitive). Each pay period preserves its source mean, median, minimum, maximum and sample size; hourly and annual figures are not converted or combined. Unsupported countries, URLs and extra filters return 422 with no net charge. Unknown update dates and absent statistics remain null. Related titles are source suggestions, not a complete searchable directory. A successful live lookup costs 1 credit; cache hits and idempotent replays cost zero.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -99583,7 +99991,8 @@
             "example": "software engineer",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Job title or title slug, e.g. software engineer. URLs and city/company filters are not accepted."
           },
           {
             "name": "country_code",
@@ -99592,7 +100001,8 @@
             "example": "us",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently supported: us and fr; case-insensitive. Other countries are rejected."
           },
           {
             "name": "Cache-Control",
@@ -99625,7 +100035,167 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read national Indeed salary aggregates for a job title or title slug. Currently supports country_code us and fr (case-insensitive). Each pay period preserves its source mean, median, minimum, maximum and sample size; hourly and annual figures are not converted or combined. Unsupported countries, URLs and extra filters return 422 with no net charge. Unknown update dates and absent statistics remain null. Related titles are source suggestions, not a complete searchable directory. A successful live lookup costs 1 credit; cache hits and idempotent replays cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            },
+                            "title_slug": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "currency": {
+                              "type": "string"
+                            },
+                            "salary": {
+                              "type": "object",
+                              "properties": {
+                                "period": {
+                                  "type": "string"
+                                },
+                                "min": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "max": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "mean": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "median": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "sample_size": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "by_period": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "period": {
+                                        "type": "string"
+                                      },
+                                      "min": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "mean": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "median": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "sample_size": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "related_titles": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "period": {
+                                    "type": "string"
+                                  },
+                                  "mean": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  },
+                                  "currency": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "updated_at": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "underlying_source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -102204,7 +102774,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u62a4\u80a4",
+            "example": "护肤",
             "schema": {
               "type": "string"
             }
@@ -102952,7 +103522,7 @@
       "get": {
         "operationId": "get_economy_consumer_spend",
         "summary": "Household spending by country and category",
-        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990\u20132100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
+        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990–2100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -103096,7 +103666,7 @@
     "/economy/tourism-spend": {
       "get": {
         "operationId": "get_economy_tourism_spend",
-        "summary": "Residents\u2019 travel spending by country and category",
+        "summary": "Residents’ travel spending by country and category",
         "description": "Read annual tourism expenditure directly from Eurostat tour_dem_extot. Supports up to 10 reporting European countries or EU27, purpose, destination, measure and spending-category filters. Values are euro, with no millions conversion. This is spending by residents aged 15 or over on trips of at least one night, not spending received by destinations. Total excludes durable goods; other may include restaurant spending when not reported separately. Missing observations remain null and source status flags are retained. Default from_year is the current year minus five; default to_year is the latest dataset year.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",

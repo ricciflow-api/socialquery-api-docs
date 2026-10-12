@@ -3,6 +3,6 @@ title: "AliExpress Search"
 openapi: "GET /aliexpress/search"
 ---
 
-Search live AliExpress listings by keyword. Supports page and page_size (1–50, default 20). Use next_cursor with the same query and page_size to consume unreturned rows before advancing to the next source page; do not combine cursor and page. Pages are fetched live and can change between requests. Country, currency, language, sort, price, category and delivery filters are currently unavailable and return 422 without net charge. Preserve each product’s returned currency and language; source defaults can vary. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.
+Search live AliExpress listings by keyword. Supports page and page_size (1–50, default 20). Use next_cursor with the same query and page_size to consume unreturned rows before advancing to the next source page; do not combine cursor and page. Pages are fetched live and can change between requests; deduplicate product IDs across pages because source windows can overlap. Country, currency, language, sort, price, category and delivery filters are currently unavailable and return 422 without net charge. Preserve each product’s returned currency and language; source defaults can vary. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.
 
 [Source documentation](https://docs.piloterr.com/aliexpress-search).

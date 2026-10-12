@@ -1,6 +1,8 @@
 ---
-title: "LinkedIn Company By Domain"
+title: "LinkedIn Company by Domain"
 openapi: "GET /linkedin/company/by-domain"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Look up one indexed LinkedIn company by its bare public website domain. The returned company website must match that domain or a subdomain. This is not an exhaustive domain-to-subsidiary search. Employee and follower counts remain source-reported with unknown precision. Supply domain without a URL scheme or path. A successful live request costs 5 credits; cached responses and idempotent replays cost zero.
+
+[Source contract](https://docs.piloterr.com/linkedin-company-info).
