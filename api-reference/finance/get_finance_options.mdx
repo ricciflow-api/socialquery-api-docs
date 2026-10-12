@@ -13,6 +13,6 @@ The first source read checks the nearest complete chain and its available-expiry
 
 Quotes are delayed, commonly by about 15 minutes, and individual contracts can have stale last trades. `underlying_quote_time` and `underlying_delay_minutes` describe the underlying stock quote; they are not a guaranteed timestamp or delay for each option. This is not historical chain reconstruction or an execution-grade market feed.
 
-The bounded provider runs use the existing configured allowance, pinned build, limited permissions, a 20-second run timeout and 25-second request deadline each. At most two runs and ten source runs/minute are allowed. No Yahoo account cookies or user credentials are required.
+The bounded provider runs use the existing configured allowance, pinned build, limited permissions, up to a 40-second run timeout and 45-second request deadline per read, within a single 55-second overall budget. A slow first read reduces the second read’s remaining allowance. At most two runs and ten source runs/minute are allowed. No Yahoo account cookies or user credentials are required.
 
 A fresh nonempty response uses the catalog price shown above. Empty results, errors, cache hits and identical successful replays cost zero. Set `X-Max-Credits` to the listed credit price before calling.
