@@ -72279,7 +72279,7 @@
       "get": {
         "operationId": "get_klarna_reviews",
         "summary": "Klarna Reviews",
-        "description": "Use Klarna Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Native regional review pages with independently verified product identity, stream/section-aware cursors and day-precision filtering. Preserves source order and metadata; no complete-corpus or AI-enrichment claim.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -72289,8 +72289,10 @@
             "required": false,
             "example": "3331931731",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "Positive native product ID. Supply this, a matching regional URL, or a cursor retaining the product identity."
           },
           {
             "name": "url",
@@ -72298,7 +72300,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Matching HTTPS www.klarna.com regional shopping product URL. Parsed only; never followed."
           },
           {
             "name": "region",
@@ -72330,8 +72333,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
-            }
+              "maximum": 50,
+              "default": 25
+            },
+            "description": "Requested native page size; the source can return fewer records while still offering continuation."
           },
           {
             "name": "nextBatchId",
@@ -72339,8 +72344,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 100000
+            },
+            "description": "Legacy direct batch number in the initial priority section only. Prefer cursor: native section transitions can reset this number."
           },
           {
             "name": "label",
@@ -72348,7 +72355,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Enrichment is unavailable. Only label=none is accepted."
           },
           {
             "name": "reports",
@@ -72356,7 +72364,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "judgments",
@@ -72368,7 +72377,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "Enrichment is unavailable. Only judgments=off is accepted."
           },
           {
             "name": "dry_run",
@@ -72379,7 +72389,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "label_evidence",
@@ -72390,7 +72401,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "fit",
@@ -72401,7 +72413,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "goal",
@@ -72409,7 +72422,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "fit_tokens",
@@ -72417,23 +72431,28 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "since",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "description": "Inclusive YYYY-MM-DD filter applied to each fetched native page. Undated rows are excluded with date filters. Empty filtered pages can still have a cursor and cost zero."
           },
           {
             "name": "until",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "description": "Inclusive YYYY-MM-DD filter applied to each fetched native page. Undated rows are excluded with date filters. Empty filtered pages can still have a cursor and cost zero."
           },
           {
             "name": "cursor",
@@ -72441,7 +72460,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque one-hour cursor binding product, region, page size, date filters, source stream and section. Revalidates the preceding source page. Stops after 200 pages and marks pagination_capped."
           },
           {
             "name": "Cache-Control",
@@ -72474,7 +72494,302 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native regional review pages with independently verified product identity, stream/section-aware cursors and day-precision filtering. Preserves source order and metadata; no complete-corpus or AI-enrichment claim.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "source_path": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "source_path",
+                                "url"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "country_code": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "domain": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "excerpt": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "native_type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "pros": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "cons": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "score": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "score_max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "source_record_key": {
+                                        "type": "string"
+                                      },
+                                      "author_display_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "date",
+                                      "language",
+                                      "country_code",
+                                      "source",
+                                      "domain",
+                                      "excerpt",
+                                      "author",
+                                      "product_name",
+                                      "native_type",
+                                      "title",
+                                      "pros",
+                                      "cons",
+                                      "source_url",
+                                      "score",
+                                      "score_max",
+                                      "source_record_key",
+                                      "author_display_name"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "review"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "filtered_out": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "review_stream": {
+                              "type": "string",
+                              "enum": [
+                                "USER",
+                                "CUSTOMER",
+                                "PRO"
+                              ]
+                            },
+                            "source_section": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_batch_id": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_batch_id": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_source_section": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "next_review_stream": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "enum": [
+                                "USER",
+                                "CUSTOMER",
+                                "PRO",
+                                null
+                              ]
+                            },
+                            "native_has_next": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "items",
+                            "returned_count",
+                            "source_returned_count",
+                            "filtered_out",
+                            "total",
+                            "limit",
+                            "region",
+                            "country_code",
+                            "review_stream",
+                            "source_section",
+                            "source_batch_id",
+                            "next_batch_id",
+                            "next_source_section",
+                            "next_review_stream",
+                            "native_has_next",
+                            "next_cursor",
+                            "pagination_capped",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -72531,7 +72846,7 @@
       "get": {
         "operationId": "get_klarna_reviews_pro",
         "summary": "Klarna Reviews Pro",
-        "description": "Use Klarna Reviews Pro to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Native regional review pages with independently verified product identity, stream/section-aware cursors and day-precision filtering. Preserves source order and metadata; no complete-corpus or AI-enrichment claim.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -72541,8 +72856,10 @@
             "required": false,
             "example": "3331931731",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "Positive native product ID. Supply this, a matching regional URL, or a cursor retaining the product identity."
           },
           {
             "name": "url",
@@ -72550,7 +72867,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Matching HTTPS www.klarna.com regional shopping product URL. Parsed only; never followed."
           },
           {
             "name": "region",
@@ -72582,8 +72900,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
-            }
+              "maximum": 50,
+              "default": 25
+            },
+            "description": "Requested native page size; the source can return fewer records while still offering continuation."
           },
           {
             "name": "nextBatchId",
@@ -72591,8 +72911,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 100000
+            },
+            "description": "Legacy direct batch number in the initial priority section only. Prefer cursor: native section transitions can reset this number."
           },
           {
             "name": "label",
@@ -72600,7 +72922,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Enrichment is unavailable. Only label=none is accepted."
           },
           {
             "name": "reports",
@@ -72608,7 +72931,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "judgments",
@@ -72620,7 +72944,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "Enrichment is unavailable. Only judgments=off is accepted."
           },
           {
             "name": "dry_run",
@@ -72631,7 +72956,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "label_evidence",
@@ -72642,7 +72968,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "fit",
@@ -72653,7 +72980,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "goal",
@@ -72661,7 +72989,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "fit_tokens",
@@ -72669,23 +72998,28 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Not implemented by this review adapter; requests specifying this option fail explicitly."
           },
           {
             "name": "since",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "description": "Inclusive YYYY-MM-DD filter applied to each fetched native page. Undated rows are excluded with date filters. Empty filtered pages can still have a cursor and cost zero."
           },
           {
             "name": "until",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "description": "Inclusive YYYY-MM-DD filter applied to each fetched native page. Undated rows are excluded with date filters. Empty filtered pages can still have a cursor and cost zero."
           },
           {
             "name": "cursor",
@@ -72693,7 +73027,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque one-hour cursor binding product, region, page size, date filters, source stream and section. Revalidates the preceding source page. Stops after 200 pages and marks pagination_capped."
           },
           {
             "name": "Cache-Control",
@@ -72726,7 +73061,302 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native regional review pages with independently verified product identity, stream/section-aware cursors and day-precision filtering. Preserves source order and metadata; no complete-corpus or AI-enrichment claim.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "source_path": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "source_path",
+                                "url"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "country_code": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "domain": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "excerpt": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "native_type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "pros": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "cons": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "score": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "score_max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "source_record_key": {
+                                        "type": "string"
+                                      },
+                                      "author_display_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "date",
+                                      "language",
+                                      "country_code",
+                                      "source",
+                                      "domain",
+                                      "excerpt",
+                                      "author",
+                                      "product_name",
+                                      "native_type",
+                                      "title",
+                                      "pros",
+                                      "cons",
+                                      "source_url",
+                                      "score",
+                                      "score_max",
+                                      "source_record_key",
+                                      "author_display_name"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "review"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "filtered_out": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "review_stream": {
+                              "type": "string",
+                              "enum": [
+                                "USER",
+                                "CUSTOMER",
+                                "PRO"
+                              ]
+                            },
+                            "source_section": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_batch_id": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_batch_id": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_source_section": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "next_review_stream": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "enum": [
+                                "USER",
+                                "CUSTOMER",
+                                "PRO",
+                                null
+                              ]
+                            },
+                            "native_has_next": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "items",
+                            "returned_count",
+                            "source_returned_count",
+                            "filtered_out",
+                            "total",
+                            "limit",
+                            "region",
+                            "country_code",
+                            "review_stream",
+                            "source_section",
+                            "source_batch_id",
+                            "next_batch_id",
+                            "next_source_section",
+                            "next_review_stream",
+                            "native_has_next",
+                            "next_cursor",
+                            "pagination_capped",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

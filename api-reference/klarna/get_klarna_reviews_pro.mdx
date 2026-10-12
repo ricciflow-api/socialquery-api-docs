@@ -1,6 +1,20 @@
 ---
-title: "Klarna Reviews Pro"
+title: "Klarna Professional Reviews"
 openapi: "GET /klarna/reviews/pro"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns a native review page for an independently verified regional product. Supply `product_id`, a matching regional product URL, or a continuation cursor. URLs are parsed and never followed. Missing products return 404. All 13 catalog regions are supported.
+
+Uses only the native `PRO` stream. It does not mix consumer reviews into professional results.
+
+Each `items[].review` retains date, language, country, publisher, score and native scale, excerpt, author/display name, product label, title, pros/cons and source URL when supplied. A native score/scale of `0/0` denotes an unrated review and is returned as null/null, not zero stars. Reviews can include other countries and variants grouped by the source. Display names do not establish verified-purchase status. `source_record_key` is an internal content hash, not a platform-issued review ID. Links are metadata only and are never followed.
+
+`limit` is 1–50, default 25. The source can return fewer rows while still offering more. It orders by its own relevance rules, not chronologically, and can switch sections while resetting its batch number. **Use `next_cursor` to retain both section and stream.** Direct `nextBatchId` addresses only the initial priority section and is not a global offset. The response exposes native stream/section/batch metadata separately. `total` remains null; native overview totals are not a guarantee that this paged source exposes every review.
+
+Cursors bind the product, region, limit and filters for one hour. The adapter re-reads the preceding page to check its content and continuation, and rejects adjacent duplicates or changed windows. Restart from the first page if the source changes. After 200 pages, `pagination_capped: true` explicitly indicates the local ceiling; no cursor is fabricated beyond that ceiling.
+
+`since` and `until` are inclusive valid `YYYY-MM-DD` filters because native dates have day precision. They filter each fetched page, excluding undated rows when filtering. `source_returned_count` and `filtered_out` retain the candidate counts. An empty filtered page can still have a next cursor. Date ordering is not assumed, so filtering never stops the source traversal early.
+
+AI labels, reports, judgments, dry-run analysis and fit enrichment remain unavailable and fail explicitly. `label=none` and `judgments=off` are accepted.
+
+A fresh nonempty page costs **5 credits**. Empty pages, failures, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 5`. Each call performs two anonymous source reads, or three with a cursor anchor. A shared 20-source-request/minute ceiling, 25-second total timeout and 2 MiB limit per response apply. No customer account or personalized review data is accessed.
