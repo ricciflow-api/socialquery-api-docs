@@ -17479,7 +17479,7 @@
       "get": {
         "operationId": "get_linkedin_search_location",
         "summary": "LinkedIn Search Location",
-        "description": "Find records through LinkedIn Search Location using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Resolve a free-text location through LinkedIn public typeahead. Each row contains an exact numeric location id/geocode and its displayed name, preserving source order. IDs are strings, not latitude/longitude. Uses the US locale. Suggestions are not exhaustive, and no pagination or total is inferred. Costs 1 credit on a live success; cache hits and failed requests cost zero.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -17523,7 +17523,68 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Resolve a free-text location through LinkedIn public typeahead. Each row contains an exact numeric location id/geocode and its displayed name, preserving source order. IDs are strings, not latitude/longitude. Uses the US locale. Suggestions are not exhaustive, and no pagination or total is inferred. Costs 1 credit on a live success; cache hits and failed requests cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "geocode": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "const": "location"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

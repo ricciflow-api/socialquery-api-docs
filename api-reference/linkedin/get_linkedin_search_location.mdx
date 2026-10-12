@@ -1,6 +1,8 @@
 ---
-title: "LinkedIn Search Location"
+title: "LinkedIn Location Lookup"
 openapi: "GET /linkedin/search/location"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Resolve a free-text location through LinkedIn public typeahead. Each row contains an exact numeric location id/geocode and its displayed name, preserving source order. IDs are strings, not latitude/longitude. Uses the US locale. Suggestions are not exhaustive, and no pagination or total is inferred. Costs 1 credit on a live success; cache hits and failed requests cost zero.
+
+The finite provider verification allowance has no automatic refill. Locations from the source may differ from LinkedIn member-only search.
