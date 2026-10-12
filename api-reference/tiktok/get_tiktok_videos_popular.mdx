@@ -1,6 +1,16 @@
 ---
-title: "TikTok Videos Popular"
+title: "TikTok Popular Videos"
 openapi: "GET /tiktok/videos/popular"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read TikTok's top-video board for **US, JP, VN, TH or ID**. The default is US, last 7 days, highest views, top 20. `period` also accepts `30`; `orderBy` also accepts `engagement` or `six_second_views`. Other markets and separate like/comment/share sorts are rejected before source work.
+
+Each `items[].post` includes the native video ID, canonical URL, caption, cover, available signed video-file URL, creator identity, publication time and lifetime views. `post.ext.trend` preserves rank, period views, organic views, engagement rate, six-second view-through rate and content tags. Period views are not lifetime views. Like/comment/share counts, duration and verification status are unavailable and remain `null`. The board may contain paid or branded posts; organic views are the supplied organic signal. Media links expire; SocialQuery returns them without downloading or rehosting the media.
+
+`limit` selects a **top-N window from 1 to 20**. Every source row must have a distinct native ID, consecutive rank, the requested country/period/sort and valid source metrics. A shortened or inconsistent dataset fails unbilled instead of being presented as a complete or empty board. There is no cursor or deeper-history search.
+
+`since` and `until` filter publication timestamps inside that requested window, inclusively. An ISO `until` date includes the whole UTC day; timezone-qualified timestamps are used exactly. Filtering preserves native ranks, so visible ranks may skip numbers. `source_count` is the verified window before filtering, `dropped` is the number removed, and `returned_count` is the final number of rows. A date-filtered empty result is free.
+
+**Pricing:** 25 credits per board plus 1 per returned video. The default top-20 request reserves 45 credits; limit 4 reserves 29. Date filtering refunds unused per-video credits, and a completely empty filtered result refunds the entire hold. Failed reads, cache hits and successful idempotent replays cost zero. Supply `X-Max-Credits` for the full requested hold, even if date filters may reduce the final charge.
+
+The source run is pinned, uses limited permissions and has a 50-second execution limit within a 55-second read deadline. This is a bounded live ranking, not a guarantee that every country and sort will remain available at all times.

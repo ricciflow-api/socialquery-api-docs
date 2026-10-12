@@ -28275,7 +28275,7 @@
       "get": {
         "operationId": "get_tiktok_videos_popular",
         "summary": "TikTok Videos Popular",
-        "description": "Use TikTok Videos Popular to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the complete requested top-N TikTok video board, up to 20 rows, for US, JP, VN, TH or ID over 7 or 30 days. Sort by views, engagement or six-second view rate. Preserve native rank, lifetime versus period views, publication times and signed media links. A truncated or inconsistent source fails without charge.",
         "x-credit-cost": 26,
         "x-launch-status": "beta",
         "parameters": [
@@ -28292,7 +28292,8 @@
                 "VN",
                 "TH",
                 "ID"
-              ]
+              ],
+              "default": "US"
             }
           },
           {
@@ -28305,7 +28306,8 @@
               "enum": [
                 "7",
                 "30"
-              ]
+              ],
+              "default": "7"
             }
           },
           {
@@ -28319,7 +28321,8 @@
                 "views",
                 "engagement",
                 "six_second_views"
-              ]
+              ],
+              "default": "views"
             }
           },
           {
@@ -28329,8 +28332,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 20
-            }
+              "maximum": 20,
+              "default": 20
+            },
+            "description": "Requested top-N board window, 1–20 (default 20). The full requested window is validated before date filtering; no second page is exposed."
           },
           {
             "name": "since",
@@ -28338,7 +28343,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional inclusive publication-date bound within the requested top-N window. Accepts ISO dates or timezone-qualified timestamps; an until date includes the entire UTC day. It does not search deeper history."
           },
           {
             "name": "until",
@@ -28346,7 +28352,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional inclusive publication-date bound within the requested top-N window. Accepts ISO dates or timezone-qualified timestamps; an until date includes the entire UTC day. It does not search deeper history."
           },
           {
             "name": "Cache-Control",
@@ -28379,7 +28386,326 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the complete requested top-N TikTok video board, up to 20 rows, for US, JP, VN, TH or ID over 7 or 30 days. Sort by views, engagement or six-second view rate. Preserve native rank, lifetime versus period views, publication times and signed media links. A truncated or inconsistent source fails without charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "media_urls": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string",
+                                              "format": "uri"
+                                            },
+                                            "maxItems": 1
+                                          },
+                                          "thumbnail_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "text",
+                                          "media_urls",
+                                          "thumbnail_url",
+                                          "duration_seconds"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": "string"
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "username",
+                                          "display_name",
+                                          "avatar_url",
+                                          "verified"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          },
+                                          "likes": {
+                                            "type": "null"
+                                          },
+                                          "comments": {
+                                            "type": "null"
+                                          },
+                                          "shares": {
+                                            "type": "null"
+                                          },
+                                          "saves": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "views",
+                                          "likes",
+                                          "comments",
+                                          "shares",
+                                          "saves"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": "null"
+                                          },
+                                          "spoiler": {
+                                            "type": "null"
+                                          },
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "deleted": {
+                                            "const": false,
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "required": [
+                                          "nsfw",
+                                          "spoiler",
+                                          "pinned",
+                                          "deleted"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "author_id": {
+                                            "type": "string"
+                                          },
+                                          "author_followers": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          },
+                                          "trend": {
+                                            "type": "object",
+                                            "properties": {
+                                              "rank": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "maximum": 20
+                                              },
+                                              "country_code": {
+                                                "type": "string"
+                                              },
+                                              "period_days": {
+                                                "type": "integer",
+                                                "enum": [
+                                                  7,
+                                                  30
+                                                ]
+                                              },
+                                              "order_by": {
+                                                "type": "string",
+                                                "enum": [
+                                                  "views",
+                                                  "engagement",
+                                                  "six_second_views"
+                                                ]
+                                              },
+                                              "period_views": {
+                                                "type": "integer",
+                                                "minimum": 0
+                                              },
+                                              "organic_views": {
+                                                "type": "integer",
+                                                "minimum": 0
+                                              },
+                                              "engagement_rate": {
+                                                "type": "number",
+                                                "minimum": 0,
+                                                "maximum": 1
+                                              },
+                                              "six_second_view_through_rate": {
+                                                "type": "number",
+                                                "minimum": 0,
+                                                "maximum": 1
+                                              },
+                                              "content_tags": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                },
+                                                "maxItems": 100
+                                              }
+                                            },
+                                            "required": [
+                                              "rank",
+                                              "country_code",
+                                              "period_days",
+                                              "order_by",
+                                              "period_views",
+                                              "organic_views",
+                                              "engagement_rate",
+                                              "six_second_view_through_rate",
+                                              "content_tags"
+                                            ],
+                                            "additionalProperties": false
+                                          }
+                                        },
+                                        "required": [
+                                          "author_id",
+                                          "author_followers",
+                                          "trend"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "content",
+                                      "author",
+                                      "engagement",
+                                      "flags",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "post"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "maxItems": 20
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "requested_limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 20
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "period_days": {
+                              "type": "integer",
+                              "enum": [
+                                7,
+                                30
+                              ]
+                            },
+                            "order_by": {
+                              "type": "string"
+                            },
+                            "has_more": {
+                              "const": false,
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "source_count",
+                            "dropped",
+                            "requested_limit",
+                            "country_code",
+                            "period_days",
+                            "order_by",
+                            "has_more",
+                            "next_cursor",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -28423,7 +28749,10 @@
         },
         "tags": [
           "TikTok"
-        ]
+        ],
+        "x-credit-cost-formula": "25 credits per board plus 1 per returned video. Hold 25 + limit (default 45); settle after publication-date filtering. Empty filtered results, failures, cache hits and idempotent replays cost zero.",
+        "x-credit-cost-min": 26,
+        "x-credit-cost-max": 45
       }
     },
     "/tiktok/profile/region": {
