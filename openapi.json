@@ -56140,7 +56140,7 @@
       "get": {
         "operationId": "get_g2_product_index",
         "summary": "G2 Product Index",
-        "description": "Use G2 Product Index to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Page through a complete, validated snapshot of G2 public English product-review URLs, 100 rows per page in slug order. Each row contains id (product slug) and url. Use the opaque cursor to stay on one snapshot, or page for the current snapshot. Snapshots refresh daily and expire after 48 hours. Partial refreshes are never published. A nonempty uncached page costs five credits; empty pages, errors, cache hits and idempotent replays are free. Cache-Control no-cache bypasses the API response cache but does not force a full catalogue refresh.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -56150,8 +56150,11 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 2501,
+              "default": 1
+            },
+            "description": "One-based page in the current complete snapshot. Cannot be combined with cursor. Beyond the last page returns an empty list at zero credits."
           },
           {
             "name": "cursor",
@@ -56159,7 +56162,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque cursor returned in pagination.next_cursor or data.next_cursor. Keeps the same complete snapshot for up to 48 hours; expired cursors return uncharged 409. Cannot be combined with page."
           },
           {
             "name": "Cache-Control",
@@ -56192,7 +56196,130 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Page through a complete, validated snapshot of G2 public English product-review URLs, 100 rows per page in slug order. Each row contains id (product slug) and url. Use the opaque cursor to stay on one snapshot, or page for the current snapshot. Snapshots refresh daily and expire after 48 hours. Partial refreshes are never published. A nonempty uncached page costs five credits; empty pages, errors, cache hits and idempotent replays are free. Cache-Control no-cache bypasses the API response cache but does not force a full catalogue refresh.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 100,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "url"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "const": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "snapshot_id": {
+                              "type": "string"
+                            },
+                            "collected_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "expires_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "source_files": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "dropped",
+                            "next_cursor",
+                            "page",
+                            "snapshot_id",
+                            "collected_at",
+                            "expires_at",
+                            "source_files",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "page_size": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "next_cursor",
+                            "has_more",
+                            "page_size"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "pagination"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

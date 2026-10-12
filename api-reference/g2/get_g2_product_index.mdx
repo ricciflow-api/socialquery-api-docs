@@ -1,6 +1,14 @@
 ---
-title: "G2 Product Index"
+title: "G2 product index"
 openapi: "GET /g2/product-index"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read G2's public product-review URL catalogue, **100 products per page**. Each item contains `id`, the product slug, and its public review-page `url`. Use the slug with the product or reviews endpoint. The catalogue includes English URLs from all product-review sitemap groups; localized duplicates are omitted and slugs are sorted.
+
+Use **`pagination.next_cursor`** to continue on the same snapshot. `data.next_cursor` contains the same token. `pagination.has_more` is the stop signal. A cursor remains usable until its snapshot expires, at most 48 hours after collection. Expired or unavailable cursor snapshots return an uncharged **409 `CURSOR_EXPIRED`**. Alternatively, use one-based `page` to read the current snapshot; do not combine page and cursor. Page numbers across a refresh can refer to different rows.
+
+The catalogue refreshes separately from requests. A refresh validates every numbered source file and rechecks the sitemap directory before publishing. Failed or incomplete refreshes retain the previous complete snapshot; snapshots older than 48 hours are not served. `collected_at`, `expires_at` and `snapshot_id` identify exactly which index you received. This indexes public URLs, not proof that every product is still active or has reviews.
+
+A nonempty uncached page costs **5 credits**. An empty page beyond the catalogue, errors, cache hits and successful idempotent replays cost zero. `X-Max-Credits: 5` caps the request. `Cache-Control: no-cache` bypasses the API response cache and reads the current validated snapshot; it does not download the entire source catalogue again. Background refresh currently uses a bounded existing Firecrawl trial allowance; exhausted source capacity prevents further refreshes.
+
+`total` is the number of unique products in this snapshot, `returned_count` is the page size and `dropped` is zero. No partial catalogue is presented as complete.
