@@ -3,4 +3,14 @@ title: "Klarna Category Keywords"
 openapi: "GET /klarna/category/keywords"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native related-search keywords for a tree (t ID) or product category (cl ID), after verifying that category exists. Names and contextual links retain source order; no popularity metric or exhaustive coverage is inferred. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.
+
+Use `category_id=t1` for TV & Audio or `category_id=cl94` for Headphones. Tree and product categories use different native keyword services. The adapter first verifies the category’s existence; the keyword service by itself can return an empty list for invalid IDs.
+
+Each `items` entry retains `name` and `source_path`. Repeated names with distinct brand or attribute links stay separate. Use a name as `query` on the search endpoint. Keywords include both search landing paths and filtered category paths. UK, Swedish and Danish results set absolute `url` to null because those legacy paths do not establish a verified Klarna page. Other markets expose source-based shopping URLs. `returned_count` counts all keyword rows.
+
+Regions: `usa` (default), `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. Region changes the native language and available content. These are current public source snapshots, not promises of inventory or completeness.
+
+A successful fresh request with content costs **1 SocialQuery credit**. Empty content for an existing category is fully refunded. Missing categories, invalid parameters, upstream failures, cached responses and successful idempotent replays have no net charge. Use `X-Max-Credits: 1` to cap the hold.
+
+The anonymous source uses the shared 20-request/minute Klarna ceiling, a 25-second total timeout and a 2 MiB limit per response. Category validation may require one additional source request. Invalid source payloads fail explicitly; they are not converted into empty success or silently truncated.

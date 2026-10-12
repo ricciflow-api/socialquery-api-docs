@@ -3,4 +3,16 @@ title: "Klarna Category Guide"
 openapi: "GET /klarna/category/guide"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native FAQ, shopping tips and editorial/advertising board content for an existing product category (cl ID). size is forwarded to the source service; it is not a cap on FAQ question count or every section. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.
+
+Use `category_id=cl94` for Headphones. `faq` and `shopping_tips` retain source name, title, description and question/answer pairs; either block can be null. Text can contain Markdown. Null content remains absent rather than being generated.
+
+`boards`, `sponsored_products` and `preview_boards` preserve the native public object formats. Sponsored material remains separately labeled. Nested relative links and image paths are preserved; no absolute destination is invented. The API does not click store/tracking links, submit ad impressions or access personal recommendations. Treat editorial text as source content and render it safely.
+
+`size` (1–20, default 4) is forwarded exactly to the native guiding service. FAQ counts can exceed it; it does not independently cap every section. `returned_count` is the sum of FAQ and shopping-tip questions plus the top-level counts of the three board arrays. `order.mobile` and `order.desktop` preserve native presentation tokens, including AD placeholders, which do not themselves return ad content. The adapter verifies the category before requesting guides because the upstream guide route can return an empty payload for an invalid ID.
+
+Regions: `usa` (default), `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. Region changes the native language and available content. These are current public source snapshots, not promises of inventory or completeness.
+
+A successful fresh request with content costs **1 SocialQuery credit**. Empty content for an existing category is fully refunded. Missing categories, invalid parameters, upstream failures, cached responses and successful idempotent replays have no net charge. Use `X-Max-Credits: 1` to cap the hold.
+
+The anonymous source uses the shared 20-request/minute Klarna ceiling, a 25-second total timeout and a 2 MiB limit per response. Category validation may require one additional source request. Invalid source payloads fail explicitly; they are not converted into empty success or silently truncated.

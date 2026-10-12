@@ -73744,7 +73744,7 @@
       "get": {
         "operationId": "get_klarna_category_filters",
         "summary": "Klarna Category Filters",
-        "description": "Use Klarna Category Filters to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns native filter definitions grouped in source order for a product category (cl ID). An optional category_path_id must belong to that category’s regional hierarchy. Definitions do not include option values or product counts. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -73754,8 +73754,10 @@
             "required": true,
             "example": "cl94",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^cl[1-9][0-9]{0,9}$"
+            },
+            "description": "Existing regional product category (cl ID); tree roots do not have this content contract."
           },
           {
             "name": "region",
@@ -73785,8 +73787,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,11}-[1-9][0-9]{0,11}$"
+            },
+            "description": "Subcategory ID from the selected category’s regional children. Membership is verified before the source filter is sent."
           },
           {
             "name": "Cache-Control",
@@ -73819,7 +73823,118 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns native filter definitions grouped in source order for a product category (cl ID). An optional category_path_id must belong to that category’s regional hierarchy. Definitions do not include option values or product counts. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "category_id": {
+                              "type": "string"
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "category_path_id": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "groups": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "filters": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "type": {
+                                          "type": "string"
+                                        },
+                                        "unit": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "description": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name",
+                                        "type",
+                                        "unit",
+                                        "description"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "filters"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "category_id",
+                            "region",
+                            "country_code",
+                            "source",
+                            "returned_count",
+                            "coverage_note",
+                            "id",
+                            "category_path_id",
+                            "groups"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -73870,7 +73985,7 @@
       "get": {
         "operationId": "get_klarna_category_keywords",
         "summary": "Klarna Category Keywords",
-        "description": "Use Klarna Category Keywords to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns native related-search keywords for a tree (t ID) or product category (cl ID), after verifying that category exists. Names and contextual links retain source order; no popularity metric or exhaustive coverage is inferred. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -73880,8 +73995,10 @@
             "required": true,
             "example": "t1",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^(?:t|cl)[1-9][0-9]{0,9}$"
+            },
+            "description": "Existing regional tree or product category."
           },
           {
             "name": "region",
@@ -73937,7 +74054,81 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns native related-search keywords for a tree (t ID) or product category (cl ID), after verifying that category exists. Names and contextual links retain source order; no popularity metric or exhaustive coverage is inferred. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "category_id": {
+                              "type": "string"
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "source_path": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "source_path",
+                                  "url"
+                                ]
+                              }
+                            }
+                          },
+                          "required": [
+                            "category_id",
+                            "region",
+                            "country_code",
+                            "source",
+                            "returned_count",
+                            "coverage_note",
+                            "items"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -73988,7 +74179,7 @@
       "get": {
         "operationId": "get_klarna_category_guide",
         "summary": "Klarna Category Guide",
-        "description": "Use Klarna Category Guide to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns native FAQ, shopping tips and editorial/advertising board content for an existing product category (cl ID). size is forwarded to the source service; it is not a cap on FAQ question count or every section. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -73998,8 +74189,10 @@
             "required": true,
             "example": "cl94",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^cl[1-9][0-9]{0,9}$"
+            },
+            "description": "Existing regional product category (cl ID); tree roots do not have this content contract."
           },
           {
             "name": "region",
@@ -74031,8 +74224,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 20
-            }
+              "maximum": 20,
+              "default": 4
+            },
+            "description": "Native guiding-content size, 1–20 (default 4). Does not truncate FAQ questions or independently cap every content section."
           },
           {
             "name": "Cache-Control",
@@ -74065,7 +74260,207 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns native FAQ, shopping tips and editorial/advertising board content for an existing product category (cl ID). size is forwarded to the source service; it is not a cap on FAQ question count or every section. Supports the 13 catalog regions. Empty content for a valid category has zero net charge; nonexistent categories return 404.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "category_id": {
+                              "type": "string"
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "requested_size": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "order": {
+                              "type": "object",
+                              "properties": {
+                                "mobile": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "desktop": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "mobile",
+                                "desktop"
+                              ]
+                            },
+                            "faq": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "questions": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "question": {
+                                            "type": "string"
+                                          },
+                                          "answer": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "question",
+                                          "answer"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "title",
+                                    "description",
+                                    "questions"
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "shopping_tips": {
+                              "anyOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "questions": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "question": {
+                                            "type": "string"
+                                          },
+                                          "answer": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "question",
+                                          "answer"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "title",
+                                    "description",
+                                    "questions"
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "boards": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "additionalProperties": true,
+                                "description": "Native public board object. Links and nested fields retain the source format; no tracking URL is invoked."
+                              }
+                            },
+                            "sponsored_products": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "additionalProperties": true,
+                                "description": "Native public board object. Links and nested fields retain the source format; no tracking URL is invoked."
+                              }
+                            },
+                            "preview_boards": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "additionalProperties": true,
+                                "description": "Native public board object. Links and nested fields retain the source format; no tracking URL is invoked."
+                              }
+                            }
+                          },
+                          "required": [
+                            "category_id",
+                            "region",
+                            "country_code",
+                            "source",
+                            "returned_count",
+                            "coverage_note",
+                            "requested_size",
+                            "order",
+                            "faq",
+                            "shopping_tips",
+                            "boards",
+                            "sponsored_products",
+                            "preview_boards"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
