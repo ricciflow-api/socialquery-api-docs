@@ -10,3 +10,5 @@ Read the current [H&M market selector](https://www.hm.com/entrance.ahtml), group
 The response reports `total_countries`, the source URL and a coverage note. Presence in this selector does not prove that a country has online delivery, stock or a working stores API. H&M's country-directory and catalog-language codes differ.
 
 Malformed or blocked source pages return an error, never a fabricated empty directory. Cached responses and idempotent replays are free; fresh successful calls use the endpoint's documented credit price.
+
+SocialQuery retrieves this public HTML through its configured Firecrawl provider, using a fresh basic scrape. Direct requests from Vercel failed the initial production check and are not used by the deployed adapter. Source trial capacity remains finite.

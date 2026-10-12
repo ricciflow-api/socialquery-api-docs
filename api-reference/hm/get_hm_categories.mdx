@@ -10,3 +10,5 @@ Read the navigation tree embedded in [H&M's public US site](https://www2.hm.com/
 `total_nodes` includes links and headings throughout the returned tree. Promotional categories may change between fetches. This is reference taxonomy, not a product listing or stock report. The store locator's navigation does not supply the separate stores endpoint.
 
 Source identity, market, unique node IDs, tree depth and response size are validated. Malformed or blocked pages return an error without net SocialQuery charge. Cached responses and idempotent replays are free.
+
+SocialQuery retrieves this public HTML through its configured Firecrawl provider, using a fresh basic scrape. Direct requests from Vercel failed the initial production check and are not used by the deployed adapter. Source trial capacity remains finite.
