@@ -118463,7 +118463,7 @@
       "get": {
         "operationId": "get_economy_imports",
         "summary": "Economy Imports",
-        "description": "Use Economy Imports to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Resolve a US ocean importer within the first 50 company search hits, then return its indexed shipment totals, top 25 suppliers, top 25 HS headings and up to 50 recent bills. Prefer normalized name matches, then whole-word partial matches, then the largest hit by shipment count. All candidate hits and the selection rule are included. This is not an exhaustive name search; supplier_count is unavailable and null. Source-confirmed no matches returns a free 404.",
         "x-credit-cost": 20,
         "x-launch-status": "beta",
         "parameters": [
@@ -118484,7 +118484,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 50,
+              "default": 25
             }
           },
           {
@@ -118518,7 +118519,411 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Resolve a US ocean importer within the first 50 company search hits, then return its indexed shipment totals, top 25 suppliers, top 25 HS headings and up to 50 recent bills. Prefer normalized name matches, then whole-word partial matches, then the largest hit by shipment count. All candidate hits and the selection rule are included. This is not an exhaustive name search; supplier_count is unavailable and null. Source-confirmed no matches returns a free 404.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "company": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "country": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "country_code": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "address": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "website": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "total_shipments": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "shipments_last_12_months": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "first_shipment_date": {
+                                  "type": "string",
+                                  "format": "date"
+                                },
+                                "last_shipment_date": {
+                                  "type": "string",
+                                  "format": "date"
+                                },
+                                "supplier_count": {
+                                  "type": "null"
+                                },
+                                "other_names": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "maxItems": 1000
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "country",
+                                "country_code",
+                                "address",
+                                "website",
+                                "url",
+                                "total_shipments",
+                                "shipments_last_12_months",
+                                "first_shipment_date",
+                                "last_shipment_date",
+                                "supplier_count",
+                                "other_names"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "top_suppliers": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "country": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "country_code": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "total_shipments": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "shipments_last_12_months": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "total_weight_kg": {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  "hs_codes": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "maxItems": 100
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "url",
+                                  "country",
+                                  "country_code",
+                                  "total_shipments",
+                                  "shipments_last_12_months",
+                                  "total_weight_kg",
+                                  "hs_codes"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "maxItems": 25
+                            },
+                            "hs_codes": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "chapter": {
+                                    "type": "string"
+                                  },
+                                  "chapter_description": {
+                                    "type": "string"
+                                  },
+                                  "shipments": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "required": [
+                                  "code",
+                                  "description",
+                                  "chapter",
+                                  "chapter_description",
+                                  "shipments"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "maxItems": 25
+                            },
+                            "recent_shipments": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string",
+                                    "format": "date"
+                                  },
+                                  "bill_number": {
+                                    "type": "string"
+                                  },
+                                  "supplier": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "supplier_country": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "supplier_country_code": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "product_description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "weight_kg": {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  "container_count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "quantity": {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  "quantity_unit": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "route": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "hs_code": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "port_of_loading": {
+                                    "type": "null"
+                                  },
+                                  "port_of_discharge": {
+                                    "type": "null"
+                                  }
+                                },
+                                "required": [
+                                  "date",
+                                  "bill_number",
+                                  "supplier",
+                                  "supplier_country",
+                                  "supplier_country_code",
+                                  "product_description",
+                                  "weight_kg",
+                                  "container_count",
+                                  "quantity",
+                                  "quantity_unit",
+                                  "route",
+                                  "hs_code",
+                                  "port_of_loading",
+                                  "port_of_discharge"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "maxItems": 50
+                            },
+                            "matches": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "country_code": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "address": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "total_shipments": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "last_shipment_date": {
+                                    "type": "string",
+                                    "format": "date"
+                                  },
+                                  "source_rank": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "selected": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "url",
+                                  "country_code",
+                                  "address",
+                                  "total_shipments",
+                                  "last_shipment_date",
+                                  "source_rank",
+                                  "selected"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "maxItems": 50
+                            },
+                            "selection": {
+                              "type": "string",
+                              "enum": [
+                                "name_match",
+                                "partial_match",
+                                "largest_search_hit"
+                              ]
+                            },
+                            "search_window": {
+                              "type": "object",
+                              "properties": {
+                                "limit": {
+                                  "type": "integer",
+                                  "const": 50
+                                },
+                                "returned_count": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "capped": {
+                                  "type": "boolean"
+                                },
+                                "complete": {
+                                  "type": "boolean",
+                                  "const": false
+                                }
+                              },
+                              "required": [
+                                "limit",
+                                "returned_count",
+                                "capped",
+                                "complete"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_updated_label": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "company",
+                            "top_suppliers",
+                            "hs_codes",
+                            "recent_shipments",
+                            "matches",
+                            "selection",
+                            "search_window",
+                            "returned_count",
+                            "source_updated_label",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -118562,7 +118967,8 @@
         },
         "tags": [
           "Economy"
-        ]
+        ],
+        "x-credit-cost-formula": "20 credits per successful company response, independent of shipment limit. Source-confirmed no records, failures, 24-hour cache hits and idempotent replays cost zero."
       }
     }
   }

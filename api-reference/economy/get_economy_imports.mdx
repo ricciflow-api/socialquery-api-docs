@@ -1,6 +1,16 @@
 ---
-title: "Economy Imports"
+title: "US Company Imports"
 openapi: "GET /economy/imports"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Look up a company in public US ocean-import records indexed by ImportYeti. Supply `company` and optionally `limit` (1–50, default 25). One successful lookup costs **20 credits**, regardless of shipment limit. Exact repeats are cached for 24 hours at zero credits; errors, source-confirmed no records (404), and idempotent replays are free.
+
+The lookup examines **at most 50 source-ranked company search hits**. It prefers a normalized exact name, ignoring spacing and common corporate endings, then a whole-word partial match, then the largest remaining search hit by indexed shipment count. Ties retain source order. For example, `Nike` chooses `Nike Usa` over a smaller filer named `Nike`. `matches` preserves every hit in that fetched window with its native rank and one selected row; `selection` explains the rule. `search_window.complete` is always false because this is not an exhaustive company-registry search. Use a precise filing name to reduce ambiguity.
+
+`company` includes source-indexed lifetime and last-12-month shipment counts, first/last shipment dates, filed address, website and known alternate names. **`supplier_count` is unavailable and remains null**; the adapter does not relabel the fetched supplier window as a total.
+
+`top_suppliers` contains up to 25 suppliers ordered by the source's shipment count, including unnamed suppliers as `name: null`. It preserves country, lifetime/12-month shipment counts, weight in kilograms and four-digit HS headings. `hs_codes` contains the top 25 four-digit headings by shipment count and their chapters.
+
+`recent_shipments` contains up to the requested number of latest source-visible bills (maximum 50), newest first. Each has its date, bill number, supplier/country, product description, weight, container count, quantity/unit and ocean route. Per-shipment `hs_code` is filled only from one explicit, unambiguous HS/HTS-code label in the manifest text. It stays null when absent or ambiguous. Loading/discharge ports remain null; aggregate route tables do not establish per-bill ports.
+
+Only US incoming ocean manifests are represented. Air freight, exports, other countries' trade and withheld manifests are absent. Totals describe the source index; its search and profile snapshots may differ during updates. The adapter validates identity, dates, ordering, duplicate bills and counts. A failed or mismatched source is refunded. Two pinned limited-permission source runs share a 55-second deadline; this verification is not a promise of continuous upstream availability.
