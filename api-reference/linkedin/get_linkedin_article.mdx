@@ -3,4 +3,12 @@ title: "LinkedIn Article"
 openapi: "GET /linkedin/article"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns a public LinkedIn Pulse article as a canonical Post: article ID, body text, author, exact publication timestamp and available like/comment counts. Pass its HTTPS `/pulse/` URL. Tracking parameters and a trailing slash are normalized. Other LinkedIn surfaces and external URLs are rejected before source access.
+
+The adapter verifies the canonical URL, public Article metadata and original article URN. IDs are preserved as strings, avoiding precision loss on LinkedIn's large numeric identifiers. Paragraph/list text comes only from the article body; comments, recommendations, login prompts and session data are excluded. Public images remain source URLs. Embedded media are not downloaded or transcribed.
+
+`engagement.views`, `engagement.shares` and `author.verified` remain null because the public surface does not corroborate them. `published_at` is the exact structured source timestamp, not an estimate from relative text. `ext.title`, `ext.article_urn`, `ext.author_url` and `ext.text_block_count` provide source context. Comments and reactors require their separate operations.
+
+A fresh successful read costs **5 credits**. Errors, cache hits and successful idempotent replays cost zero. Set `X-Max-Credits: 5`. Member-only, blocked, mismatched or incomplete pages return an unbilled error; no article is generated from search snippets or login pages.
+
+Uses anonymous public HTML with a 14-second direct timeout and a 2 MiB limit. Direct requests share a 20-source-read/minute ceiling. The candidate Firecrawl fallback is disabled after two live probes returned HTTP 500; no fallback reliability is claimed. No LinkedIn login, partner API credential or new subscription is required. Public-source availability is not a production SLA.

@@ -11565,7 +11565,7 @@
       "get": {
         "operationId": "get_linkedin_article",
         "summary": "LinkedIn Article",
-        "description": "Use LinkedIn Article to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public LinkedIn Pulse article text, author, exact publish time and available like/comment counts. Requires matching canonical URL, public Article metadata and the native article URN. Member-only, blocked, mismatched or incomplete pages return an unbilled error; missing view/share/verification fields remain null.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -11573,10 +11573,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/pulse/hidden-costs-unreliable-electricity-bill-gates/",
+            "example": "https://www.linkedin.com/pulse/ai-equity-choice-we-cant-delay-bill-gates-d1gte",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Public HTTPS LinkedIn /pulse/ URL. Tracking parameters and trailing slash are normalized; other LinkedIn surfaces and external URLs are rejected."
           },
           {
             "name": "Cache-Control",
@@ -11609,7 +11610,166 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public LinkedIn Pulse article text, author, exact publish time and available like/comment counts. Requires matching canonical URL, public Article metadata and the native article URN. Member-only, blocked, mismatched or incomplete pages return an unbilled error; missing view/share/verification fields remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "content": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": "string"
+                                },
+                                "media_urls": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "thumbnail_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "duration_seconds": {
+                                  "type": "null"
+                                }
+                              },
+                              "required": [
+                                "text",
+                                "media_urls",
+                                "thumbnail_url",
+                                "duration_seconds"
+                              ]
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "username": {
+                                  "type": "string"
+                                },
+                                "display_name": {
+                                  "type": "string"
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "verified": {
+                                  "type": "null"
+                                }
+                              },
+                              "required": [
+                                "username",
+                                "display_name",
+                                "avatar_url",
+                                "verified"
+                              ]
+                            },
+                            "engagement": {
+                              "type": "object",
+                              "properties": {
+                                "views": {
+                                  "type": "null"
+                                },
+                                "likes": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "comments": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "shares": {
+                                  "type": "null"
+                                }
+                              },
+                              "required": [
+                                "views",
+                                "likes",
+                                "comments",
+                                "shares"
+                              ]
+                            },
+                            "published_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "title": {
+                                  "type": "string"
+                                },
+                                "article_urn": {
+                                  "type": "string"
+                                },
+                                "author_url": {
+                                  "type": "string"
+                                },
+                                "published_at_precision": {
+                                  "type": "string",
+                                  "const": "exact"
+                                },
+                                "text_block_count": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "coverage_note": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "title",
+                                "article_urn",
+                                "author_url",
+                                "published_at_precision",
+                                "text_block_count",
+                                "coverage_note"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "url",
+                            "content",
+                            "author",
+                            "engagement",
+                            "published_at",
+                            "ext"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
