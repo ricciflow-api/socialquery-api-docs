@@ -1,6 +1,18 @@
 ---
-title: "Kohls Questions"
+title: "Kohl’s Questions"
 openapi: "GET /kohls/questions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns approved public English-US feedback from the review widget published by Kohl’s. Supply `product_id`, a matching regional product URL, or a continuation cursor. A separate product display lookup confirms identity; a source-confirmed missing product returns 404.
+
+The source groups related variants into native product families. **Results are not necessarily for the exact requested variant.** Every row retains its actual `product` ID, name, URL when available, and `family_ids`. Related IDs must have a source-corroborated family relationship to the requested product. A retired related product can have a null URL; no replacement URL is invented. Tracking parameters are stripped from returned product links.
+
+Each question retains its native ID, title/details, public nickname, timestamp, actual product ID and syndication metadata. `answers` contains up to ten English-US answers included by the source, preserving each answer's ID, text, public nickname, timestamp and native best/brand-answer flags. Answer parent IDs are checked against the question.
+
+`total_answer_count` is the source count; `returned_answer_count` counts included answers. `answers_complete` is true only when those counts match. Fewer answers can reflect the ten-answer window or locale filtering. This endpoint does not provide a separate answer cursor or claim that a source best-answer flag establishes correctness.
+
+`page` is one-based and `limit` is 1–50, default 10. Results use native newest-first order. `total` is the source's family/locale candidate count, identified by `total_scope`; it is not an exact-SKU or all-locale count. Cursors bind product, limit and filters for one hour and corroborate the preceding record. Source changes can require restarting. Offsets stop at 10,000, with `pagination_capped` identifying a local ceiling.
+
+The response selects public feedback fields only. It excludes IP addresses, internal author/submission IDs, contact details and raw provider objects. No customer account access or feedback submission is used. The source URL omits the public display configuration parameter.
+
+A fresh nonempty page costs **5 credits**. Empty pages, failures, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 5`. Each request uses two anonymous display reads, or three with a cursor. A shared 20-source-request/minute limit, 25-second total timeout and 2 MiB limit per response apply. Public-source availability has no contractual SLA.

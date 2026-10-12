@@ -69965,7 +69965,7 @@
       "get": {
         "operationId": "get_kohls_reviews",
         "summary": "Kohls Reviews",
-        "description": "Use Kohls Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Approved public English-US feedback from the retailer’s published display source. Independently verifies product identity, retains actual related-variant IDs through native product-family relationships, and supports bounded pagination with empty-result refunds.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -69975,8 +69975,10 @@
             "required": false,
             "example": "1695762",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "Native product ID. Supply product_id, a matching product URL, or a continuation cursor."
           },
           {
             "name": "url",
@@ -69984,7 +69986,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical HTTPS www.kohls.com/product/prd-ID/product.jsp URL, or its ID path. Parsed only; never followed. Must match any supplied product_id."
           },
           {
             "name": "page",
@@ -69992,8 +69995,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "default": 1
+            },
+            "description": "One-based page. (page-1)*limit must not exceed 10,000. A supplied page must match the cursor offset."
           },
           {
             "name": "limit",
@@ -70002,8 +70007,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
-            }
+              "maximum": 50,
+              "default": 10
+            },
+            "description": "Native feedback page size, 1–50; default 10."
           },
           {
             "name": "label",
@@ -70011,7 +70018,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "No AI enrichment is implemented; only label=none is accepted."
           },
           {
             "name": "reports",
@@ -70019,7 +70027,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable from this adapter; specifying this option fails explicitly."
           },
           {
             "name": "judgments",
@@ -70031,7 +70040,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "No AI enrichment is implemented; only judgments=off is accepted."
           },
           {
             "name": "dry_run",
@@ -70042,7 +70052,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unavailable from this adapter; specifying this option fails explicitly."
           },
           {
             "name": "label_evidence",
@@ -70053,7 +70064,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unavailable from this adapter; specifying this option fails explicitly."
           },
           {
             "name": "fit",
@@ -70064,7 +70076,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Unavailable from this adapter; specifying this option fails explicitly."
           },
           {
             "name": "goal",
@@ -70072,7 +70085,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable from this adapter; specifying this option fails explicitly."
           },
           {
             "name": "fit_tokens",
@@ -70080,23 +70094,28 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unavailable from this adapter; specifying this option fails explicitly."
           },
           {
             "name": "since",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "description": "Inclusive valid YYYY-MM-DD filter on each candidate page by UTC publication date; total remains the native unfiltered family/locale total. Empty filtered pages can continue and are free."
           },
           {
             "name": "until",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "description": "Inclusive valid YYYY-MM-DD filter on each candidate page by UTC publication date; total remains the native unfiltered family/locale total. Empty filtered pages can continue and are free."
           },
           {
             "name": "cursor",
@@ -70104,7 +70123,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour cursor retaining product, limit and date filters. Rechecks the preceding native record. May be supplied without product_id/url."
           },
           {
             "name": "Cache-Control",
@@ -70137,7 +70157,232 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Approved public English-US feedback from the retailer’s published display source. Independently verifies product identity, retains actual related-variant IDs through native product-family relationships, and supports bounded pagination with empty-result refunds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "family_ids": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "url",
+                                "family_ids"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "author_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "locale": {
+                                        "type": "string"
+                                      },
+                                      "is_syndicated": {
+                                        "type": "boolean"
+                                      },
+                                      "source_client": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "family_ids": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "name",
+                                          "url",
+                                          "family_ids"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      },
+                                      "rating": {
+                                        "type": "number",
+                                        "minimum": 0
+                                      },
+                                      "rating_scale": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0
+                                      },
+                                      "recommended": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "published_at",
+                                      "author_name",
+                                      "locale",
+                                      "is_syndicated",
+                                      "source_client",
+                                      "product",
+                                      "title",
+                                      "text",
+                                      "rating",
+                                      "rating_scale",
+                                      "recommended"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "review"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "filtered_out": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total_scope": {
+                              "type": "string",
+                              "const": "native_product_family_locale_candidates"
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "locale": {
+                              "type": "string"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "items",
+                            "returned_count",
+                            "source_returned_count",
+                            "filtered_out",
+                            "total",
+                            "total_scope",
+                            "page",
+                            "limit",
+                            "offset",
+                            "locale",
+                            "next_cursor",
+                            "pagination_capped",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -70182,7 +70427,8 @@
         "x-one-of-parameters": [
           [
             "product_id",
-            "url"
+            "url",
+            "cursor"
           ]
         ],
         "tags": [
@@ -70194,7 +70440,7 @@
       "get": {
         "operationId": "get_kohls_questions",
         "summary": "Kohls Questions",
-        "description": "Use Kohls Questions to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Approved public English-US feedback from the retailer’s published display source. Independently verifies product identity, retains actual related-variant IDs through native product-family relationships, and supports bounded pagination with empty-result refunds.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -70204,8 +70450,10 @@
             "required": false,
             "example": "1695762",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "Native product ID. Supply product_id, a matching product URL, or a continuation cursor."
           },
           {
             "name": "url",
@@ -70213,7 +70461,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical HTTPS www.kohls.com/product/prd-ID/product.jsp URL, or its ID path. Parsed only; never followed. Must match any supplied product_id."
           },
           {
             "name": "page",
@@ -70221,8 +70470,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "default": 1
+            },
+            "description": "One-based page. (page-1)*limit must not exceed 10,000. A supplied page must match the cursor offset."
           },
           {
             "name": "limit",
@@ -70231,8 +70482,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
-            }
+              "maximum": 50,
+              "default": 10
+            },
+            "description": "Native feedback page size, 1–50; default 10."
           },
           {
             "name": "cursor",
@@ -70240,7 +70493,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour cursor retaining product, limit and date filters. Rechecks the preceding native record. May be supplied without product_id/url."
           },
           {
             "name": "Cache-Control",
@@ -70273,7 +70527,291 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Approved public English-US feedback from the retailer’s published display source. Independently verifies product identity, retains actual related-variant IDs through native product-family relationships, and supports bounded pagination with empty-result refunds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "family_ids": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "url",
+                                "family_ids"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "question": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "author_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "locale": {
+                                        "type": "string"
+                                      },
+                                      "is_syndicated": {
+                                        "type": "boolean"
+                                      },
+                                      "source_client": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "family_ids": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "name",
+                                          "url",
+                                          "family_ids"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "text": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "total_answer_count": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "answers": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "published_at": {
+                                              "type": "string",
+                                              "format": "date-time"
+                                            },
+                                            "author_name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "locale": {
+                                              "type": "string"
+                                            },
+                                            "is_syndicated": {
+                                              "type": "boolean"
+                                            },
+                                            "source_client": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "is_best_answer": {
+                                              "type": "boolean"
+                                            },
+                                            "is_brand_answer": {
+                                              "type": "boolean"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "published_at",
+                                            "author_name",
+                                            "locale",
+                                            "is_syndicated",
+                                            "source_client",
+                                            "text",
+                                            "is_best_answer",
+                                            "is_brand_answer"
+                                          ]
+                                        }
+                                      },
+                                      "returned_answer_count": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      },
+                                      "answers_complete": {
+                                        "type": "boolean"
+                                      },
+                                      "answer_limit": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "published_at",
+                                      "author_name",
+                                      "locale",
+                                      "is_syndicated",
+                                      "source_client",
+                                      "product",
+                                      "title",
+                                      "text",
+                                      "total_answer_count",
+                                      "answers",
+                                      "returned_answer_count",
+                                      "answers_complete",
+                                      "answer_limit"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "question"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "filtered_out": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total_scope": {
+                              "type": "string",
+                              "const": "native_product_family_locale_candidates"
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "locale": {
+                              "type": "string"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "items",
+                            "returned_count",
+                            "source_returned_count",
+                            "filtered_out",
+                            "total",
+                            "total_scope",
+                            "page",
+                            "limit",
+                            "offset",
+                            "locale",
+                            "next_cursor",
+                            "pagination_capped",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -70318,7 +70856,8 @@
         "x-one-of-parameters": [
           [
             "product_id",
-            "url"
+            "url",
+            "cursor"
           ]
         ],
         "tags": [
