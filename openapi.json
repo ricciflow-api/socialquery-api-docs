@@ -80348,7 +80348,7 @@
       "get": {
         "operationId": "get_gumtree_trending",
         "summary": "Gumtree Trending",
-        "description": "Use Gumtree Trending to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Current popular-search terms from Gumtree’s anonymous UK homepage feed, using the national location. Preserves source order; does not invent search volume, growth, ranking scores or measurement periods. One bounded window with no pagination.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -80383,7 +80383,60 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Current popular-search terms from Gumtree’s anonymous UK homepage feed, using the national location. Preserves source order; does not invent search volume, growth, ranking scores or measurement periods. One bounded window with no pagination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "location_id": {
+                              "type": "string",
+                              "const": "10000392"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "location_id",
+                            "source",
+                            "next_cursor",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

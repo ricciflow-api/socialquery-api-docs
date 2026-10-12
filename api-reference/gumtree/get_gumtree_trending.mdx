@@ -3,4 +3,10 @@ title: "Gumtree Trending"
 openapi: "GET /gumtree/trending"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns the current search terms displayed as **popular searches** by Gumtree UK’s anonymous homepage, using its national location (`10000392`). The live source currently returns about 30 strings. This operation accepts no query parameters and has no pagination.
+
+`items` preserves the source’s exact term order. That order is not claimed to rank popularity. The source does not publish search volume, growth rates, a measurement period or its update timestamp; those metrics are not invented. This is one bounded public window, not a complete query-demand dataset or locally personalized recommendations.
+
+A fresh nonempty response costs **1 credit**. A source-confirmed empty list, cache hit, error or successful idempotent replay costs zero. Use `X-Max-Credits: 1`. A blocked, malformed or mismatched source never becomes empty success.
+
+Anonymous direct requests use an 8-second total timeout and a 64 KiB response limit. The existing Firecrawl account provides a basic-transport fallback with exact source-URL verification, original JSON bytes, one provider credit and a 35-second timeout. Both paths share a 20-source-request/minute ceiling. No Gumtree account or API key is required. The public source has no contractual availability guarantee.
