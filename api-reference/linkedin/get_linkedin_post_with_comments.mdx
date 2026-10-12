@@ -1,6 +1,8 @@
 ---
-title: "LinkedIn Post With Comments"
+title: "LinkedIn Post with Public Comments"
 openapi: "GET /linkedin/post/with-comments"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read public LinkedIn post text plus its visible top-level comments from a full HTTPS /posts/ URL containing the activity ID. Live verification returned 10 comments. This is a bounded public window, not the full discussion: comments_complete is false and the post comment count can exceed returned_comment_count. Comment IDs, reply threads, media, avatars, sorting, pagination, and reaction breakdowns are unavailable and remain null. Dates are source-reported. Feed-update URN URLs are not resolved by this adapter; use the full public post URL. A live success costs 5 credits. Invalid options fail before provider access and have no net charge.
+
+[Source documentation](https://docs.scrapebadger.com/api-reference/endpoint/linkedin/get-post).

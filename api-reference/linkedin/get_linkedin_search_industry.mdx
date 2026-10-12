@@ -1,6 +1,8 @@
 ---
-title: "LinkedIn Search Industry"
+title: "LinkedIn Industry Lookup"
 openapi: "GET /linkedin/search/industry"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Resolve industry names to LinkedIn Industry V2 IDs using the official published reference snapshot (434 active English labels, retrieved 12 October 2026). All query words must appear in the label, ignoring case; exact labels sort first, then alphabetically. Returns every match, its industry URN, hierarchy, and the source URL/date. Inactive entries are excluded. This is a dated reference lookup, not live LinkedIn autocomplete; IDs are not NAICS codes. No pagination, locale override or fuzzy matching. A live request costs 1 credit; cache and idempotency replays cost zero.
+
+[Source documentation](https://learn.microsoft.com/en-us/linkedin/shared/references/reference-tables/industry-codes-v2).

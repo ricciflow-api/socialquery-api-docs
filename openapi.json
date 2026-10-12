@@ -12864,7 +12864,7 @@
       "get": {
         "operationId": "get_linkedin_post_with_comments",
         "summary": "LinkedIn Post With Comments",
-        "description": "Inspect discussion records with LinkedIn Post With Comments. Supply the accepted resource identifier and follow the operation's paging rules. Returned records may represent only part of the discussion.",
+        "description": "Read public LinkedIn post text plus its visible top-level comments from a full HTTPS /posts/ URL containing the activity ID. Live verification returned 10 comments. This is a bounded public window, not the full discussion: comments_complete is false and the post comment count can exceed returned_comment_count. Comment IDs, reply threads, media, avatars, sorting, pagination, and reaction breakdowns are unavailable and remain null. Dates are source-reported. Feed-update URN URLs are not resolved by this adapter; use the full public post URL. A live success costs 5 credits. Invalid options fail before provider access and have no net charge.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -12875,7 +12875,8 @@
             "example": "https://www.linkedin.com/feed/update/urn:li:activity:7501466755261820928",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Full public HTTPS LinkedIn /posts/ URL containing the activity ID; feed-update URN URLs are unsupported."
           },
           {
             "name": "Cache-Control",
@@ -12908,7 +12909,223 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read public LinkedIn post text plus its visible top-level comments from a full HTTPS /posts/ URL containing the activity ID. Live verification returned 10 comments. This is a bounded public window, not the full discussion: comments_complete is false and the post comment count can exceed returned_comment_count. Comment IDs, reply threads, media, avatars, sorting, pagination, and reaction breakdowns are unavailable and remain null. Dates are source-reported. Feed-update URN URLs are not resolved by this adapter; use the full public post URL. A live success costs 5 credits. Invalid options fail before provider access and have no net charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "post": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "media_urls": {
+                                      "type": "null"
+                                    },
+                                    "thumbnail_url": {
+                                      "type": "null"
+                                    },
+                                    "duration_seconds": {
+                                      "type": "null"
+                                    }
+                                  }
+                                },
+                                "author": {
+                                  "type": "object",
+                                  "properties": {
+                                    "username": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "display_name": {
+                                      "type": "string"
+                                    },
+                                    "url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "avatar_url": {
+                                      "type": "null"
+                                    },
+                                    "verified": {
+                                      "type": "null"
+                                    }
+                                  }
+                                },
+                                "engagement": {
+                                  "type": "object",
+                                  "properties": {
+                                    "views": {
+                                      "type": "null"
+                                    },
+                                    "likes": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "comments": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "shares": {
+                                      "type": "null"
+                                    },
+                                    "saves": {
+                                      "type": "null"
+                                    }
+                                  }
+                                },
+                                "published_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "activity_urn": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "comments": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "comment": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "null"
+                                      },
+                                      "parent_id": {
+                                        "type": "null"
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": "string"
+                                          },
+                                          "url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          },
+                                          "replies": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "replies": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "edited": {
+                                            "type": "null"
+                                          },
+                                          "reaction_counts": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_comment_count": {
+                              "type": "integer"
+                            },
+                            "comments_complete": {
+                              "type": "boolean",
+                              "const": false
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -17747,7 +17964,7 @@
       "get": {
         "operationId": "get_linkedin_search_industry",
         "summary": "LinkedIn Search Industry",
-        "description": "Find records through LinkedIn Search Industry using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Resolve industry names to LinkedIn Industry V2 IDs using the official published reference snapshot (434 active English labels, retrieved 12 October 2026). All query words must appear in the label, ignoring case; exact labels sort first, then alphabetically. Returns every match, its industry URN, hierarchy, and the source URL/date. Inactive entries are excluded. This is a dated reference lookup, not live LinkedIn autocomplete; IDs are not NAICS codes. No pagination, locale override or fuzzy matching. A live request costs 1 credit; cache and idempotency replays cost zero.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -17757,8 +17974,11 @@
             "required": true,
             "example": "Software",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Case-insensitive label keywords. All words must occur in the industry label."
           },
           {
             "name": "Cache-Control",
@@ -17791,7 +18011,79 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Resolve industry names to LinkedIn Industry V2 IDs using the official published reference snapshot (434 active English labels, retrieved 12 October 2026). All query words must appear in the label, ignoring case; exact labels sort first, then alphabetically. Returns every match, its industry URN, hierarchy, and the source URL/date. Inactive entries are excluded. This is a dated reference lookup, not live LinkedIn autocomplete; IDs are not NAICS codes. No pagination, locale override or fuzzy matching. A live request costs 1 credit; cache and idempotency replays cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "urn": {
+                                    "type": "string"
+                                  },
+                                  "hierarchy": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "active": {
+                                    "type": "boolean",
+                                    "const": true
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "taxonomy": {
+                              "type": "string"
+                            },
+                            "locale": {
+                              "type": "string"
+                            },
+                            "source_url": {
+                              "type": "string"
+                            },
+                            "source_retrieved_at": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
