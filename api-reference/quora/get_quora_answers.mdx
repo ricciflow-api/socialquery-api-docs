@@ -3,4 +3,9 @@ title: "Quora Answers"
 openapi: "GET /quora/answers"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read a bounded answer window from up to two questions discovered for a keyword. This is not exhaustive global answer search. AI-written answers are flagged. since/until filter source publication dates within that window; only time=all is supported. Up to 10 results, without continuation.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Empty or failed upstream Actor output is treated as an unavailable response, not a billed successful search.
+
+
+Unknown values remain null. Source execution uses a pinned Actor build, restricted permissions and a hard per-run cost cap. No login cookies, private profile fields or reviewer demographic traits are returned.

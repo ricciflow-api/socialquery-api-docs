@@ -3,4 +3,9 @@ title: "Sephora Product"
 openapi: "GET /sephora/product"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read a Sephora US product with description, ingredients, USD price range, rating, variants and observed stock. Optional sku selects a returned variant and its price/stock; an absent SKU returns 404. Only language=en-US is supported. This does not report store-level availability.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Empty or failed upstream Actor output is treated as an unavailable response, not a billed successful search.
+
+
+Unknown values remain null. Source execution uses a pinned Actor build, restricted permissions and a hard per-run cost cap. No login cookies, private profile fields or reviewer demographic traits are returned.

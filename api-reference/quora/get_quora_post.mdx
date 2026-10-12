@@ -3,4 +3,9 @@ title: "Quora Post"
 openapi: "GET /quora/post"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read one public Quora question by its canonical URL. Returns the title and observed answer, follower and comment counts. Separate body text, author identity and publication time are unavailable. Profile, answer and Space URLs are unsupported.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Empty or failed upstream Actor output is treated as an unavailable response, not a billed successful search.
+
+
+Unknown values remain null. Source execution uses a pinned Actor build, restricted permissions and a hard per-run cost cap. No login cookies, private profile fields or reviewer demographic traits are returned.

@@ -53516,7 +53516,7 @@
       "get": {
         "operationId": "get_sephora_product",
         "summary": "Sephora Product",
-        "description": "Use Sephora Product to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read a Sephora US product with description, ingredients, USD price range, rating, variants and observed stock. Optional sku selects a returned variant and its price/stock; an absent SKU returns 404. Only language=en-US is supported. This does not report store-level availability.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -53556,7 +53556,8 @@
                 "en-CA",
                 "fr-CA"
               ]
-            }
+            },
+            "description": "Only en-US is supported; other values return 422."
           },
           {
             "name": "Cache-Control",
@@ -53579,7 +53580,246 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read a Sephora US product with description, ingredients, USD price range, rating, variants and observed stock. Optional sku selects a returned variant and its price/stock; an absent SKU returns 404. Only language=en-US is supported. This does not report store-level availability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "seller": {
+                              "type": "null"
+                            },
+                            "brand": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "price": {
+                              "type": "object",
+                              "properties": {
+                                "current": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "original": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "currency": {
+                                  "type": "string",
+                                  "const": "USD"
+                                }
+                              }
+                            },
+                            "rating": {
+                              "type": "object",
+                              "properties": {
+                                "average": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "count": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                }
+                              }
+                            },
+                            "image_urls": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "availability": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "reviews_count": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "features": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "specifications": {
+                              "type": "object",
+                              "properties": {
+                                "ingredients": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "how_to_use": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "variations": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "sku": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "size": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "price": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "original_price": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "in_stock": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "image_url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "sku": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "price_max": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "price_display": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "is_price_range": {
+                                  "type": "boolean"
+                                },
+                                "brand_id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "category_id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "source_country": {
+                                  "type": "string",
+                                  "const": "US"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -53629,14 +53869,15 @@
         ],
         "tags": [
           "Sephora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/sephora/reviews": {
       "get": {
         "operationId": "get_sephora_reviews",
         "summary": "Sephora Reviews",
-        "description": "Use Sephora Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read written Sephora product reviews, up to 100 per page and three pages. Supports observed rating, helpful votes, verified-purchase flag, review sorting, exact star filter and since date. Review totals are unknown for the returned filtered window. Review analysis/enrichment and until are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -53663,8 +53904,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 3
+            },
+            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
           },
           {
             "name": "limit",
@@ -53707,7 +53950,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "reports",
@@ -53715,7 +53959,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "judgments",
@@ -53727,7 +53972,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "dry_run",
@@ -53738,7 +53984,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "label_evidence",
@@ -53749,7 +53996,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "fit",
@@ -53760,7 +54008,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "goal",
@@ -53768,7 +54017,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "fit_tokens",
@@ -53776,7 +54026,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "since",
@@ -53792,7 +54043,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this bounded public-review adapter; returns 422."
           },
           {
             "name": "cursor",
@@ -53800,7 +54052,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque asp1_ cursor. Repeat identical query, identifiers, filters and page size. Do not combine with page."
           },
           {
             "name": "Cache-Control",
@@ -53823,7 +54076,186 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read written Sephora product reviews, up to 100 per page and three pages. Supports observed rating, helpful votes, verified-purchase flag, review sorting, exact star filter and since date. Review totals are unknown for the returned filtered window. Review analysis/enrichment and until are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "entity_id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "null"
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "max": {
+                                            "type": "number",
+                                            "const": 5
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "url": {
+                                            "type": "null"
+                                          },
+                                          "location": {
+                                            "type": "null"
+                                          },
+                                          "reviews_count": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "helpful_votes": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "verified": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": "string",
+                                        "const": "sephora"
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "original_language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "translated": {
+                                        "type": "boolean",
+                                        "const": false
+                                      },
+                                      "images": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "responses": {
+                                        "type": "null"
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "incentivized": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "recommended": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -53873,14 +54305,15 @@
         ],
         "tags": [
           "Sephora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/sephora/search": {
       "get": {
         "operationId": "get_sephora_search",
         "summary": "Sephora Search",
-        "description": "Find records through Sephora Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Find Sephora US products by keyword. Prices preserve ranges in USD. Up to 60 rows per page and three pages. Keyword matching and supported sorting follow the source. Exact totals are unavailable; continuation uses observed look-ahead rows, not an estimated total.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -53899,8 +54332,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 3
+            },
+            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -53925,7 +54360,8 @@
                 "price_high",
                 "new"
               ]
-            }
+            },
+            "description": "Supports best_selling, top_rated, price_low and price_high. new is unsupported and returns 422."
           },
           {
             "name": "min_rating",
@@ -53935,7 +54371,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 5
-            }
+            },
+            "description": "Integer minimum star rating from 1 to 4."
           },
           {
             "name": "min_price",
@@ -53944,7 +54381,8 @@
             "schema": {
               "type": "integer",
               "minimum": 0
-            }
+            },
+            "description": "Whole USD amounts from 0 to 100000; fractional values are unsupported."
           },
           {
             "name": "max_price",
@@ -53953,7 +54391,8 @@
             "schema": {
               "type": "integer",
               "minimum": 0
-            }
+            },
+            "description": "Whole USD amounts from 0 to 100000; fractional values are unsupported."
           },
           {
             "name": "is_new",
@@ -53977,7 +54416,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque asp1_ cursor. Repeat identical query, identifiers, filters and page size. Do not combine with page."
           },
           {
             "name": "Cache-Control",
@@ -54000,7 +54440,282 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Find Sephora US products by keyword. Prices preserve ranges in USD. Up to 60 rows per page and three pages. Keyword matching and supported sorting follow the source. Exact totals are unavailable; continuation uses observed look-ahead rows, not an estimated total.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "seller": {
+                                        "type": "null"
+                                      },
+                                      "brand": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "reviews_count": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "features": {
+                                        "type": [
+                                          "array",
+                                          "null"
+                                        ],
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "specifications": {
+                                        "type": "object",
+                                        "properties": {
+                                          "ingredients": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "how_to_use": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "variations": {
+                                        "type": [
+                                          "array",
+                                          "null"
+                                        ],
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "sku": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "size": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "description": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "price": {
+                                              "type": [
+                                                "number",
+                                                "null"
+                                              ],
+                                              "minimum": 0
+                                            },
+                                            "original_price": {
+                                              "type": [
+                                                "number",
+                                                "null"
+                                              ],
+                                              "minimum": 0
+                                            },
+                                            "in_stock": {
+                                              "type": [
+                                                "boolean",
+                                                "null"
+                                              ]
+                                            },
+                                            "image_url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "sku": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "price_max": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "price_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "is_price_range": {
+                                            "type": "boolean"
+                                          },
+                                          "brand_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "category_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_country": {
+                                            "type": "string",
+                                            "const": "US"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -54044,7 +54759,8 @@
         },
         "tags": [
           "Sephora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/sephora/search/suggestions": {
@@ -54149,7 +54865,7 @@
       "get": {
         "operationId": "get_sephora_category",
         "summary": "Sephora Category",
-        "description": "Use Sephora Category to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "List Sephora US products using a category ID such as cat60026. Up to 60 rows per page and three pages. Results include product identity, USD price range and rating. Exact category totals are unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -54168,8 +54884,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 3
+            },
+            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -54194,7 +54912,8 @@
                 "price_high",
                 "new"
               ]
-            }
+            },
+            "description": "Supports best_selling, top_rated, price_low and price_high. new is unsupported and returns 422."
           },
           {
             "name": "min_price",
@@ -54203,7 +54922,8 @@
             "schema": {
               "type": "integer",
               "minimum": 0
-            }
+            },
+            "description": "Whole USD amounts from 0 to 100000; fractional values are unsupported."
           },
           {
             "name": "max_price",
@@ -54212,7 +54932,8 @@
             "schema": {
               "type": "integer",
               "minimum": 0
-            }
+            },
+            "description": "Whole USD amounts from 0 to 100000; fractional values are unsupported."
           },
           {
             "name": "cursor",
@@ -54220,7 +54941,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque asp1_ cursor. Repeat identical query, identifiers, filters and page size. Do not combine with page."
           },
           {
             "name": "Cache-Control",
@@ -54243,7 +54965,282 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "List Sephora US products using a category ID such as cat60026. Up to 60 rows per page and three pages. Results include product identity, USD price range and rating. Exact category totals are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "seller": {
+                                        "type": "null"
+                                      },
+                                      "brand": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "reviews_count": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "features": {
+                                        "type": [
+                                          "array",
+                                          "null"
+                                        ],
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "specifications": {
+                                        "type": "object",
+                                        "properties": {
+                                          "ingredients": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "how_to_use": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "variations": {
+                                        "type": [
+                                          "array",
+                                          "null"
+                                        ],
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "sku": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "size": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "description": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "price": {
+                                              "type": [
+                                                "number",
+                                                "null"
+                                              ],
+                                              "minimum": 0
+                                            },
+                                            "original_price": {
+                                              "type": [
+                                                "number",
+                                                "null"
+                                              ],
+                                              "minimum": 0
+                                            },
+                                            "in_stock": {
+                                              "type": [
+                                                "boolean",
+                                                "null"
+                                              ]
+                                            },
+                                            "image_url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "sku": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "price_max": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "price_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "is_price_range": {
+                                            "type": "boolean"
+                                          },
+                                          "brand_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "category_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_country": {
+                                            "type": "string",
+                                            "const": "US"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -54287,7 +55284,8 @@
         },
         "tags": [
           "Sephora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/sephora/categories": {
@@ -54531,7 +55529,7 @@
       "get": {
         "operationId": "get_sephora_brand_products",
         "summary": "Sephora Brand Products",
-        "description": "Use Sephora Brand Products to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "List Sephora US products using a brand short name such as gucci. Up to 60 rows per page and three pages. Results include product identity, USD price range and rating. Exact brand totals are unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -54550,8 +55548,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 3
+            },
+            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -54576,7 +55576,8 @@
                 "price_high",
                 "new"
               ]
-            }
+            },
+            "description": "Supports best_selling, top_rated, price_low and price_high. new is unsupported and returns 422."
           },
           {
             "name": "min_price",
@@ -54585,7 +55586,8 @@
             "schema": {
               "type": "integer",
               "minimum": 0
-            }
+            },
+            "description": "Whole USD amounts from 0 to 100000; fractional values are unsupported."
           },
           {
             "name": "max_price",
@@ -54594,7 +55596,8 @@
             "schema": {
               "type": "integer",
               "minimum": 0
-            }
+            },
+            "description": "Whole USD amounts from 0 to 100000; fractional values are unsupported."
           },
           {
             "name": "min_rating",
@@ -54604,7 +55607,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 5
-            }
+            },
+            "description": "Integer minimum star rating from 1 to 4."
           },
           {
             "name": "cursor",
@@ -54612,7 +55616,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque asp1_ cursor. Repeat identical query, identifiers, filters and page size. Do not combine with page."
           },
           {
             "name": "Cache-Control",
@@ -54635,7 +55640,282 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "List Sephora US products using a brand short name such as gucci. Up to 60 rows per page and three pages. Results include product identity, USD price range and rating. Exact brand totals are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "seller": {
+                                        "type": "null"
+                                      },
+                                      "brand": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "reviews_count": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "features": {
+                                        "type": [
+                                          "array",
+                                          "null"
+                                        ],
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "specifications": {
+                                        "type": "object",
+                                        "properties": {
+                                          "ingredients": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "how_to_use": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "variations": {
+                                        "type": [
+                                          "array",
+                                          "null"
+                                        ],
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "sku": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "size": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "description": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "price": {
+                                              "type": [
+                                                "number",
+                                                "null"
+                                              ],
+                                              "minimum": 0
+                                            },
+                                            "original_price": {
+                                              "type": [
+                                                "number",
+                                                "null"
+                                              ],
+                                              "minimum": 0
+                                            },
+                                            "in_stock": {
+                                              "type": [
+                                                "boolean",
+                                                "null"
+                                              ]
+                                            },
+                                            "image_url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "sku": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "price_max": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "price_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "is_price_range": {
+                                            "type": "boolean"
+                                          },
+                                          "brand_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "category_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_country": {
+                                            "type": "string",
+                                            "const": "US"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -54679,7 +55959,8 @@
         },
         "tags": [
           "Sephora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/sephora/stores": {
@@ -64133,7 +65414,7 @@
       "get": {
         "operationId": "get_quora_search",
         "summary": "Quora Search",
-        "description": "Find records through Quora Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Discover public Quora questions for a keyword, up to 10 per call. Returns titles, question URLs and observed answer/follower/comment counts. Publication dates and exact totals are unavailable. Only time=all is supported; there is no continuation.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -64160,7 +65441,8 @@
                 "month",
                 "year"
               ]
-            }
+            },
+            "description": "Only all is supported. Native time ranking is unavailable; other values return 422."
           },
           {
             "name": "limit",
@@ -64178,7 +65460,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable because the public question source does not provide publication dates; returns 422."
           },
           {
             "name": "until",
@@ -64186,7 +65469,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable because the public question source does not provide publication dates; returns 422."
           },
           {
             "name": "Cache-Control",
@@ -64209,7 +65493,266 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Discover public Quora questions for a keyword, up to 10 per call. Returns titles, question URLs and observed answer/follower/comment counts. Publication dates and exact totals are unavailable. Only time=all is supported; there is no continuation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "type": "null"
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "null"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "null"
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "comments": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "shares": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "saves": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": "null"
+                                          },
+                                          "spoiler": {
+                                            "type": "null"
+                                          },
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "deleted": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "type": {
+                                            "type": "string"
+                                          },
+                                          "question_title": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "question_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "answer_count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "follower_count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "topics": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "author_credential": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "author_profile_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "is_ai_answer": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "answer_to": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "updated_at": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "content_category": {
+                                        "type": "null"
+                                      },
+                                      "estimated_reach": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64253,14 +65796,15 @@
         },
         "tags": [
           "Quora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/quora/post": {
       "get": {
         "operationId": "get_quora_post",
         "summary": "Quora Post",
-        "description": "Use Quora Post to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read one public Quora question by its canonical URL. Returns the title and observed answer, follower and comment counts. Separate body text, author identity and publication time are unavailable. Profile, answer and Space URLs are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -64294,7 +65838,216 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read one public Quora question by its canonical URL. Returns the title and observed answer, follower and comment counts. Separate body text, author identity and publication time are unavailable. Profile, answer and Space URLs are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "content": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "media_urls": {
+                                  "type": "null"
+                                },
+                                "thumbnail_url": {
+                                  "type": "null"
+                                },
+                                "duration_seconds": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "username": {
+                                  "type": "null"
+                                },
+                                "display_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "verified": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "engagement": {
+                              "type": "object",
+                              "properties": {
+                                "views": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "likes": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "comments": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "shares": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "saves": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                }
+                              }
+                            },
+                            "published_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "flags": {
+                              "type": "object",
+                              "properties": {
+                                "nsfw": {
+                                  "type": "null"
+                                },
+                                "spoiler": {
+                                  "type": "null"
+                                },
+                                "pinned": {
+                                  "type": "null"
+                                },
+                                "deleted": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "question_title": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "question_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "answer_count": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "follower_count": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "topics": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "author_credential": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "author_profile_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "is_ai_answer": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "answer_to": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "updated_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64338,14 +66091,15 @@
         },
         "tags": [
           "Quora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/quora/answers": {
       "get": {
         "operationId": "get_quora_answers",
         "summary": "Quora Answers",
-        "description": "Use Quora Answers to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read a bounded answer window from up to two questions discovered for a keyword. This is not exhaustive global answer search. AI-written answers are flagged. since/until filter source publication dates within that window; only time=all is supported. Up to 10 results, without continuation.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -64372,7 +66126,8 @@
                 "month",
                 "year"
               ]
-            }
+            },
+            "description": "Only all is supported. Native time ranking is unavailable; other values return 422."
           },
           {
             "name": "limit",
@@ -64421,7 +66176,266 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read a bounded answer window from up to two questions discovered for a keyword. This is not exhaustive global answer search. AI-written answers are flagged. since/until filter source publication dates within that window; only time=all is supported. Up to 10 results, without continuation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "type": "null"
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "null"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "null"
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "comments": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "shares": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "saves": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": "null"
+                                          },
+                                          "spoiler": {
+                                            "type": "null"
+                                          },
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "deleted": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "type": {
+                                            "type": "string"
+                                          },
+                                          "question_title": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "question_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "answer_count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "follower_count": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "topics": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "author_credential": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "author_profile_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "is_ai_answer": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "answer_to": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "updated_at": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "content_category": {
+                                        "type": "null"
+                                      },
+                                      "estimated_reach": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64465,7 +66479,8 @@
         },
         "tags": [
           "Quora"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/quora/posts": {

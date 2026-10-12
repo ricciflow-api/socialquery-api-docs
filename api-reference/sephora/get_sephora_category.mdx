@@ -3,4 +3,10 @@ title: "Sephora Category"
 openapi: "GET /sephora/category"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+List Sephora US products using a category ID such as cat60026. Up to 60 rows per page and three pages. Results include product identity, USD price range and rating. Exact category totals are unavailable.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Empty or failed upstream Actor output is treated as an unavailable response, not a billed successful search.
+
+Pagination re-fetches the source prefix; updates can shift products or reviews between calls. Keep parameters identical with a returned cursor. `window_truncated=true` on page 3 means more rows were observed but this adapter’s bounded window ends. A null cursor does not prove the full catalog or review archive was retrieved.
+
+Unknown values remain null. Source execution uses a pinned Actor build, restricted permissions and a hard per-run cost cap. No login cookies, private profile fields or reviewer demographic traits are returned.

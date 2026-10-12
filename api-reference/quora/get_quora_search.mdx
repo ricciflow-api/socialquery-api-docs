@@ -3,4 +3,9 @@ title: "Quora Search"
 openapi: "GET /quora/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Discover public Quora questions for a keyword, up to 10 per call. Returns titles, question URLs and observed answer/follower/comment counts. Publication dates and exact totals are unavailable. Only time=all is supported; there is no continuation.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Empty or failed upstream Actor output is treated as an unavailable response, not a billed successful search.
+
+
+Unknown values remain null. Source execution uses a pinned Actor build, restricted permissions and a hard per-run cost cap. No login cookies, private profile fields or reviewer demographic traits are returned.
