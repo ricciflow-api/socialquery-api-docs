@@ -50841,7 +50841,7 @@
       "get": {
         "operationId": "get_google_shopping_price_history",
         "summary": "Google Shopping Price History",
-        "description": "Use Google Shopping Price History to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return source-reported dated price observations per store for a numeric Google catalog product_id and selected country. Uses the default product offer. Composite offer identifiers and page tokens are not supported. Dates have day precision; no interpolation, currency conversion or merging of same-named store series. Products/markets without a chart return 404 PRICE_HISTORY_UNAVAILABLE without charge. Current-price listings are never substituted for history.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -50849,10 +50849,12 @@
             "name": "product_id",
             "in": "query",
             "required": true,
-            "example": "catalogid:7310953537322941042,productid:2695666608789071335",
+            "example": "4337405995804634306",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,24}$"
+            },
+            "description": "Numeric Google catalog identifier. Composite prds/offer identifiers and page tokens are not yet supported."
           },
           {
             "name": "country",
@@ -50860,7 +50862,9 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Provider-supported two-letter country code, default US; GB maps to the UK edition. Chart availability is product- and market-dependent.",
+            "example": "US"
           },
           {
             "name": "Cache-Control",
@@ -50893,7 +50897,126 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return source-reported dated price observations per store for a numeric Google catalog product_id and selected country. Uses the default product offer. Composite offer identifiers and page tokens are not supported. Dates have day precision; no interpolation, currency conversion or merging of same-named store series. Products/markets without a chart return 404 PRICE_HISTORY_UNAVAILABLE without charge. Current-price listings are never substituted for history.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product_id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "country": {
+                              "type": "string"
+                            },
+                            "currency": {
+                              "type": "string"
+                            },
+                            "price_history": {
+                              "type": "boolean",
+                              "const": true
+                            },
+                            "stores": {
+                              "type": "array",
+                              "minItems": 1,
+                              "maxItems": 100,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "source_index": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "prices": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "maxItems": 5000,
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "date": {
+                                          "type": "string",
+                                          "format": "date"
+                                        },
+                                        "price": {
+                                          "type": "number",
+                                          "minimum": 0
+                                        }
+                                      },
+                                      "required": [
+                                        "date",
+                                        "price"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "name",
+                                  "source_index",
+                                  "prices"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "store_count": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "observation_count": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 10000
+                            },
+                            "date_precision": {
+                              "type": "string",
+                              "const": "day"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "product_id",
+                            "title",
+                            "country",
+                            "currency",
+                            "price_history",
+                            "stores",
+                            "store_count",
+                            "observation_count",
+                            "date_precision",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

@@ -1,6 +1,14 @@
 ---
-title: "Google Shopping Price History"
+title: "Google Shopping price history"
 openapi: "GET /google_shopping/price-history"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Costs **1 credit** for a successful live history response. Errors, cache hits, and successful idempotent replays cost zero credits.
+
+Supply a **numeric Google catalog product ID** and a country code (default US). This release uses the default product offer. Composite `catalogid:...,productid:...` identifiers and opaque offer/page tokens are not supported; they return an uncharged 422 instead of silently selecting a different variant. Country inputs use the provider's supported codes; GB selects its UK edition.
+
+The response contains `stores[].prices[]`, with source-reported `date` and `price` observations, the source currency, and the product title. Dates are normalized to ISO calendar dates and sorted ascending within each source series. No missing dates are interpolated, no currency conversion is applied, and stores with the same display name are not merged. `source_index` preserves their separate source positions.
+
+These observations describe price changes and are not a complete daily series, a nationwide quote, or a checkout price. History availability varies by product and market. A recognized product without a chart returns **404 `PRICE_HISTORY_UNAVAILABLE`**, uncharged. Malformed dates, mismatched request identity, or incomplete series fail without returning a partial history. Current-price listings are never substituted for history.
+
+Limits are 100 source series, 5,000 observations per series, and 10,000 observations overall; oversized responses fail. Source: [SerpApi Google Product API](https://serpapi.com/google-product-api), using the existing free search allowance. Live fixture evidence covers a US chart and an unavailable UK chart; it does not certify every country or product.
