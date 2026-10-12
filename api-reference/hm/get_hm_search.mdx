@@ -1,6 +1,8 @@
 ---
-title: "Hm Search"
+title: "H&M Search"
 openapi: "GET /hm/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search the H&M US catalog in source relevance order. Returns up to 36 product articles per page, with three pages maximum. Only en-US and its en_us/en-us aliases are verified; filters and other sort orders return 422. Keep query and limit with the cursor; do not combine cursor and page. Cursor continuation excludes previously returned article IDs as live rankings change. Direct page requests have no history. Prices are USD; missing ratings, descriptions and totals remain null. Size stock values are source codes, not inventory quantities.
+
+A successful uncached request costs **5 credits**. Failed requests and cache hits cost zero. The response exposes `window_truncated` when more records exist beyond the verified three-page window; it does not promise the complete catalog.

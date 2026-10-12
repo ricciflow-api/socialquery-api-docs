@@ -3,4 +3,6 @@ title: "Klarna Product Offers"
 openapi: "GET /klarna/product/offers"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Look up a US Klarna product by its complete canonical product URL. Product-ID-only lookup and other regions are unavailable and return 422. Optional product_id and category_id must match the URL. Returns source product identity and retailer offers. Merchant links, individual stock status, conditions, ratings and descriptions are unavailable. Retailers can repeat for distinct variants; these are retained. The source minimum in-stock price is separate from the lowest listed offer price, whose stock status is unknown.
+
+A successful uncached request costs **5 credits**. Failed requests and cache hits cost zero. Empty offers are valid only when the source returns a matching product record. No price-history, review or all-region coverage is implied.

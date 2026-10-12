@@ -2217,7 +2217,7 @@
       "post": {
         "operationId": "post_web_monitors",
         "summary": "Web Monitors",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2475,7 +2475,7 @@
       "get": {
         "operationId": "get_web_monitors",
         "summary": "Web Monitors",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2692,7 +2692,7 @@
       "get": {
         "operationId": "get_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -2884,7 +2884,7 @@
       "patch": {
         "operationId": "patch_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3116,7 +3116,7 @@
       "delete": {
         "operationId": "delete_web_monitors_monitor_id",
         "summary": "Web Monitors {Monitor Id}",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3310,7 +3310,7 @@
       "get": {
         "operationId": "get_web_monitors_monitor_id_checks",
         "summary": "Web Monitors {Monitor Id} Checks",
-        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15\u201310080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
+        "description": "API-key-scoped scheduled public-page or site-search checks. Configuration calls cost 0 credits; each successful scheduled scrape costs 2 credits and each search costs 3. Failed or interrupted checks are refunded. Uses elapsed UTC cadence (15–10080 minutes); first check is due after one minute and may queue. Ten undeleted monitors per account. Read snapshots through /checks; webhook delivery, AI judging, natural-language schedules and cron expressions are not supported and return 422. Revoking or expiring the creating key stops new checks. Already running checks may finish after pause or deletion.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -3524,7 +3524,7 @@
       "post": {
         "operationId": "post_web_sessions",
         "summary": "Create a browser session",
-        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30\u201360 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
+        "description": "Create an isolated browser session and navigate to one public URL. Sessions belong to the creating API key, last 30–60 seconds (default 60), and cannot be extended. Creation costs 5 SocialQuery credits; execute, list, inspect and delete are free during that lifetime. An optional inactivity limit must be 10 seconds or greater and no longer than the session lifetime. CDP URLs grant access to the session: keep them private. Live view URLs are returned only when stream_web_view is true. Session metadata is retained for 24 hours. Failed navigation triggers cleanup. Send a stable Idempotency-Key; an uncertain submission is never resubmitted automatically.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -3889,7 +3889,7 @@
       "post": {
         "operationId": "post_web_sessions_session_id_execute",
         "summary": "Execute browser code",
-        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1\u201330 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
+        "description": "Execute up to 16,000 characters of Node.js, Python or Bash code in an active browser session created with the current API key. Node.js has an existing page object. Execution timeout is 1–30 seconds (default 20); the session lifetime still applies. Check data.execution.success, exit_code, stderr and killed: HTTP success alone does not mean the script succeeded. Closed or expired sessions return 409. No additional credits are charged. Use an Idempotency-Key when code changes remote state.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -13010,7 +13010,7 @@
       "get": {
         "operationId": "get_linkedin_profile_posts",
         "summary": "LinkedIn Profile Posts",
-        "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1\u201350, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
+        "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1–50, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -13081,7 +13081,7 @@
         ],
         "responses": {
           "200": {
-            "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1\u201350, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
+            "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1–50, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13935,7 +13935,7 @@
       "get": {
         "operationId": "get_linkedin_profile_experiences",
         "summary": "LinkedIn Profile Experiences",
-        "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile\u2019s selected top position.",
+        "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile’s selected top position.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -13998,7 +13998,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile\u2019s selected top position.",
+            "description": "Visible public LinkedIn work experiences: role title, company, description and source date labels. Only page=1 is supported. This window is not guaranteed to be the complete career history. Numeric company IDs, employment types and role skills are unavailable. A current role is not proof of the profile’s selected top position.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15718,7 +15718,7 @@
               "minimum": 1,
               "maximum": 100
             },
-            "description": "Page 1\u2013100. Cannot be combined with cursor."
+            "description": "Page 1–100. Cannot be combined with cursor."
           },
           {
             "name": "date_posted",
@@ -16096,7 +16096,7 @@
               "minimum": 1,
               "maximum": 100
             },
-            "description": "Page 1\u2013100. Cannot be combined with cursor."
+            "description": "Page 1–100. Cannot be combined with cursor."
           },
           {
             "name": "date_posted",
@@ -43396,7 +43396,7 @@
       "get": {
         "operationId": "get_finance_news",
         "summary": "Recent articles for a stock ticker",
-        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1\u201350 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
+        "description": "Read the latest Nasdaq articles tagged with a ticker, such as AAPL or AAPL:NASDAQ. The source window contains at most 15 articles; limit controls how many of those rows are returned (1–50 accepted). since and until filter that window using UTC dates or timezone-qualified timestamps. This is not an archive search. Each article includes its exact UTC publication time, publisher, Nasdaq URL and source domain. Thumbnails are null. The feed includes multi-company coverage and excludes press releases. Unsupported or unknown tickers fail rather than returning market-wide news. next_cursor is null and truncated indicates a full or locally shortened source window.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -43940,7 +43940,7 @@
       "get": {
         "operationId": "get_finance_fundamentals",
         "summary": "Reported US company fundamentals",
-        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1\u201340 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
+        "description": "Read USD US-GAAP fundamentals from SEC EDGAR for a listed company. Use a ticker, optionally followed by an exchange, and choose quarterly or annual periods (default quarterly; 1–40 rows, default 8). Each period includes revenue, cost of goods sold, gross profit, inventory, inventory change, payables, original filing date and fiscal labels. Missing values remain null. The source concept names and filing accession numbers are retained. Direct reported values can reflect restatements; derived fourth quarters use the original annual filing minus the already-filed nine-month result. This avoids allocating later annual restatements entirely to Q4, but is not a point-in-time dataset. Quarterly-only cost tags are excluded when there is no annual disclosure of that concept. Unresolvable fiscal labels remain null. IFRS-only, unlisted and stale companies without a US-GAAP period in the past two years return 404. Requests share a conservative SEC traffic limit.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -44988,7 +44988,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window, page 1\u20133; do not combine with cursor."
+            "description": "Bounded source window, page 1–3; do not combine with cursor."
           },
           {
             "name": "industry",
@@ -54128,7 +54128,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "limit",
@@ -54556,7 +54556,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -55195,7 +55195,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -55600,7 +55600,7 @@
       "get": {
         "operationId": "get_sephora_categories",
         "summary": "Sephora Categories",
-        "description": "List the root categories in Sephora\u2019s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category\u2019s children. This is not a flattened list of the entire category tree.",
+        "description": "List the root categories in Sephora’s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category’s children. This is not a flattened list of the entire category tree.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -55625,7 +55625,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List the root categories in Sephora\u2019s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category\u2019s children. This is not a flattened list of the entire category tree.",
+            "description": "List the root categories in Sephora’s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category’s children. This is not a flattened list of the entire category tree.",
             "content": {
               "application/json": {
                 "schema": {
@@ -55905,7 +55905,7 @@
       "get": {
         "operationId": "get_sephora_brands",
         "summary": "Sephora Brands",
-        "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint\u2019s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
+        "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint’s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -55930,7 +55930,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint\u2019s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
+            "description": "List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint’s id parameter; that endpoint uses the short name rather than the numeric brand ID.",
             "content": {
               "application/json": {
                 "schema": {
@@ -56059,7 +56059,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window; page 1\u20133. Do not combine with cursor."
+            "description": "Bounded source window; page 1–3. Do not combine with cursor."
           },
           {
             "name": "page_size",
@@ -56475,7 +56475,7 @@
       "get": {
         "operationId": "get_sephora_stores",
         "summary": "Sephora Stores",
-        "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1\u2013100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU\u2019s inventory.",
+        "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1–100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU’s inventory.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -56487,7 +56487,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Decimal latitude,longitude, in that order. Latitude \u221290 to 90; longitude \u2212180 to 180."
+            "description": "Decimal latitude,longitude, in that order. Latitude −90 to 90; longitude −180 to 180."
           },
           {
             "name": "radius",
@@ -56522,7 +56522,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1\u2013100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU\u2019s inventory.",
+            "description": "Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1–100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU’s inventory.",
             "content": {
               "application/json": {
                 "schema": {
@@ -58323,8 +58323,8 @@
     "/hm/search": {
       "get": {
         "operationId": "get_hm_search",
-        "summary": "Hm Search",
-        "description": "Find records through Hm Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "summary": "H&M Search",
+        "description": "Search the H&M US catalog in source relevance order. Returns up to 36 product articles per page, with three pages maximum. Only en-US and its en_us/en-us aliases are verified; filters and other sort orders return 422. Keep query and limit with the cursor; do not combine cursor and page. Cursor continuation excludes previously returned article IDs as live rankings change. Direct page requests have no history. Prices are USD; missing ratings, descriptions and totals remain null. Size stock values are source codes, not inventory quantities.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -58334,7 +58334,9 @@
             "required": true,
             "example": "t-shirts",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -58343,7 +58345,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 1,
+              "maximum": 3,
+              "default": 1
             }
           },
           {
@@ -58353,7 +58357,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 36
+              "maximum": 36,
+              "default": 36
             }
           },
           {
@@ -58368,7 +58373,8 @@
                 "price_low",
                 "price_high"
               ]
-            }
+            },
+            "description": "Only relevance is currently supported. Other reference sort orders return 422."
           },
           {
             "name": "language",
@@ -58376,7 +58382,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Verified market: en-US (aliases en_us/en-us). Other locales return 422."
           },
           {
             "name": "filters",
@@ -58384,7 +58391,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unavailable; supplied filters return 422."
           },
           {
             "name": "cursor",
@@ -58415,7 +58423,236 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search the H&M US catalog in source relevance order. Returns up to 36 product articles per page, with three pages maximum. Only en-US and its en_us/en-us aliases are verified; filters and other sort orders return 422. Keep query and limit with the cursor; do not combine cursor and page. Cursor continuation excludes previously returned article IDs as live rankings change. Direct page requests have no history. Prices are USD; missing ratings, descriptions and totals remain null. Size stock values are source codes, not inventory quantities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "null"
+                                      },
+                                      "seller": {
+                                        "type": "null"
+                                      },
+                                      "brand": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": "number",
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": "null"
+                                          },
+                                          "count": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "enum": [
+                                          "in_stock",
+                                          "out_of_stock",
+                                          null
+                                        ]
+                                      },
+                                      "reviews_count": {
+                                        "type": "null"
+                                      },
+                                      "features": {
+                                        "type": "null"
+                                      },
+                                      "specifications": {
+                                        "type": "null"
+                                      },
+                                      "variations": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": "string"
+                                            },
+                                            "color": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "image_url": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "product_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "color": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_availability": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "price_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "original_price_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "discount_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "is_new": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_locale": {
+                                            "type": "string",
+                                            "const": "en_us"
+                                          },
+                                          "sizes": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "label": {
+                                                  "type": "string"
+                                                },
+                                                "source_stock_code": {
+                                                  "type": [
+                                                    "number",
+                                                    "null"
+                                                  ],
+                                                  "description": "Source availability code, not an inventory count."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -59571,7 +59808,7 @@
       "get": {
         "operationId": "get_klarna_product",
         "summary": "Klarna Product",
-        "description": "Use Klarna Product to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Look up a US Klarna product by its complete canonical product URL. Product-ID-only lookup and other regions are unavailable and return 422. Optional product_id and category_id must match the URL. Returns source product identity and retailer offers. Merchant links, individual stock status, conditions, ratings and descriptions are unavailable. Retailers can repeat for distinct variants; these are retained. The source minimum in-stock price is separate from the lowest listed offer price, whose stock status is unknown.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -59582,15 +59819,18 @@
             "example": "3331931731",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional consistency check against the URL; not sufficient by itself."
           },
           {
             "name": "url",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Full https://www.klarna.com/us/shopping/pl/cl.../... product URL.",
+            "example": "https://www.klarna.com/us/shopping/pl/cl2/3523928940/TVs/Samsung-QN65QN80H-65-Inch-Titan-Black-Smart-TV/"
           },
           {
             "name": "category_id",
@@ -59622,7 +59862,8 @@
                 "finland",
                 "denmark"
               ]
-            }
+            },
+            "description": "Only usa is currently verified; other reference regions return 422."
           },
           {
             "name": "Cache-Control",
@@ -59645,7 +59886,190 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Look up a US Klarna product by its complete canonical product URL. Product-ID-only lookup and other regions are unavailable and return 422. Optional product_id and category_id must match the URL. Returns source product identity and retailer offers. Merchant links, individual stock status, conditions, ratings and descriptions are unavailable. Retailers can repeat for distinct variants; these are retained. The source minimum in-stock price is separate from the lowest listed offer price, whose stock status is unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "null"
+                                },
+                                "brand": {
+                                  "type": "null"
+                                },
+                                "seller": {
+                                  "type": "null"
+                                },
+                                "price": {
+                                  "type": "object",
+                                  "properties": {
+                                    "current": {
+                                      "type": [
+                                        "number",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "original": {
+                                      "type": "null"
+                                    },
+                                    "currency": {
+                                      "type": "string",
+                                      "const": "USD"
+                                    },
+                                    "basis": {
+                                      "type": "string",
+                                      "const": "source_min_price_in_stock"
+                                    }
+                                  }
+                                },
+                                "rating": {
+                                  "type": "object",
+                                  "properties": {
+                                    "average": {
+                                      "type": "null"
+                                    },
+                                    "count": {
+                                      "type": "null"
+                                    }
+                                  }
+                                },
+                                "image_urls": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "availability": {
+                                  "type": "null"
+                                },
+                                "reviews_count": {
+                                  "type": "null"
+                                },
+                                "features": {
+                                  "type": "null"
+                                },
+                                "specifications": {
+                                  "type": "null"
+                                },
+                                "variations": {
+                                  "type": "null"
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "category_id": {
+                                      "type": "string"
+                                    },
+                                    "category_name": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "offers": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": "string"
+                                          },
+                                          "price": {
+                                            "type": "number",
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          },
+                                          "shipping_cost": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "retailer": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "name": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "url": {
+                                            "type": "null"
+                                          },
+                                          "availability": {
+                                            "type": "null"
+                                          },
+                                          "condition": {
+                                            "type": "null"
+                                          },
+                                          "attributes": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "name": {
+                                                  "type": "string"
+                                                },
+                                                "value": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "source_min_price_in_stock": {
+                                      "type": [
+                                        "number",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "coverage_note": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -59702,7 +60126,7 @@
       "get": {
         "operationId": "get_klarna_product_offers",
         "summary": "Klarna Product Offers",
-        "description": "Use Klarna Product Offers to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Look up a US Klarna product by its complete canonical product URL. Product-ID-only lookup and other regions are unavailable and return 422. Optional product_id and category_id must match the URL. Returns source product identity and retailer offers. Merchant links, individual stock status, conditions, ratings and descriptions are unavailable. Retailers can repeat for distinct variants; these are retained. The source minimum in-stock price is separate from the lowest listed offer price, whose stock status is unknown.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -59713,15 +60137,18 @@
             "example": "3331931731",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional consistency check against the URL; not sufficient by itself."
           },
           {
             "name": "url",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Full https://www.klarna.com/us/shopping/pl/cl.../... product URL.",
+            "example": "https://www.klarna.com/us/shopping/pl/cl2/3523928940/TVs/Samsung-QN65QN80H-65-Inch-Titan-Black-Smart-TV/"
           },
           {
             "name": "region",
@@ -59744,7 +60171,8 @@
                 "finland",
                 "denmark"
               ]
-            }
+            },
+            "description": "Only usa is currently verified; other reference regions return 422."
           },
           {
             "name": "Cache-Control",
@@ -59767,7 +60195,129 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Look up a US Klarna product by its complete canonical product URL. Product-ID-only lookup and other regions are unavailable and return 422. Optional product_id and category_id must match the URL. Returns source product identity and retailer offers. Merchant links, individual stock status, conditions, ratings and descriptions are unavailable. Retailers can repeat for distinct variants; these are retained. The source minimum in-stock price is separate from the lowest listed offer price, whose stock status is unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "offer": {
+                                    "type": "object",
+                                    "properties": {
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "price": {
+                                        "type": "number",
+                                        "minimum": 0
+                                      },
+                                      "currency": {
+                                        "type": "string",
+                                        "const": "USD"
+                                      },
+                                      "shipping_cost": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "retailer": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          }
+                                        }
+                                      },
+                                      "url": {
+                                        "type": "null"
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      },
+                                      "condition": {
+                                        "type": "null"
+                                      },
+                                      "attributes": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "description": "Number of offers in this source response, not an independently verified market total."
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "source_min_price_in_stock": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -62079,7 +62629,7 @@
               "minimum": 1,
               "maximum": 3
             },
-            "description": "Bounded source window, page 1\u20133; do not combine with cursor."
+            "description": "Bounded source window, page 1–3; do not combine with cursor."
           },
           {
             "name": "sort_by",
@@ -68102,7 +68652,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -68838,7 +69388,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u7f8e\u98df",
+            "example": "美食",
             "schema": {
               "type": "string"
             }
@@ -71146,7 +71696,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc18c\uc15c\ud06c\ub864",
+            "example": "소셜크롤",
             "schema": {
               "type": "string"
             }
@@ -71422,7 +71972,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -71698,7 +72248,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc591\uc790\uc5ed\ud559",
+            "example": "양자역학",
             "schema": {
               "type": "string"
             }
@@ -71825,7 +72375,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc8fc\uc2dd",
+            "example": "주식",
             "schema": {
               "type": "string"
             }
@@ -72101,7 +72651,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ub85c\ub098 \uc99d\uc0c1",
+            "example": "코로나 증상",
             "schema": {
               "type": "string"
             }
@@ -72244,7 +72794,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uac15\ub0a8\uc5ed \uce74\ud398",
+            "example": "강남역 카페",
             "schema": {
               "type": "string"
             }
@@ -72350,7 +72900,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ud55c\ub77c\uc0b0",
+            "example": "한라산",
             "schema": {
               "type": "string"
             }
@@ -72511,7 +73061,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uae30\ud6c4\ubcc0\ud654",
+            "example": "기후변화",
             "schema": {
               "type": "string"
             }
@@ -72638,7 +73188,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\ub124\uc774\ubcd8",
+            "example": "네이볘",
             "schema": {
               "type": "string"
             }
@@ -72723,7 +73273,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc131\uc778\uc601\ud654",
+            "example": "성인영화",
             "schema": {
               "type": "string"
             }
@@ -72808,7 +73358,7 @@
             "name": "keywords",
             "in": "query",
             "required": false,
-            "example": "\uc0bc\uc131\uc804\uc790,\uac24\ub7ed\uc2dc",
+            "example": "삼성전자,갤럭시",
             "schema": {
               "type": "string"
             }
@@ -73146,7 +73696,7 @@
             "name": "keyword",
             "in": "query",
             "required": true,
-            "example": "\ucf54\ud2b8",
+            "example": "코트",
             "schema": {
               "type": "string"
             }
@@ -84892,7 +85442,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\uc0bc\uc131\uc804\uc790",
+            "example": "삼성전자",
             "schema": {
               "type": "string"
             }
@@ -91185,7 +91735,7 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "\u62a4\u80a4",
+            "example": "护肤",
             "schema": {
               "type": "string"
             }
@@ -91873,7 +92423,7 @@
       "get": {
         "operationId": "get_economy_consumer_spend",
         "summary": "Household spending by country and category",
-        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990\u20132100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
+        "description": "Read annual household consumption directly from Eurostat. Supports up to 10 European countries and EU27, the documented spending categories and reporting units, and years from 1990–2100. Missing observations remain null and source status flags are retained. Countries absent from COICOP 2018 use COICOP 1999; miscellaneous then includes insurance and financial services, and insurance_financial is null. GB/UK data stops at 2019. Mixed requests identify the source dataset on each series. Default from_year is the current year minus five; default to_year is the latest dataset year. Data follows the domestic concept and is not all spending by residents abroad.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -92007,7 +92557,7 @@
     "/economy/tourism-spend": {
       "get": {
         "operationId": "get_economy_tourism_spend",
-        "summary": "Residents\u2019 travel spending by country and category",
+        "summary": "Residents’ travel spending by country and category",
         "description": "Read annual tourism expenditure directly from Eurostat tour_dem_extot. Supports up to 10 reporting European countries or EU27, purpose, destination, measure and spending-category filters. Values are euro, with no millions conversion. This is spending by residents aged 15 or over on trips of at least one night, not spending received by destinations. Total excludes durable goods; other may include restaurant spending when not reported separately. Missing observations remain null and source status flags are retained. Default from_year is the current year minus five; default to_year is the latest dataset year.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
