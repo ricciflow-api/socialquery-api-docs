@@ -3,4 +3,8 @@ title: "Instagram Post Stats"
 openapi: "GET /instagram/post/stats"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public Instagram post data with observed likes, comments and views when exposed. Hidden counts remain null. Views may be unavailable and do not include Facebook cross-post views. Saves and shares are unavailable; include=saves returns 422. Canonical post URLs are returned with tracking query parameters removed.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+Only observed public fields are returned. Missing data is not replaced with zero or inferred private metadata. Public visibility can change.

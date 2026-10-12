@@ -16751,7 +16751,7 @@
       "get": {
         "operationId": "get_linkedin_profile_about",
         "summary": "LinkedIn Profile About",
-        "description": "Use LinkedIn Profile About to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public LinkedIn About summary, headline and displayed location. Unavailable text remains null. Member URNs, private contact details, account creation dates and verification metadata are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16770,7 +16770,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current public source; supplying this parameter returns 422."
           },
           {
             "name": "Cache-Control",
@@ -16793,7 +16794,49 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public LinkedIn About summary, headline and displayed location. Unavailable text remains null. Member URNs, private contact details, account creation dates and verification metadata are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "summary": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "headline": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "location": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -16837,7 +16880,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/profile/contact": {
@@ -28479,7 +28523,7 @@
       "get": {
         "operationId": "get_instagram_post_stats",
         "summary": "Instagram Post Stats",
-        "description": "Use Instagram Post Stats to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public Instagram post data with observed likes, comments and views when exposed. Hidden counts remain null. Views may be unavailable and do not include Facebook cross-post views. Saves and shares are unavailable; include=saves returns 422. Canonical post URLs are returned with tracking query parameters removed.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -28498,7 +28542,8 @@
             "required": false,
             "schema": {
               "type": "boolean"
-            }
+            },
+            "description": "Accepts true or false. Only validated public Instagram post URLs are accepted, and returned post URLs are always canonical without tracking parameters."
           },
           {
             "name": "include",
@@ -28509,7 +28554,8 @@
               "enum": [
                 "saves"
               ]
-            }
+            },
+            "description": "Unsupported by the current public source; supplying this parameter returns 422."
           },
           {
             "name": "Cache-Control",
@@ -28532,7 +28578,170 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public Instagram post data with observed likes, comments and views when exposed. Hidden counts remain null. Views may be unavailable and do not include Facebook cross-post views. Saves and shares are unavailable; include=saves returns 422. Canonical post URLs are returned with tracking query parameters removed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "content": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "media_urls": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "thumbnail_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "duration_seconds": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                }
+                              }
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "username": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "display_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "verified": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "engagement": {
+                              "type": "object",
+                              "properties": {
+                                "views": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "likes": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "comments": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "shares": {
+                                  "type": "null"
+                                },
+                                "saves": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "flags": {
+                              "type": "object",
+                              "properties": {
+                                "nsfw": {
+                                  "type": "null"
+                                },
+                                "spoiler": {
+                                  "type": "null"
+                                },
+                                "pinned": {
+                                  "type": "null"
+                                },
+                                "deleted": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "published_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "shortcode": {
+                                  "type": "string"
+                                },
+                                "media_type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "image",
+                                    "video",
+                                    "carousel"
+                                  ]
+                                },
+                                "counts_hidden": {
+                                  "type": "boolean"
+                                },
+                                "coverage_note": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -28576,7 +28785,8 @@
         },
         "tags": [
           "Instagram"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call. Failed requests and cache hits cost zero."
       }
     },
     "/instagram/tagged": {

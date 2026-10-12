@@ -3,4 +3,8 @@ title: "LinkedIn Profile About"
 openapi: "GET /linkedin/profile/about"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public LinkedIn About summary, headline and displayed location. Unavailable text remains null. Member URNs, private contact details, account creation dates and verification metadata are unsupported.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+Only observed public fields are returned. Missing data is not replaced with zero or inferred private metadata. Public visibility can change.
