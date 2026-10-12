@@ -3,4 +3,6 @@ title: "Yelp Business Info"
 openapi: "GET /yelp/business/info"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Retrieve public Yelp business details using a 22-character business ID, or a canonical yelp.com/biz URL containing that ID. Business aliases are not accepted. Returns contact details, rating, review totals, photos, source-text hours and features. Current open/closed status is not inferred.
+
+Successful uncached requests cost **1 credits**. Cache hits and failed requests cost zero. Provider availability and free allowance may change.

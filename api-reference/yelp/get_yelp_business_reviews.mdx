@@ -3,4 +3,6 @@ title: "Yelp Business Reviews"
 openapi: "GET /yelp/business/reviews"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Return up to ten Yelp reviews in source relevance order. The opaque cursor is bound to the business and date filters and advances by ten source rows, even if filtering removes all rows. At most 101 pages are available. Date filters apply to each returned page, not an exhaustive archive; undated rows are retained. Yelp review IDs and unknown sentiment remain null. AI enrichment is unavailable.
+
+Successful uncached requests cost **5 credits**. Cache hits and failed requests cost zero. Provider availability and free allowance may change.

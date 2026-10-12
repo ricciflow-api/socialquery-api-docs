@@ -3,4 +3,6 @@ title: "Home Depot Product"
 openapi: "GET /home_depot/product"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Retrieve a US Home Depot product by its nine-digit item_id or canonical product URL. Optional store_id selects the source-reported store inventory. Returns a normalized product with USD price, images, specifications and review totals. Missing values remain null. No live inventory guarantee is made.
+
+Successful uncached requests cost **5 credits**. Cache hits and failed requests cost zero. Provider availability and free allowance may change.

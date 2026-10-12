@@ -3,4 +3,6 @@ title: "Home Depot Reviews"
 openapi: "GET /home_depot/reviews"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Return one page of at most ten Home Depot reviews, sorted most helpful by the source. Date filters apply only to this page and retain undated rows. There is no continuation, complete archive, AI enrichment or reference relevance-ranking parity.
+
+Successful uncached requests cost **5 credits**. Cache hits and failed requests cost zero. Provider availability and free allowance may change.

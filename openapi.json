@@ -52699,7 +52699,7 @@
       "get": {
         "operationId": "get_home_depot_product",
         "summary": "Home Depot Product",
-        "description": "Use Home Depot Product to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Retrieve a US Home Depot product by its nine-digit item_id or canonical product URL. Optional store_id selects the source-reported store inventory. Returns a normalized product with USD price, images, specifications and review totals. Missing values remain null. No live inventory guarantee is made.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -52707,10 +52707,11 @@
             "name": "item_id",
             "in": "query",
             "required": false,
-            "example": "326680222",
+            "example": "313383605",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Nine-digit Home Depot product ID."
           },
           {
             "name": "url",
@@ -52718,7 +52719,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical HTTPS URL containing the product ID or 22-character Yelp business ID. Query strings, fragments and aliases are unsupported."
           },
           {
             "name": "store_id",
@@ -52726,7 +52728,9 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One to four digit Home Depot US store ID. Missing inventory values remain null.",
+            "example": "2414"
           },
           {
             "name": "Cache-Control",
@@ -52749,7 +52753,183 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Retrieve a US Home Depot product by its nine-digit item_id or canonical product URL. Optional store_id selects the source-reported store inventory. Returns a normalized product with USD price, images, specifications and review totals. Missing values remain null. No live inventory guarantee is made.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "title": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "description": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "brand": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "model": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "upc": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "currency": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "availability": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "price": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "rating": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "review_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "images": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "highlights": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "specifications": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "group": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "values": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "value": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "store_inventory": {
+                                  "anyOf": [
+                                    {
+                                      "type": "null"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "store_id": {
+                                          "type": "string"
+                                        },
+                                        "store_name": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "pickup_quantity": {
+                                          "type": [
+                                            "integer",
+                                            "null"
+                                          ],
+                                          "minimum": 0
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -52806,7 +52986,7 @@
       "get": {
         "operationId": "get_home_depot_reviews",
         "summary": "Home Depot Reviews",
-        "description": "Use Home Depot Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return one page of at most ten Home Depot reviews, sorted most helpful by the source. Date filters apply only to this page and retain undated rows. There is no continuation, complete archive, AI enrichment or reference relevance-ranking parity.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -52814,10 +52994,11 @@
             "name": "item_id",
             "in": "query",
             "required": true,
-            "example": "326680222",
+            "example": "313383605",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Nine-digit Home Depot product ID."
           },
           {
             "name": "label",
@@ -52825,7 +53006,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "reports",
@@ -52833,7 +53015,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "judgments",
@@ -52845,7 +53028,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "dry_run",
@@ -52856,7 +53040,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "label_evidence",
@@ -52867,7 +53052,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "fit",
@@ -52878,7 +53064,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "goal",
@@ -52886,7 +53073,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "fit_tokens",
@@ -52894,7 +53082,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "since",
@@ -52902,7 +53091,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD or an ISO timestamp with explicit timezone. Filters only the returned source page. Date-only until includes the entire UTC day; undated rows remain."
           },
           {
             "name": "until",
@@ -52910,7 +53100,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD or an ISO timestamp with explicit timezone. Filters only the returned source page. Date-only until includes the entire UTC day; undated rows remain."
           },
           {
             "name": "Cache-Control",
@@ -52933,7 +53124,185 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return one page of at most ten Home Depot reviews, sorted most helpful by the source. Date filters apply only to this page and retain undated rows. There is no continuation, complete archive, AI enrichment or reference relevance-ranking parity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 10,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "resource_id": {
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "number",
+                                        "minimum": 0,
+                                        "maximum": 5
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "verified_purchase": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "helpful_votes": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "photos": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "owner_replies": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "text": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "author": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "role": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "published_at": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "sentiment": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "source_reported_total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64398,7 +64767,7 @@
       "get": {
         "operationId": "get_yelp_business_info",
         "summary": "Yelp Business Info",
-        "description": "Use Yelp Business Info to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Retrieve public Yelp business details using a 22-character business ID, or a canonical yelp.com/biz URL containing that ID. Business aliases are not accepted. Returns contact details, rating, review totals, photos, source-text hours and features. Current open/closed status is not inferred.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -64406,10 +64775,11 @@
             "name": "id",
             "in": "query",
             "required": false,
-            "example": "zj8Lq1T8KIC5zwFief15jg",
+            "example": "-4ofMtrD7pSpZIX5pnDkig",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "22-character Yelp business ID (encid). Aliases are unsupported."
           },
           {
             "name": "url",
@@ -64417,7 +64787,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical HTTPS URL containing the product ID or 22-character Yelp business ID. Query strings, fragments and aliases are unsupported."
           },
           {
             "name": "Cache-Control",
@@ -64440,7 +64811,167 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Retrieve public Yelp business details using a 22-character business ID, or a canonical yelp.com/biz URL containing that ID. Business aliases are not accepted. Returns contact details, rating, review totals, photos, source-text hours and features. Current open/closed status is not inferred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "business": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "alias": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "description": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "website": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "phone": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "address": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "country": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "price_range": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "rating": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ]
+                                },
+                                "review_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "claimed": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "photos": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "hours": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "day": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "hours": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                },
+                                "features": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "available": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -64497,7 +65028,7 @@
       "get": {
         "operationId": "get_yelp_business_reviews",
         "summary": "Yelp Business Reviews",
-        "description": "Use Yelp Business Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return up to ten Yelp reviews in source relevance order. The opaque cursor is bound to the business and date filters and advances by ten source rows, even if filtering removes all rows. At most 101 pages are available. Date filters apply to each returned page, not an exhaustive archive; undated rows are retained. Yelp review IDs and unknown sentiment remain null. AI enrichment is unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -64505,10 +65036,11 @@
             "name": "id",
             "in": "query",
             "required": false,
-            "example": "zj8Lq1T8KIC5zwFief15jg",
+            "example": "-4ofMtrD7pSpZIX5pnDkig",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "22-character Yelp business ID (encid). Aliases are unsupported."
           },
           {
             "name": "url",
@@ -64516,7 +65048,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical HTTPS URL containing the product ID or 22-character Yelp business ID. Query strings, fragments and aliases are unsupported."
           },
           {
             "name": "cursor",
@@ -64524,7 +65057,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque next_cursor from the previous page. Keep business and date filters identical."
           },
           {
             "name": "label",
@@ -64532,7 +65066,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "reports",
@@ -64540,7 +65075,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "judgments",
@@ -64552,7 +65088,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "dry_run",
@@ -64563,7 +65100,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "label_evidence",
@@ -64574,7 +65112,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "fit",
@@ -64585,7 +65124,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "goal",
@@ -64593,7 +65133,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "fit_tokens",
@@ -64601,7 +65142,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "AI enrichment is unavailable. Omit this parameter; only judgments=off is accepted. Unsupported enrichment requests fail with 422 and no charge."
           },
           {
             "name": "since",
@@ -64609,7 +65151,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD or an ISO timestamp with explicit timezone. Filters only the returned source page. Date-only until includes the entire UTC day; undated rows remain."
           },
           {
             "name": "until",
@@ -64617,7 +65160,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD or an ISO timestamp with explicit timezone. Filters only the returned source page. Date-only until includes the entire UTC day; undated rows remain."
           },
           {
             "name": "Cache-Control",
@@ -64640,7 +65184,185 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return up to ten Yelp reviews in source relevance order. The opaque cursor is bound to the business and date filters and advances by ten source rows, even if filtering removes all rows. At most 101 pages are available. Date filters apply to each returned page, not an exhaustive archive; undated rows are retained. Yelp review IDs and unknown sentiment remain null. AI enrichment is unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 10,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "resource_id": {
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "number",
+                                        "minimum": 0,
+                                        "maximum": 5
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "verified_purchase": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "helpful_votes": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "photos": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "owner_replies": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "text": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "author": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "role": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "published_at": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "sentiment": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "source_reported_total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
