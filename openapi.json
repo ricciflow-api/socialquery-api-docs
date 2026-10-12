@@ -53303,7 +53303,7 @@
       "get": {
         "operationId": "get_g2_seller_products",
         "summary": "G2 Seller Products",
-        "description": "Use G2 Seller Products to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read G2's current public seller product cards in native order, excluding the separate featured block. Source IDs, card descriptions and textual review counts are retained. Exact ratings are unavailable and remain null. Cursor pagination follows source Next links up to 100 pages, with an explicit truncation flag.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -53330,8 +53330,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Page 1–100; omit when using a cursor, or supply the matching page."
           },
           {
             "name": "cursor",
@@ -53339,7 +53341,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Use the source-returned next_cursor with the same seller."
           },
           {
             "name": "Cache-Control",
@@ -53372,7 +53375,153 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read G2's current public seller product cards in native order, excluding the separate featured block. Source IDs, card descriptions and textual review counts are retained. Exact ratings are unavailable and remain null. Cursor pagination follows source Next links up to 100 pages, with an explicit truncation flag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "seller": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "slug",
+                                "name",
+                                "url"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "slug": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "review_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "rating": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "slug",
+                                      "name",
+                                      "url",
+                                      "type",
+                                      "description",
+                                      "review_count",
+                                      "rating"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              }
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_has_more": {
+                              "type": "boolean"
+                            },
+                            "truncated": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "seller",
+                            "items",
+                            "page",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "source_has_more",
+                            "truncated",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

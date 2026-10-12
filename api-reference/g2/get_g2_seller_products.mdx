@@ -3,4 +3,12 @@ title: "G2 Seller Products"
 openapi: "GET /g2/seller/products"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a G2 seller slug as `id`, such as `hubspot`, or its public seller `url`. If both are supplied they must identify the same seller. The adapter validates the canonical seller page, seller identity on every product card and the current product-list page.
+
+`items[].product` contains each source numeric ID, slug, name, URL, type, card-description excerpt and review count. The separate featured-products block is excluded, preserving the native order of the main list. Review counts come from displayed source text; missing counts remain null. Exact numeric ratings are unavailable and remain null rather than being inferred from rounded star graphics.
+
+Use `next_cursor` as `cursor` with the same seller to continue, or request `page` 1–100. `returned_count` is this page's count; `total` is null because the full catalog size is not established. A real last page has no cursor and `source_has_more: false`. At the 100-page ceiling, additional source pages instead produce `truncated: true` and no further cursor. Live catalog changes can move entries between pages.
+
+Each fresh request uses one basic Firecrawl fetch of the exact public seller URL. Same-document fragments set by the page are allowed; redirects to different URLs or query parameters are rejected. The endpoint does not retrieve seller reviews, full product details or private analytics.
+
+A missing public product list returns 404 without a net SocialQuery charge. Successful fresh requests use the documented price; cached responses and successful idempotent replays are free.
