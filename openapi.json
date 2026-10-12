@@ -73187,7 +73187,7 @@
       "get": {
         "operationId": "get_klarna_category",
         "summary": "Klarna Category",
-        "description": "Use Klarna Category to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns native product-category rows with regional prices, ratings and source-order pagination. Supports size 1–100, all seven documented sorts, bounded offsets, price ranges, one facet filter and subcategory paths. Applied filters are corroborated against source metadata. Cursors bind request context and check the preceding product; empty pages have no net charge.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -73197,8 +73197,10 @@
             "required": true,
             "example": "cl94",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^cl[1-9][0-9]{0,9}$"
+            },
+            "description": "Regional product category (cl ID). Tree roots group categories rather than product rows."
           },
           {
             "name": "region",
@@ -73230,7 +73232,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
+              "maximum": 100,
+              "default": 48
             }
           },
           {
@@ -73239,8 +73242,11 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 100000,
+              "default": 0
+            },
+            "description": "Native row offset. Zero is represented by omitting the upstream parameter; prefer the returned cursor."
           },
           {
             "name": "sort_by",
@@ -73265,7 +73271,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Nonnegative regional price range, for example 50-500, 50- or -500. Up to two decimals; either bound can be omitted. Source metadata and returned prices must respect the range."
           },
           {
             "name": "filter",
@@ -73273,7 +73280,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One native keyID-valueID facet, such as BRAND-162. Numeric feature IDs are accepted. The source must confirm application; unknown or ignored filters are rejected."
           },
           {
             "name": "category_path_id",
@@ -73281,7 +73289,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Numeric keyID-valueID subcategory path from regional category children. Cannot conflict with filter."
           },
           {
             "name": "cursor",
@@ -73289,7 +73298,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Return data.next_cursor verbatim with the category ID. Other request settings are restored when omitted and must match if supplied. Expires after one hour; source reordering may require restarting."
           },
           {
             "name": "Cache-Control",
@@ -73322,7 +73332,270 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns native product-category rows with regional prices, ratings and source-order pagination. Supports size 1–100, all seven documented sorts, bounded offsets, price ranges, one facet filter and subcategory paths. Applied filters are corroborated against source metadata. Cursors bind request context and check the preceding product; empty pages have no net charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "source_path": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "category": {
+                                        "anyOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "source_path": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "url": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "name",
+                                              "source_path",
+                                              "url"
+                                            ]
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "currency"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "average",
+                                          "count"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "enum": [
+                                          "in_stock",
+                                          "out_of_stock",
+                                          null
+                                        ]
+                                      },
+                                      "condition": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "source_path",
+                                      "url",
+                                      "description",
+                                      "category",
+                                      "price",
+                                      "rating",
+                                      "image_urls",
+                                      "availability",
+                                      "condition"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "size": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "category": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "source_path": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "source_path"
+                              ]
+                            },
+                            "category_path_id": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "sort_by": {
+                              "type": "string"
+                            },
+                            "applied_filters": {
+                              "type": "object",
+                              "additionalProperties": {
+                                "type": "string"
+                              }
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "size",
+                            "offset",
+                            "next_cursor",
+                            "category",
+                            "category_path_id",
+                            "region",
+                            "country_code",
+                            "sort_by",
+                            "applied_filters",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

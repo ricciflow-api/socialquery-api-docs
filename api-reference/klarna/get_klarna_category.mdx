@@ -1,6 +1,22 @@
 ---
-title: "Klarna Category"
+title: "Klarna Category Products"
 openapi: "GET /klarna/category"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native product rows for a regional product category, such as `category_id=cl94` for Headphones. Get IDs from the category directory or category-children endpoint. Tree roots (`t` IDs) contain category groups rather than this product-list contract.
+
+Each `items[].product` contains native ID, title, category, description, source path, price, rating, images, stock flag and condition when available. Null values stay unknown. Prices and stock flags are source snapshots, not merchant checkout quotes. UK, Swedish and Danish rows retain legacy relative paths with null absolute product URLs.
+
+`size` is 1–100 (default 48); `offset` is 0–100,000 (default 0). `total` is the current source product-hit count, excluding separately returned unclassified merchant offers and merchandising carousels. `returned_count` counts this page. No local slice is passed off as native source pagination.
+
+Send `data.next_cursor` verbatim with the same category ID for the next page. Region, size, sort and filters are restored when omitted, and must match if supplied. Cursors last one hour and verify the preceding product's ID. Source reordering can cause a failure that requires restarting; this is not a frozen inventory snapshot. A native offset can also be supplied directly, without continuity checking. Reaching the source total or the offset ceiling produces a null cursor.
+
+Supported `sort_by` values are `popularity` (default), `price_low`, `price_high`, `trend`, `name`, `rating` and `price_drop`. These map to Klarna's native sorts. Rating and trend order are source rankings, not locally recomputed scores; native rating order need not be strictly monotonic by displayed average rating. Price order is checked against returned amounts.
+
+`price_range` accepts ranges such as `50-500`, `50-` or `-500`, in the regional currency, with up to two decimal places. `filter` accepts one native facet as `keyID-valueID`, such as `BRAND-162` for Apple in the US. `category_path_id` accepts a regional subcategory ID, such as `100003567-100014541` for US Headphones. A facet and subcategory cannot specify conflicting values for the same key. Source metadata must confirm every requested filter; ignored or unrecognized values return 422 with no net charge.
+
+Regions: `usa`, `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. Prices retain native regional currencies.
+
+A fresh successful nonempty page costs **5 SocialQuery credits**. Empty pages, failures, cached responses and successful idempotent replays have no net charge. Use `X-Max-Credits: 5` to cap the request hold.
+
+Source access is anonymous. Each call makes at most three source requests, sharing the Klarna 20-request/minute ceiling, with a 25-second total timeout and 2 MiB per-response limit. A filtered request reads native filter metadata; a cursor page with size 100 checks its preceding product in a separate one-row request. Smaller cursor pages include and remove that anchor in the native window. Duplicate IDs, category mismatches, ignored filters and inconsistent pagination fail explicitly.
