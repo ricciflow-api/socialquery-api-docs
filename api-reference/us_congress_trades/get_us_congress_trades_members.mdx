@@ -1,6 +1,18 @@
 ---
-title: "Us Congress Trades Members"
+title: "Congressional Disclosure Members"
 openapi: "GET /us_congress_trades/members"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+List members with at least one disclosure in the **current Capitol Trades index**. The underlying website limits disclosure history to three years; this is not a lifetime roster or a claim of complete government filing coverage.
+
+Optional `party` is `democrat` or `republican`. Without that filter, the native `other` group can also appear. `state` accepts a two-letter USPS state, DC or territory code, case-insensitively. `limit` defaults to 20 and accepts 1–100; `offset` defaults to zero and accepts 0–1,000. Results are ordered by last name, first name, then exact Bioguide ID.
+
+The adapter reads and checks the **complete current source directory before filtering**, including total counts, all native pages, unique member IDs and disclosure-count ordering. It does not filter only a sampled page. At most 1,000 members and ten 100-row source pages are supported; larger, incomplete or changing indexes fail without charging. Native zero-result filter pages can fail upstream, so filters are applied locally to the corroborated complete index.
+
+Each native ID is joined exactly to the public [congress-legislators dataset](https://github.com/unitedstates/congress-legislators). `first_name` and `last_name` are supplied by that dataset, not guessed by splitting display names. `name`, `party` and `trade_count` remain native disclosure-site fields. `state` is the latest recorded congressional state or territory from the identity dataset. A native source disagreement is visible in `ext.native_state` and `ext.state_discrepancy`; it is never silently hidden. The source currently mislabels Eleanor Holmes Norton as Washington, while her exact Bioguide record identifies DC. Names may differ in nickname, middle-name or accent conventions. Private biography, contact, birthday and gender fields are omitted.
+
+Pass `data.next_cursor` as `cursor` alone to continue. Its one-hour lifetime binds the query and the complete roster identity. Changed members, names, party or state require restarting. Disclosure counts may update between pages; this is not a frozen financial snapshot. `total` is the complete count after filters, `total_indexed` is the unfiltered native roster size. Windows beyond the end and filters with no members return an empty list.
+
+Requests share a 55-second deadline. The existing Firecrawl basic transport reads public disclosure pages with at most three concurrent reads and 20 reads/minute. Anonymous public name files are bounded to 16 MiB each, without sharing the Firecrawl credential. No new account, credential or paid plan is used.
+
+A fresh nonempty result costs **1 credit**. Empty results, errors, cache hits and identical successful replays cost zero. Use `X-Max-Credits: 1`. Member handles used for disclosure lookups can be ambiguous; the exact returned Bioguide `id` is supported by `/v1/us_congress_trades/politician/trades`.

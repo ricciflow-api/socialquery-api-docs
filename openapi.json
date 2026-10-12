@@ -112334,7 +112334,7 @@
       "get": {
         "operationId": "get_us_congress_trades_members",
         "summary": "Us Congress Trades Members",
-        "description": "Use Us Congress Trades Members to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Members with disclosures in the current public Capitol Trades index. Exact Bioguide IDs join first/last names and latest recorded congressional state to the public congress-legislators dataset. Complete-index filtering, bounded pagination and one-hour roster-bound cursors. Three-year native coverage, not every historical STOCK Act filer.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -112357,8 +112357,11 @@
             "required": false,
             "example": "ca",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            },
+            "description": "USPS state, DC or territory code, case-insensitive. Uses the member’s latest recorded congressional state from the public identity dataset; native disclosure-site disagreements are exposed."
           },
           {
             "name": "limit",
@@ -112367,7 +112370,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
+              "maximum": 100,
+              "default": 20
             }
           },
           {
@@ -112376,7 +112380,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
+              "minimum": 0,
+              "maximum": 1000,
+              "default": 0
             }
           },
           {
@@ -112385,7 +112391,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour cursor bound to filters, limit, offset and complete member identities. Use alone. Roster changes require restarting; disclosure counts can refresh."
           },
           {
             "name": "Cache-Control",
@@ -112418,7 +112425,160 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Members with disclosures in the current public Capitol Trades index. Exact Bioguide IDs join first/last names and latest recorded congressional state to the public congress-legislators dataset. Complete-index filtering, bounded pagination and one-hour roster-bound cursors. Three-year native coverage, not every historical STOCK Act filer.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 100,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "first_name": {
+                                    "type": "string"
+                                  },
+                                  "last_name": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "party": {
+                                    "type": "string",
+                                    "enum": [
+                                      "democrat",
+                                      "republican",
+                                      "other"
+                                    ]
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  },
+                                  "trade_count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "ext": {
+                                    "type": "object",
+                                    "properties": {
+                                      "native_state": {
+                                        "type": "string"
+                                      },
+                                      "state_discrepancy": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "required": [
+                                      "native_state",
+                                      "state_discrepancy"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "first_name",
+                                  "last_name",
+                                  "name",
+                                  "party",
+                                  "state",
+                                  "trade_count",
+                                  "url",
+                                  "ext"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total_indexed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "party": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "state": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 1000
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "name_source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "total_indexed",
+                            "party",
+                            "state",
+                            "limit",
+                            "offset",
+                            "has_more",
+                            "next_cursor",
+                            "source",
+                            "name_source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
