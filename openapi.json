@@ -117667,7 +117667,7 @@
       "get": {
         "operationId": "get_us_congress_trades_stats_sectors",
         "summary": "Us Congress Trades Stats Sectors",
-        "description": "Use Us Congress Trades Stats Sectors to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Disclosed-trade counts by the eleven native issuer sectors, plus an explicit unclassified residual. Counts come from complete native filtered totals, not sample proportions. The snapshot covers the public Capitol Trades three-year index, refreshes daily and expires after 48 hours. A final unfiltered anchor is rechecked before publication; independently collected source totals are not an atomic source snapshot. One credit for a nonempty uncached aggregate; a verified all-zero index, errors, cache hits and idempotent replay are free. No query filters are accepted. Cache bypass reads the latest complete snapshot without triggering source collection.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -117702,7 +117702,122 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Disclosed-trade counts by the eleven native issuer sectors, plus an explicit unclassified residual. Counts come from complete native filtered totals, not sample proportions. The snapshot covers the public Capitol Trades three-year index, refreshes daily and expires after 48 hours. A final unfiltered anchor is rechecked before publication; independently collected source totals are not an atomic source snapshot. One credit for a nonempty uncached aggregate; a verified all-zero index, errors, cache hits and idempotent replay are free. No query filters are accepted. Cache bypass reads the latest complete snapshot without triggering source collection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "minItems": 12,
+                              "maxItems": 12,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "sector": {
+                                    "type": "string"
+                                  },
+                                  "trade_count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "share": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "count_kind": {
+                                    "type": "string",
+                                    "enum": [
+                                      "native_total",
+                                      "residual"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "sector",
+                                  "trade_count",
+                                  "share",
+                                  "count_kind"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "returned_count": {
+                              "const": 12
+                            },
+                            "total_disclosures": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "classified_disclosures": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "unclassified_disclosures": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "retrieved_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "snapshot_id": {
+                              "type": "string"
+                            },
+                            "collected_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "expires_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "source_reads": {
+                              "const": 13
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total_disclosures",
+                            "classified_disclosures",
+                            "unclassified_disclosures",
+                            "source",
+                            "retrieved_at",
+                            "coverage_note",
+                            "snapshot_id",
+                            "collected_at",
+                            "expires_at",
+                            "source_reads"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

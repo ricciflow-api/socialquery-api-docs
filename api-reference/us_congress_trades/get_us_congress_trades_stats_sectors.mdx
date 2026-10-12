@@ -1,6 +1,16 @@
 ---
-title: "Us Congress Trades Stats Sectors"
+title: "Congress disclosure counts by sector"
 openapi: "GET /us_congress_trades/stats/sectors"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns **eleven named sectors and an unclassified remainder** from the public Capitol Trades index. Each row has `sector`, `trade_count`, `share` and `count_kind`. Named sectors use native filtered totals; `unclassified` is the exact residual after subtracting their disjoint totals from `total_disclosures`. It is not the source's `other` filter and is not estimated from sampled rows.
+
+Counts cover the source's roughly **three-year public index**, not lifetime trades or all government filings. `classified_disclosures` plus `unclassified_disclosures` equals `total_disclosures`, and all twelve row counts reconcile to that total.
+
+A background worker collects one source page per step and validates all twelve totals. It rechecks the initial unfiltered total and first-page identities before publishing; incomplete or inconsistent refreshes retain the previous complete snapshot. The source does not offer an atomic historical snapshot. `retrieved_at` records collection start, `collected_at` records completion, and `snapshot_id` identifies the published result. None is a fabricated source last-updated time.
+
+Snapshots refresh daily and expire after **48 hours**. Missing or expired snapshots return uncharged 503. A response-cache hit cannot extend snapshot expiry. A successful idempotent replay preserves its original dated payload under the normal 24-hour replay contract; it is historical request evidence, not a fresh snapshot. `Cache-Control: no-cache` bypasses the API response cache but does not trigger collection.
+
+An uncached nonempty aggregate costs **1 credit**. A verified index with zero total disclosures is free, as are errors, cache hits and idempotent replays. Use `X-Max-Credits: 1`. No query parameters, per-sector filters, custom date windows or pagination are accepted.
+
+Background collection currently uses a non-resetting allowance of 28 reads from existing Firecrawl trial capacity. Exhausting it prevents future refreshes; this is not evidence of sustained provider funding.
