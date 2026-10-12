@@ -1,6 +1,16 @@
 ---
-title: "Kohls Search"
+title: "Kohl’s Search"
 openapi: "GET /kohls/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Searches the public US Kohl’s catalog. Supply `query` and optionally `sort_by`: `featured`, `newest`, `price_low`, `price_high`, `rating`, or `percent_off`. These preserve the source’s ranking; an unmatched keyword can return unrelated popular products. No exact-keyword relevance or stock guarantee is implied.
+
+Products retain native IDs, titles, canonical URLs, source images, displayed colors, rating/count when known and a sponsorship flag. Unrated values remain null. `price.current` is the minimum native sale or regular price, while `current_range` and `original_range` preserve variation ranges. Coupon-conditioned `conditional_offer` values remain separate and are not treated as the base price. Prices exclude tax/shipping; suppressed or in-store-only current prices remain null. No tracking IDs, wallet/account data or advertising callbacks are returned or followed.
+
+Use `dimensions[].values[].filter` for native dimension IDs, joined with commas in `filters`. IDs can contain encoded spaces, plus signs or punctuation; keep the returned value intact. Filter application and active sort are checked against source metadata. A silently dropped native filter becomes an explicit error rather than an unfiltered success. Dimension counts are native facet counts, not independent inventory guarantees.
+
+`limit` is 1–48, default 12. `page` is one-based; `data.next_cursor` is preferred and may be supplied without the original query. The source ignores page-size overrides and returns 120 candidates; the adapter returns only the requested logical page. `source_page_size` and `source_offset` identify that larger source window. Pagination stops at offset 10,000 and reports `pagination_capped` when that ceiling prevents continuation.
+
+Cursors bind query, limit, sort and filters for one hour and recheck the preceding product. Source counts/ranking can change, requiring a restart. Later pages first corroborate the query’s current total because the native service can error for out-of-range offsets. A confirmed terminal result is empty and free; upstream errors are never converted into successful empty results.
+
+Fresh nonempty pages cost **5 credits**. Empty pages, cache hits, failures and successful idempotent replays cost zero. Use `X-Max-Credits: 5`. Requests use one anonymous source read, or two for later native windows, with a shared 20-source-request/minute ceiling, 25-second total timeout and 2 MiB limit per response. No new private provider key is required. This public source has no contractual availability guarantee.

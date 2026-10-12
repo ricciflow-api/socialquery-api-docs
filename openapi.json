@@ -69819,18 +69819,21 @@
       "get": {
         "operationId": "get_kohls_search",
         "summary": "Kohls Search",
-        "description": "Find records through Kohls Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Native public US product search with six sorts, source-confirmed dimension filters and bounded pagination. Source ranking can return unrelated popular items for unmatched queries. Prices preserve ranges and conditional coupon offers separately. Empty terminal pages are corroborated against the first-page total and cost zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "query",
             "in": "query",
-            "required": true,
+            "required": false,
             "example": "jeans",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Search keyword, or omit when continuing with a cursor. Native relevance is not a strict keyword match."
           },
           {
             "name": "page",
@@ -69839,7 +69842,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "One-based logical page, with (page-1)*limit at most 10,000. Must agree with a supplied cursor."
           },
           {
             "name": "limit",
@@ -69848,8 +69852,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 48
-            }
+              "maximum": 48,
+              "default": 12
+            },
+            "description": "Returned products per logical page: 1–48, default 12. Larger values fail. The native 120-row candidate window is not exposed as a product page."
           },
           {
             "name": "sort_by",
@@ -69873,7 +69879,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated filter values from dimensions[].values[].filter. Encoded spaces and plus signs are accepted. The adapter rejects filters the native source does not apply."
           },
           {
             "name": "cursor",
@@ -69881,7 +69888,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour query/limit/sort/filter-bound continuation from data.next_cursor; may be supplied alone. Verifies the preceding product and requires restarting if source order changes."
           },
           {
             "name": "Cache-Control",
@@ -69914,7 +69922,356 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native public US product search with six sorts, source-confirmed dimension filters and bounded pagination. Source ranking can return unrelated popular items for unmatched queries. Prices preserve ranges and conditional coupon offers separately. Empty terminal pages are corroborated against the first-page total and cost zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          },
+                                          "current_range": {
+                                            "type": [
+                                              "object",
+                                              "null"
+                                            ],
+                                            "properties": {
+                                              "min": {
+                                                "type": "number",
+                                                "minimum": 0
+                                              },
+                                              "max": {
+                                                "type": "number",
+                                                "minimum": 0
+                                              }
+                                            },
+                                            "required": [
+                                              "min",
+                                              "max"
+                                            ]
+                                          },
+                                          "original_range": {
+                                            "type": [
+                                              "object",
+                                              "null"
+                                            ],
+                                            "properties": {
+                                              "min": {
+                                                "type": "number",
+                                                "minimum": 0
+                                              },
+                                              "max": {
+                                                "type": "number",
+                                                "minimum": 0
+                                              }
+                                            },
+                                            "required": [
+                                              "min",
+                                              "max"
+                                            ]
+                                          },
+                                          "display_current": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_original": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "label": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "suppressed": {
+                                            "type": "boolean"
+                                          },
+                                          "in_store_only": {
+                                            "type": "boolean"
+                                          },
+                                          "conditional_offer": {
+                                            "type": [
+                                              "object",
+                                              "null"
+                                            ],
+                                            "properties": {
+                                              "display_price": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "codes": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "wallet_offer": {
+                                                "type": "boolean"
+                                              }
+                                            },
+                                            "required": [
+                                              "display_price",
+                                              "codes",
+                                              "wallet_offer"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "original",
+                                          "currency",
+                                          "current_range",
+                                          "original_range",
+                                          "display_current",
+                                          "display_original",
+                                          "label",
+                                          "suppressed",
+                                          "in_store_only",
+                                          "conditional_offer"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "average",
+                                          "count"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "colors": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "sponsored": {
+                                        "type": "boolean"
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "url",
+                                      "price",
+                                      "rating",
+                                      "image_urls",
+                                      "colors",
+                                      "sponsored",
+                                      "availability"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "corrected_query": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 48
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "sort_by": {
+                              "type": "string"
+                            },
+                            "applied_filters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "dimensions": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "values": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "filter": {
+                                          "type": "string"
+                                        },
+                                        "count": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        }
+                                      },
+                                      "required": [
+                                        "name",
+                                        "filter",
+                                        "count"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "label",
+                                  "values"
+                                ]
+                              }
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "source_page_size": {
+                              "type": "integer",
+                              "const": 120
+                            },
+                            "source_offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "query",
+                            "corrected_query",
+                            "page",
+                            "limit",
+                            "offset",
+                            "sort_by",
+                            "applied_filters",
+                            "dimensions",
+                            "next_cursor",
+                            "pagination_capped",
+                            "source_page_size",
+                            "source_offset",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -69958,6 +70315,12 @@
         },
         "tags": [
           "Kohls"
+        ],
+        "x-one-of-parameters": [
+          [
+            "query",
+            "cursor"
+          ]
         ]
       }
     },
