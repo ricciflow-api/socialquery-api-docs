@@ -1,6 +1,14 @@
 ---
-title: "Us Congress Trades State Trades"
+title: "Congressional Trades by State"
 openapi: "GET /us_congress_trades/state/trades"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns public STOCK Act disclosures filed by members from the requested state, using the [Capitol Trades disclosure index](https://www.capitoltrades.com/trades). It reuses SocialQuery's existing Firecrawl basic transport; no new account or key is required.
+
+Supply a two-letter US state code or `DC`, `limit` (1–100; default 20), and `offset` (0–1,000,000), or pass a returned `next_cursor` alone. Cursors bind state, limit and offset for one hour and verify the preceding trade ID. Source edits, added filings or changed page totals can require restarting. Results use the source's descending publication order, not trade-date order. No additional filters or alternate sorts are supported on this operation.
+
+Each disclosure preserves source IDs, politician name/party/state/chamber, issuer/ticker/sector, publication timestamp, trade date, transaction type, owner label, reporting gap, estimated disclosed value and nullable transaction price. **Values are source estimates, not exact amounts.** Birth date, gender and unrelated source fields are omitted. The `total` is the current state's indexed disclosure count; it is not lifetime trading activity, a complete government record or a guarantee of immediate filing coverage.
+
+The adapter corroborates the applied state filter, every row's state, totals, page order and rendered disclosure links. It reads at most two native 100-row pages per request, with a 55-second shared timeout, 4 MiB decoded HTML limit per page and 20 source reads/minute. Original bytes are decoded without executing page scripts. Confirmed terminal offsets return an empty list with the source total and no cursor.
+
+A fresh nonempty response costs **1 credit**. Empty results, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. Source requests use the existing approved Firecrawl free balance; no purchased plan or replenishment is enabled.
