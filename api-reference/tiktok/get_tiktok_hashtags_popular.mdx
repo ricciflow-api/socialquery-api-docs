@@ -1,6 +1,16 @@
 ---
-title: "TikTok Hashtags Popular"
+title: "TikTok Popular Hashtags"
 openapi: "GET /tiktok/hashtags/popular"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the **three publicly visible ranked hashtags** from TikTok Creative Center for a supported market and period. `countryCode` defaults to `US`; `period` defaults to `7` and accepts `7`, `30` or `90`.
+
+Omit `industry` for the overall board, select one of the 15 active industry slugs for its board, or use `industry=all` for the overall board plus all 15 industry boards. Every requested board is read separately. The response preserves all board memberships in `post.ext.trend.boards` while merging duplicate native hashtag IDs. Results are ordered overall first, then the documented industry order and rank. Shared hashtag metrics come from the first board containing it; this is not an atomic snapshot of all boards.
+
+`post.content.text` contains the hashtag without `#`. `post.ext.trend` contains its rank, market, period, aggregate posts and views, daily popularity curve, industry identity, and available public top creators. Creator country is unavailable and stays `null`. Aggregate period views are not copied into lifetime engagement. Author and publication fields that do not apply to a hashtag stay `null`.
+
+`since` and `until` accept valid ISO dates or timezone-qualified timestamps. Since hashtags have no publication timestamp, these bounds preserve the result. They do not filter the popularity curve. `period` selects the curve window. Inverted or malformed date bounds are rejected. There is no second page or cursor; retired industry/filter options are unsupported.
+
+**Pricing:** 2 credits per unique returned hashtag, minimum 6. A single board reserves 6 credits; `industry=all` reserves 96 and refunds the difference after deduplication. Failed or incomplete board reads charge zero. Cache hits and successful idempotent replays also charge zero. Use `X-Max-Credits: 96` for the all-board request.
+
+Every board must return its complete three-row public window with valid identity, market, period and ranking. A missing, malformed or shortened board fails the whole request without charging; a partial dataset is never called a complete or empty result. Reads have one 55-second overall deadline and bounded concurrency. Coverage is the public logged-out board, not private analytics or an exhaustive hashtag search.

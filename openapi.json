@@ -27701,7 +27701,7 @@
       "get": {
         "operationId": "get_tiktok_hashtags_popular",
         "summary": "TikTok Hashtags Popular",
-        "description": "Use TikTok Hashtags Popular to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return the complete three-row public TikTok hashtag trend board for a supported market and 7/30/90-day period. Select one active industry, omit it for the overall board, or request all 16 boards and merge duplicate hashtag IDs. Missing boards fail without charge. Aggregate period metrics and unknown publication dates are explicit.",
         "x-credit-cost": 6,
         "x-launch-status": "beta",
         "parameters": [
@@ -27740,7 +27740,8 @@
                 "TR",
                 "AE",
                 "VN"
-              ]
+              ],
+              "default": "US"
             }
           },
           {
@@ -27754,7 +27755,8 @@
                 "7",
                 "30",
                 "90"
-              ]
+              ],
+              "default": "7"
             }
           },
           {
@@ -27782,7 +27784,8 @@
                 "sports-and-outdoor",
                 "health"
               ]
-            }
+            },
+            "description": "Omit for the overall board; select an active industry for that board, or all for overall plus 15 industries. Each board has three public rows; deduplicated by native hashtag ID."
           },
           {
             "name": "since",
@@ -27790,7 +27793,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional ISO date/time bound. Hashtags have no publication timestamp and are retained; this does not filter the trend-curve dates."
           },
           {
             "name": "until",
@@ -27798,7 +27802,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional ISO date/time bound. Hashtags have no publication timestamp and are retained; this does not filter the trend-curve dates."
           },
           {
             "name": "Cache-Control",
@@ -27831,7 +27836,394 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return the complete three-row public TikTok hashtag trend board for a supported market and 7/30/90-day period. Select one active industry, omit it for the overall board, or request all 16 boards and merge duplicate hashtag IDs. Missing boards fail without charge. Aggregate period metrics and unknown publication dates are explicit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "media_urls": {
+                                            "type": "null"
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "null"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "text",
+                                          "media_urls",
+                                          "thumbnail_url",
+                                          "duration_seconds"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "null"
+                                          },
+                                          "display_name": {
+                                            "type": "null"
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "username",
+                                          "display_name",
+                                          "avatar_url",
+                                          "verified"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": "null"
+                                          },
+                                          "likes": {
+                                            "type": "null"
+                                          },
+                                          "comments": {
+                                            "type": "null"
+                                          },
+                                          "shares": {
+                                            "type": "null"
+                                          },
+                                          "saves": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "views",
+                                          "likes",
+                                          "comments",
+                                          "shares",
+                                          "saves"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": "null"
+                                          },
+                                          "spoiler": {
+                                            "type": "null"
+                                          },
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "deleted": {
+                                            "const": false,
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "required": [
+                                          "nsfw",
+                                          "spoiler",
+                                          "pinned",
+                                          "deleted"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "published_at": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "trend": {
+                                            "type": "object",
+                                            "properties": {
+                                              "rank": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "maximum": 3
+                                              },
+                                              "country_code": {
+                                                "type": "string"
+                                              },
+                                              "period_days": {
+                                                "type": "integer",
+                                                "enum": [
+                                                  7,
+                                                  30,
+                                                  90
+                                                ]
+                                              },
+                                              "posts": {
+                                                "type": "integer",
+                                                "minimum": 0
+                                              },
+                                              "views": {
+                                                "type": "integer",
+                                                "minimum": 0
+                                              },
+                                              "industry": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "industry_id": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "industry_label": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "popularity_curve": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "date": {
+                                                      "type": "string",
+                                                      "format": "date"
+                                                    },
+                                                    "value": {
+                                                      "type": "number",
+                                                      "minimum": 0,
+                                                      "maximum": 100
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "date",
+                                                    "value"
+                                                  ],
+                                                  "additionalProperties": false
+                                                },
+                                                "maxItems": 90
+                                              },
+                                              "top_creators": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "handle": {
+                                                      "type": "string"
+                                                    },
+                                                    "name": {
+                                                      "type": "string"
+                                                    },
+                                                    "followers": {
+                                                      "type": "integer",
+                                                      "minimum": 0
+                                                    },
+                                                    "country": {
+                                                      "type": "null"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "handle",
+                                                    "name",
+                                                    "followers",
+                                                    "country"
+                                                  ],
+                                                  "additionalProperties": false
+                                                },
+                                                "maxItems": 20
+                                              },
+                                              "boards": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "industry": {
+                                                      "type": [
+                                                        "string",
+                                                        "null"
+                                                      ]
+                                                    },
+                                                    "industry_id": {
+                                                      "type": [
+                                                        "string",
+                                                        "null"
+                                                      ]
+                                                    },
+                                                    "industry_label": {
+                                                      "type": [
+                                                        "string",
+                                                        "null"
+                                                      ]
+                                                    },
+                                                    "rank": {
+                                                      "type": "integer",
+                                                      "minimum": 1,
+                                                      "maximum": 3
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "industry",
+                                                    "industry_id",
+                                                    "industry_label",
+                                                    "rank"
+                                                  ],
+                                                  "additionalProperties": false
+                                                },
+                                                "maxItems": 16
+                                              }
+                                            },
+                                            "required": [
+                                              "rank",
+                                              "country_code",
+                                              "period_days",
+                                              "posts",
+                                              "views",
+                                              "industry",
+                                              "industry_id",
+                                              "industry_label",
+                                              "popularity_curve",
+                                              "top_creators",
+                                              "boards"
+                                            ],
+                                            "additionalProperties": false
+                                          }
+                                        },
+                                        "required": [
+                                          "trend"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "content",
+                                      "author",
+                                      "engagement",
+                                      "flags",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "post"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "maxItems": 48
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "boards_checked": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 16
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "period_days": {
+                              "type": "integer",
+                              "enum": [
+                                7,
+                                30,
+                                90
+                              ]
+                            },
+                            "since": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "until": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "has_more": {
+                              "const": false,
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "dropped",
+                            "boards_checked",
+                            "country_code",
+                            "period_days",
+                            "since",
+                            "until",
+                            "has_more",
+                            "next_cursor",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -27875,7 +28267,8 @@
         },
         "tags": [
           "TikTok"
-        ]
+        ],
+        "x-credit-cost-formula": "max(6, 2 * unique_returned_hashtags); zero on failure or cache hit. Reserve 6 for one board, or 96 for industry=all; unused hold is refunded."
       }
     },
     "/tiktok/videos/popular": {
