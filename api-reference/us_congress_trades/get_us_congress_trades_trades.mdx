@@ -1,6 +1,18 @@
 ---
-title: "Us Congress Trades Trades"
+title: "Congressional Trades"
 openapi: "GET /us_congress_trades/trades"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Queries the public [Capitol Trades disclosure index](https://www.capitoltrades.com/trades). All filters are optional and can be combined: `ticker`, `politician`, `party`, `chamber`, `sector`, `tx_type`, `start_date` and `end_date`. Bare tickers default to `:US`; exact public issuer lookup must be complete and unambiguous. Member names must resolve uniquely; full display names and native member IDs are also accepted. Unindexed identities return an empty result. Use a full member name/ID for an initial empty filtered or terminal result: an empty page cannot independently corroborate a surname.
+
+`sector` uses the source's 12 documented slugs, including `information-technology`, `health-care` and `financials`. Spaces and case normalize. Date bounds are inclusive **publication dates**, not transaction dates; omitted bounds use 1900-01-01/the request's UTC date when a date filter is present. Every returned row must agree with every requested identity and filter.
+
+Use `sort=pub_date` (default), `tx_date` or `reporting_gap` with `order=asc|desc` (default desc). **Value sorting requires the complete filtered result to contain at most 100 disclosures.** That entire result is sorted before slicing. Broader results return an unbilled `422 UNSUPPORTED_PARAMETER`; narrow the filters or use a native date/delay sort. Partial pages are never presented as globally value-sorted.
+
+`limit` is 1–100 (default 20), `offset` is 0–1,000,000. Pass a returned `next_cursor` alone to preserve filters, resolved identities, sort and window size for one hour. The preceding trade ID is rechecked; new or edited source records can require restarting. Confirmed terminal windows are empty and free.
+
+The source limits available history to the past **three years**. `total` is its current matching indexed count, not lifetime or complete government filings. Disclosures preserve source IDs, member name/party/state/chamber, issuer/ticker/sector, publication and trade dates, transaction type, owner, reporting gap, estimated value and nullable price. Values are estimates. Birth dates and gender are omitted.
+
+The adapter uses anonymous issuer lookup only when a ticker is supplied, and the existing Firecrawl basic transport for public HTML. Member-filtered requests add one directory read; at most two native disclosure pages are read. Bounds: shared 55-second deadline, 1 MiB issuer response, 4 MiB decoded HTML per page and 20 source reads/minute. Scripts are parsed as data without execution. No new account or private key is required.
+
+A fresh nonempty result costs **1 credit**; empty results, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. Existing approved provider free allowance only.
