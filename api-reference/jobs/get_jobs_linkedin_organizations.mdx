@@ -1,6 +1,16 @@
 ---
-title: "Jobs Linkedin Organizations"
+title: "LinkedIn Organization Suggestions"
 openapi: "GET /jobs/linkedin/organizations"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Find the LinkedIn organization IDs used by its public job-search company filter. Supply `query`, a company or school name of 1–200 characters. For example, Google resolves to `1441` and Harvard University to `1646` in the verified source fixtures.
+
+Each suggestion contains `id`, `display_name` and `source_type`. Pass an ID as `organization_ids` to `/v1/jobs/linkedin/search`; separate multiple IDs with semicolons. This adapter reads LinkedIn's native public job-filter typeahead without a member account, cookie or API key.
+
+Companies and schools share the native **COMPANY** namespace. `source_type` preserves that source label; it is not a claim that a university is a commercial company. We do not infer organization categories, slugs, profile URLs or follower counts from names. Native tracking IDs are omitted.
+
+The source normally returns ten suggestions in its own order. This is **not an exhaustive organization directory**. It supplies no total or continuation, so `total` and `next_cursor` remain null. Empty native arrays are valid; login/challenge HTML, malformed records or throttling are errors.
+
+The direct public LinkedIn job provider shares a 20-request/minute limit, with a 20-second deadline and a 256 KiB response limit. When that source is unavailable from the hosting region, the existing Oxylabs Web API transports the same exact public JSON URL, with a 35-second deadline and ten fallback reads/minute. Its source URL, status and JSON shape are verified independently. The fallback shares the existing non-resetting **50-request trial ceiling** with the Amazon adapter; exhausted capacity fails closed. Only Oxylabs receives its configured credential. Redirects are rejected.
+
+A fresh nonempty list costs **1 credit**. Empty lists, failures, cached results and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. No new key or paid plan is required. Direct suggestions are keyless; fallback capacity is limited to the existing approved Oxylabs trial allowance.

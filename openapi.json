@@ -109441,7 +109441,7 @@
       "get": {
         "operationId": "get_jobs_linkedin_organizations",
         "summary": "Jobs Linkedin Organizations",
-        "description": "Use Jobs Linkedin Organizations to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public LinkedIn job-filter suggestions matching a company or school name. Returns native numeric organization IDs and display names in source order. This is a bounded typeahead window, normally ten suggestions, not an exhaustive directory.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -109451,8 +109451,11 @@
             "required": true,
             "example": "google",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": "Company or school name, 1–200 characters after trimming."
           },
           {
             "name": "Cache-Control",
@@ -109485,7 +109488,80 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public LinkedIn job-filter suggestions matching a company or school name. Returns native numeric organization IDs and display names in source order. This is a bounded typeahead window, normally ten suggestions, not an exhaustive directory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 50,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "display_name": {
+                                    "type": "string"
+                                  },
+                                  "source_type": {
+                                    "type": "string",
+                                    "const": "COMPANY"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "display_name",
+                                  "source_type"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "query",
+                            "total",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
