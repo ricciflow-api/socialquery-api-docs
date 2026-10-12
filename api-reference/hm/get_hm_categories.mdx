@@ -1,6 +1,12 @@
 ---
-title: "Hm Categories"
+title: "H&M Categories"
 openapi: "GET /hm/categories"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the navigation tree embedded in [H&M's public US site](https://www2.hm.com/en_us/customer-service/shopping-at-hm/store-locator.html). This endpoint takes no query parameters; it currently returns the `en_us` market only.
+
+`categories` preserves the source department hierarchy. Each node has its source `id`, `name`, `children`, tracking label and path. Clickable entries have `kind: "link"`, a relative `href` and absolute `url`. Group headings have `kind: "group"` with null links. `hidden` and `inactive` retain the source flags; missing flags remain null.
+
+`total_nodes` includes links and headings throughout the returned tree. Promotional categories may change between fetches. This is reference taxonomy, not a product listing or stock report. The store locator's navigation does not supply the separate stores endpoint.
+
+Source identity, market, unique node IDs, tree depth and response size are validated. Malformed or blocked pages return an error without net SocialQuery charge. Cached responses and idempotent replays are free.

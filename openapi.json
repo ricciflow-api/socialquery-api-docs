@@ -419,6 +419,78 @@
             ]
           }
         }
+      },
+      "HmNavigationNode": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "href",
+          "url",
+          "tracking_label",
+          "tracking_path",
+          "kind",
+          "inactive",
+          "hidden",
+          "children"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "href": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tracking_label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tracking_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "link",
+              "group"
+            ]
+          },
+          "inactive": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hidden": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HmNavigationNode"
+            }
+          }
+        }
       }
     },
     "responses": {
@@ -67074,7 +67146,7 @@
       "get": {
         "operationId": "get_hm_countries",
         "summary": "Hm Countries",
-        "description": "Use Hm Countries to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Live public H&M market selector grouped by region, preserving source order and storefront language choices. The two-letter locale identifies the market; storefront_locale includes its language. URLs are actual H&M market-selection links, which may redirect to regional storefronts. No query parameters. This directory does not establish store inventory, delivery availability or store-list coverage.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -67109,7 +67181,108 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Live public H&M market selector grouped by region, preserving source order and storefront language choices. The two-letter locale identifies the market; storefront_locale includes its language. URLs are actual H&M market-selection links, which may redirect to regional storefronts. No query parameters. This directory does not establish store inventory, delivery availability or store-list coverage.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "regions",
+                            "total_countries",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "properties": {
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "regions": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "region",
+                                  "countries"
+                                ],
+                                "properties": {
+                                  "region": {
+                                    "type": "string"
+                                  },
+                                  "countries": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "required": [
+                                        "locale",
+                                        "name",
+                                        "url",
+                                        "languages"
+                                      ],
+                                      "properties": {
+                                        "locale": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "url": {
+                                          "type": "string"
+                                        },
+                                        "languages": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "required": [
+                                              "language",
+                                              "storefront_locale",
+                                              "label",
+                                              "url"
+                                            ],
+                                            "properties": {
+                                              "language": {
+                                                "type": "string"
+                                              },
+                                              "storefront_locale": {
+                                                "type": "string"
+                                              },
+                                              "label": {
+                                                "type": "string"
+                                              },
+                                              "url": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "total_countries": {
+                              "type": "integer",
+                              "minimum": 1
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -67160,7 +67333,7 @@
       "get": {
         "operationId": "get_hm_categories",
         "summary": "Hm Categories",
-        "description": "Use Hm Categories to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Live H&M US website navigation tree, preserving department hierarchy, non-clickable group headings, tracking labels, and source hidden/inactive flags. No query parameters; only en_us is available. Promotional links may change. This returns reference taxonomy, not product listings or stock. Invalid, blocked or incomplete source structure fails without net customer charge.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -67195,7 +67368,57 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Live H&M US website navigation tree, preserving department hierarchy, non-clickable group headings, tracking labels, and source hidden/inactive flags. No query parameters; only en_us is available. Promotional links may change. This returns reference taxonomy, not product listings or stock. Invalid, blocked or incomplete source structure fails without net customer charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "locale",
+                            "categories",
+                            "total_nodes",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "properties": {
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "locale": {
+                              "type": "string",
+                              "enum": [
+                                "en_us"
+                              ]
+                            },
+                            "categories": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/HmNavigationNode"
+                              }
+                            },
+                            "total_nodes": {
+                              "type": "integer",
+                              "minimum": 1
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

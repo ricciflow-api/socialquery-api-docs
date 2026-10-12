@@ -1,6 +1,12 @@
 ---
-title: "Hm Countries"
+title: "H&M Countries"
 openapi: "GET /hm/countries"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the current [H&M market selector](https://www.hm.com/entrance.ahtml), grouped by region and preserving its language choices. This endpoint takes no query parameters and does not require a separate provider account.
+
+`regions[].countries[]` contains the market name, its two-letter `locale`, and `languages`. Each language includes its source label, language code, `storefront_locale` such as `en_us`, and an observed H&M `url`. These URLs select a market and may redirect to a regional storefront; they are not guessed storefront addresses.
+
+The response reports `total_countries`, the source URL and a coverage note. Presence in this selector does not prove that a country has online delivery, stock or a working stores API. H&M's country-directory and catalog-language codes differ.
+
+Malformed or blocked source pages return an error, never a fabricated empty directory. Cached responses and idempotent replays are free; fresh successful calls use the endpoint's documented credit price.
