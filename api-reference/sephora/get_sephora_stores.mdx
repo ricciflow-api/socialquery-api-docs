@@ -3,4 +3,8 @@ title: "Sephora Stores"
 openapi: "GET /sephora/stores"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Find nearby Sephora stores using location_coordinate=latitude,longitude. radius is 1–100 miles, default 50. Returns public addresses, coordinates, source distances, phone, weekly/special hours and pickup-service flags. Store presence and pickup support do not indicate any SKU’s inventory.
+
+A successful uncached call costs **1 credit**. Failed requests and cache hits cost zero.
+
+The service reads the completed source dataset with one extra row to detect truncation before returning a directory. It returns an upstream error instead of silently truncating responses beyond 500 source records. Totals count the current source response; store searches are limited to the requested area. Unknown fields remain null.

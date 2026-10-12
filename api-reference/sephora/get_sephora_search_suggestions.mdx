@@ -3,4 +3,8 @@ title: "Sephora Search Suggestions"
 openapi: "GET /sephora/search/suggestions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get live Sephora autocomplete suggestions for a query. Returns separate text suggestions, suggested product IDs/SKUs and trending category links. Supports en-US, en-CA and fr-CA; default en-US. Suggested products are cards, not full product details.
+
+A successful uncached call costs **1 credit**. Failed requests and cache hits cost zero.
+
+The service reads the completed source dataset with one extra row to detect truncation before returning a directory. It returns an upstream error instead of silently truncating responses beyond 500 source records. Totals count the current source response; store searches are limited to the requested area. Unknown fields remain null.

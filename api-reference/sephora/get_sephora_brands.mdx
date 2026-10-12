@@ -3,4 +3,8 @@ title: "Sephora Brands"
 openapi: "GET /sephora/brands"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+List all brands in the current Sephora US source directory. Returns brand ID, short name and public URL. Pass product_query_id to the brand/products endpoint’s id parameter; that endpoint uses the short name rather than the numeric brand ID.
+
+A successful uncached call costs **1 credit**. Failed requests and cache hits cost zero.
+
+The service reads the completed source dataset with one extra row to detect truncation before returning a directory. It returns an upstream error instead of silently truncating responses beyond 500 source records. Totals count the current source response; store searches are limited to the requested area. Unknown fields remain null.

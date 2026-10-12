@@ -3,4 +3,8 @@ title: "Sephora Categories"
 openapi: "GET /sephora/categories"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+List the root categories in Sephora’s US catalog. Each record includes its category ID, name, public URL and observed child-category flag. Use category/data for a root category’s children. This is not a flattened list of the entire category tree.
+
+A successful uncached call costs **1 credit**. Failed requests and cache hits cost zero.
+
+The service reads the completed source dataset with one extra row to detect truncation before returning a directory. It returns an upstream error instead of silently truncating responses beyond 500 source records. Totals count the current source response; store searches are limited to the requested area. Unknown fields remain null.
