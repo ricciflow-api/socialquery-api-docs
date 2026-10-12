@@ -8,3 +8,5 @@ Public related-company window. Use returned company URLs; numeric company IDs an
 A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
 
 This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.
+
+Use a company vanity URL. Numeric company IDs cannot be resolved by this public source and return 422.

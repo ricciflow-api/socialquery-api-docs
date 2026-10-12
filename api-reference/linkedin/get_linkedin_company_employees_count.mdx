@@ -3,8 +3,4 @@ title: "LinkedIn Company Employees Count"
 openapi: "GET /linkedin/company/employees-count"
 ---
 
-Public company employee count for a numeric company_id. Location filtering and employee demographic breakdowns are unavailable; byGroup is null.
-
-A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
-
-This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.
+<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>

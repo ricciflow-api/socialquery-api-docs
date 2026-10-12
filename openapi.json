@@ -8973,7 +8973,7 @@
       "get": {
         "operationId": "get_linkedin_company",
         "summary": "LinkedIn Company",
-        "description": "Public company identity and About data. Company follower totals are withheld because the source count could not be corroborated. Unknown location details, funding and status flags are not invented.",
+        "description": "Public company identity and About data. Company follower totals are withheld because the source count could not be corroborated. Unknown location details, funding and status flags are not invented. Use a company vanity URL; numeric company IDs are not supported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -10393,7 +10393,7 @@
       "get": {
         "operationId": "get_linkedin_company_also_viewed",
         "summary": "LinkedIn Company Also Viewed",
-        "description": "Public related-company window. Use returned company URLs; numeric company IDs and follower counts are unavailable. No continuation is available.",
+        "description": "Public related-company window. Use returned company URLs; numeric company IDs and follower counts are unavailable. No continuation is available. Use a company vanity URL; numeric company IDs are not supported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -10404,7 +10404,8 @@
             "example": "1441",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by this public source; supply a vanity company URL instead. Returns 422."
           },
           {
             "name": "url",
@@ -10732,7 +10733,7 @@
       "get": {
         "operationId": "get_linkedin_company_employees_count",
         "summary": "LinkedIn Company Employees Count",
-        "description": "Public company employee count for a numeric company_id. Location filtering and employee demographic breakdowns are unavailable; byGroup is null.",
+        "description": "Use LinkedIn Company Employees Count to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -10751,8 +10752,7 @@
             "required": false,
             "schema": {
               "type": "string"
-            },
-            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
+            }
           },
           {
             "name": "Cache-Control",
@@ -10775,41 +10775,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Public company employee count for a numeric company_id. Location filtering and employee demographic breakdowns are unavailable; byGroup is null.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SocialQueryResponse"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "type": "object",
-                          "properties": {
-                            "coverage_note": {
-                              "type": "string"
-                            },
-                            "total": {
-                              "type": [
-                                "integer",
-                                "null"
-                              ],
-                              "minimum": 0
-                            },
-                            "byGroup": {
-                              "type": "null"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
+            "$ref": "#/components/responses/Success"
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -10853,8 +10819,7 @@
         },
         "tags": [
           "LinkedIn"
-        ],
-        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
+        ]
       }
     },
     "/linkedin/profile/interests/schools": {
