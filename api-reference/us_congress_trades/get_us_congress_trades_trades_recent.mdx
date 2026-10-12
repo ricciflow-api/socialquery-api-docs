@@ -1,6 +1,14 @@
 ---
-title: "Us Congress Trades Trades Recent"
+title: "US Congress Trades — Recent"
 openapi: "GET /us_congress_trades/trades/recent"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns public STOCK Act disclosures **published in the last 7 days**, newest first. Inclusion uses the exact source publication timestamp in UTC, not the date the trade occurred or a timezone-shifted display label.
+
+Each item has its source disclosure ID and URL, issuer ID/name/ticker/sector, the member's professional identity (name, party, state and chamber), publication and trade dates, transaction type, owner category and reporting delay. `value_estimate_usd` is the source's estimate of a reported amount range; it is **not an exact transaction amount**. `price_usd` may be null. Unrelated birth dates and gender are excluded.
+
+Use `limit` from 1–100 (default 50), or a nonnegative `offset` up to 1,000,000. Prefer `next_cursor`: it preserves the window and limit for one hour and checks the preceding disclosure ID. A source edit or new disclosure that changes page order may require restarting. At most two native 100-row pages are fetched per request. A final cursor page can be empty when the inclusive source calendar-day window extends before the exact cutoff.
+
+`window_start` and `window_end` are exact UTC bounds. `source_candidate_total` counts the source's inclusive calendar-date candidates, which can include records before the exact cutoff; `total` is null because this request does not scan the entire window. This feed reflects the source's public coverage, not a complete official filing archive. Broader trade search and aggregate statistics are separate operations and are not implied by these feeds.
+
+Each successful fresh nonempty request costs **1 SocialQuery credit**. Validated empty results, failures, cache hits and successful idempotent replays have no net charge. The adapter uses one or two basic Firecrawl requests within the configured allowance and validates source URLs, query dates, native page counts, disclosure links, ordering and IDs before returning data.
