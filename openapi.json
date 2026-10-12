@@ -16237,7 +16237,7 @@
       "get": {
         "operationId": "get_linkedin_profile_honors",
         "summary": "LinkedIn Profile Honors",
-        "description": "Use LinkedIn Profile Honors to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public honors and awards as listed on the member profile, with issuer and original display dates. Awards are source-reported, not independently verified. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16245,10 +16245,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
+            "example": "https://www.linkedin.com/in/reidhoffman/",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical public HTTPS LinkedIn /in/ profile URL without query or fragment."
           },
           {
             "name": "page",
@@ -16257,7 +16258,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "Only page=1 is supported. The source returns one visible public section; deeper pages return 422."
           },
           {
             "name": "urn",
@@ -16265,7 +16267,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "cursor",
@@ -16273,7 +16276,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "Cache-Control",
@@ -16306,7 +16310,98 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public honors and awards as listed on the member profile, with issuer and original display dates. Awards are source-reported, not independently verified. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "issuer": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "date_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "verified": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "enum": [
+                                false
+                              ]
+                            },
+                            "profile_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "apify"
+                              ]
+                            },
+                            "source_actor": {
+                              "type": "string",
+                              "enum": [
+                                "lergassy~linkedin-profile-scraper"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -16817,7 +16912,7 @@
       "get": {
         "operationId": "get_linkedin_profile_volunteers",
         "summary": "LinkedIn Profile Volunteers",
-        "description": "Use LinkedIn Profile Volunteers to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public volunteer roles and organization labels with source display dates and current-status flags. Unknown causes and organization URLs remain null. The source may omit older entries. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16825,10 +16920,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
+            "example": "https://www.linkedin.com/in/reidhoffman/",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical public HTTPS LinkedIn /in/ profile URL without query or fragment."
           },
           {
             "name": "page",
@@ -16837,7 +16933,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "Only page=1 is supported. The source returns one visible public section; deeper pages return 422."
           },
           {
             "name": "urn",
@@ -16845,7 +16942,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "cursor",
@@ -16853,7 +16951,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "Cache-Control",
@@ -16886,7 +16985,113 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public volunteer roles and organization labels with source display dates and current-status flags. Unknown causes and organization URLs remain null. The source may omit older entries. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "role": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "organization": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "start_date_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "end_date_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "current": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "cause": {
+                                    "type": "null"
+                                  },
+                                  "organization_url": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "enum": [
+                                false
+                              ]
+                            },
+                            "profile_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "apify"
+                              ]
+                            },
+                            "source_actor": {
+                              "type": "string",
+                              "enum": [
+                                "lergassy~linkedin-profile-scraper"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
