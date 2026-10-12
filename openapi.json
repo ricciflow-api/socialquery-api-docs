@@ -115228,7 +115228,7 @@
       "get": {
         "operationId": "get_us_congress_trades_stats",
         "summary": "Us Congress Trades Stats",
-        "description": "Use Us Congress Trades Stats to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return the current public Capitol Trades index totals and transaction-date boundaries. Three corroborated source pages establish the trade total, oldest/newest transaction dates and member-directory count. Coverage is roughly three years, not lifetime or complete STOCK Act data. Dates have day precision; the source database update time is unavailable, so last_updated is null and observed_at records this retrieval. Accepts no query filters.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -115263,7 +115263,79 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return the current public Capitol Trades index totals and transaction-date boundaries. Three corroborated source pages establish the trade total, oldest/newest transaction dates and member-directory count. Coverage is roughly three years, not lifetime or complete STOCK Act data. Dates have day precision; the source database update time is unavailable, so last_updated is null and observed_at records this retrieval. Accepts no query filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "total_trades": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "total_politicians": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "earliest_trade_date": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "latest_trade_date": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "date_precision": {
+                              "type": "string",
+                              "const": "day"
+                            },
+                            "last_updated": {
+                              "type": "null"
+                            },
+                            "observed_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "source": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "politicians_source": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "total_trades",
+                            "total_politicians",
+                            "earliest_trade_date",
+                            "latest_trade_date",
+                            "date_precision",
+                            "last_updated",
+                            "observed_at",
+                            "source",
+                            "politicians_source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

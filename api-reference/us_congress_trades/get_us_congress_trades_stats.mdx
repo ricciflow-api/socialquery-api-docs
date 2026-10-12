@@ -1,6 +1,12 @@
 ---
-title: "Us Congress Trades Stats"
+title: "Congressional trade coverage"
 openapi: "GET /us_congress_trades/stats"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Costs **1 credit** for a successful live read. Identical requests are cached for 15 minutes at zero credits. Errors and idempotent replays are free. No query filters are accepted.
+
+The public [Capitol Trades index](https://www.capitoltrades.com/trades) supplies the total number of indexed disclosures and the earliest/latest **transaction dates**. These are date-only values, not publication timestamps. The [politician directory](https://www.capitoltrades.com/politicians) supplies its indexed member count.
+
+The source covers roughly three years and is not a complete or lifetime government archive. Ascending and descending boundary pages must report matching totals and correctly sorted records. The three source pages are read concurrently, not as an atomic database snapshot; mismatched or malformed responses fail unbilled.
+
+The source does not expose a database update timestamp. **`last_updated` remains null**; `observed_at` is our retrieval time. Do not interpret it as the publication time of a disclosure or proof that every recent filing has been indexed.
