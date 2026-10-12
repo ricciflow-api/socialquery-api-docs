@@ -1,6 +1,10 @@
 ---
-title: "Reddit Profile Comments"
+title: "Reddit Comment History"
 openapi: "GET /reddit/profile/comments"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read an account's public comment listing newest first. limit controls returned depth (1–100, default 25). Reserve 2 × limit credits, then charge 2 per comment actually returned; unused held credits are refunded. Successful empty results, cache hits and failed requests cost zero. before is exclusive at midnight UTC; since and until are inclusive. Dates and source order are validated; duplicate rows across source pages are removed. The source walk is bounded to 500 rows and 45 seconds. An incomplete walk returns HISTORY_WINDOW_EXCEEDED rather than a partial success. Unknown/private history and nonexistent-account behavior are not verified. Reddit score remains ext.score; likes, reply counts and author avatars are unknown. parent_id preserves t1_ reply parents and t3_ top-level parents. No public cursor is returned.
+
+For example, `limit=25` holds 50 credits. If 7 comments match the date window, the final charge is 14 credits and 36 are released. Send `X-Max-Credits: 50` to enforce that maximum hold on the server.
+
+The initial provider verification allowance is finite; there is no automatic refill. This endpoint is in preview while full catalog coverage is being verified.
