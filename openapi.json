@@ -11254,7 +11254,7 @@
       "get": {
         "operationId": "get_linkedin_job_hiring_team",
         "summary": "LinkedIn Job Hiring Team",
-        "description": "Use LinkedIn Job Hiring Team to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return the publicly visible job-poster cards on a LinkedIn guest job page. This is not a complete recruiting organization or member-only hiring panel. Supply a numeric id or canonical HTTPS LinkedIn job URL; if both are present they must match. Unknown verification/follower fields remain null; IDs are public profile identifiers, not member URNs. A complete validated page without public poster cards returns an empty list at zero credits. No pagination, contact extraction, enrichment, or messaging.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -11262,9 +11262,10 @@
             "name": "id",
             "in": "query",
             "required": false,
-            "example": "4463963538",
+            "example": "4432906054",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,19}$"
             }
           },
           {
@@ -11272,8 +11273,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "uri"
+            },
+            "description": "Canonical https://www.linkedin.com/jobs/view/<id> or /jobs/view/<slug>-<id> without query parameters, credentials or fragment."
           },
           {
             "name": "Cache-Control",
@@ -11306,7 +11309,159 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return the publicly visible job-poster cards on a LinkedIn guest job page. This is not a complete recruiting organization or member-only hiring panel. Supply a numeric id or canonical HTTPS LinkedIn job URL; if both are present they must match. Unknown verification/follower fields remain null; IDs are public profile identifiers, not member URNs. A complete validated page without public poster cards returns an empty list at zero credits. No pagination, contact extraction, enrichment, or messaging.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 20,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "author": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "username": {
+                                        "type": "string"
+                                      },
+                                      "display_name": {
+                                        "type": "string"
+                                      },
+                                      "bio": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "avatar_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "format": "uri"
+                                      },
+                                      "verified": {
+                                        "type": "null"
+                                      },
+                                      "followers": {
+                                        "type": "null"
+                                      },
+                                      "following": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id_kind": {
+                                            "type": "string",
+                                            "const": "public_identifier"
+                                          },
+                                          "role": {
+                                            "type": "string",
+                                            "const": "job_poster"
+                                          },
+                                          "source_job_id": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "id_kind",
+                                          "role",
+                                          "source_job_id"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "username",
+                                      "display_name",
+                                      "bio",
+                                      "url",
+                                      "avatar_url",
+                                      "verified",
+                                      "followers",
+                                      "following",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "author"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "job_id": {
+                              "type": "string"
+                            },
+                            "job_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "dropped",
+                            "job_id",
+                            "job_url",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

@@ -1,6 +1,14 @@
 ---
-title: "LinkedIn Job Hiring Team"
+title: "LinkedIn job hiring team"
 openapi: "GET /linkedin/job/hiring-team"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Costs **5 credits** for a successful live response containing a public job poster. A validated empty result, cache hit, successful idempotent replay, or error costs zero credits.
+
+Supply a numeric `id`, or a canonical HTTPS LinkedIn job `url` without tracking parameters or a fragment. If both are supplied, they must identify the same job. Pagination and extra query parameters are not accepted.
+
+This endpoint returns **public job-poster cards** from the guest job page. It does not enumerate the complete recruiting organization or the hiring panel shown to signed-in members. A complete job page without a public poster returns an empty list. A blocked, malformed, or mismatched job page fails instead of reporting an empty team.
+
+Each item contains an `author` with a public profile identifier, display name, headline (`bio`), profile URL, and an available source-hosted avatar URL. These identifiers are not member URNs. Follower counts and verification remain `null`; image URLs may expire. No profile enrichment, contact extraction, or messaging takes place.
+
+LinkedIn's anonymous page is the primary source. A bounded Oxylabs transport can retrieve that same page when the primary fails. This fallback shares the account's existing verification allowance with other Oxylabs routes; it is not an unlimited production plan. Availability depends on the source and remaining allowance.
