@@ -1,6 +1,14 @@
 ---
-title: "YouTube Transcripts"
+title: "Batch YouTube Transcripts"
 openapi: "POST /youtube/transcripts"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Send `ids` as an array of 1–100 bare eleven-character YouTube video IDs. Full watch URLs are rejected. Rows stay in input order. Use `format=text` (default) for joined caption text, or `format=segments` for `start_ms`, `duration_ms` and `text` on every segment. An optional `language` chooses a caption track; the returned `language` retains the provider's track name when known.
+
+The source is the existing [ScrapeCreators transcript API](https://docs.scrapecreators.com/v1/youtube/video/transcript/). Video identity and segment timings are checked before a row can succeed. Missing captions and unavailable videos are distinguished only when the source explicitly reports them. A source failure is `error`, not an invented empty transcript.
+
+Billing reserves **3 credits × number of input IDs** and settles at **3 credits per successful row**. `not_found`, `error` and `deferred` rows cost zero. For two IDs, send `X-Max-Credits: 6`. Duplicate input IDs are separate requested rows. The batch is not response-cached; repeat the same `Idempotency-Key` to replay a result without further work or charges.
+
+At most four source calls run concurrently. Calls have a twelve-second timeout; no new work starts after the batch's twenty-eight-second scheduling budget. Remaining rows are returned as `deferred` and unbilled. Retry only those IDs in a new batch with a new idempotency key. Provider quota/authentication failures stop new source work. Large batches are not guaranteed to finish in one request.
+
+This release supports JSON responses. SSE requests return 422 before billing. Through MCP use `execute_endpoint`; through the Python skill supply `--allow-mutation`, an idempotency key and the full batch credit cap.

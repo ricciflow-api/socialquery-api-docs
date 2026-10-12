@@ -7656,7 +7656,7 @@
       "post": {
         "operationId": "post_youtube_transcripts",
         "summary": "YouTube Transcripts",
-        "description": "Submit the documented input body for YouTube Transcripts. Inspect the required fields and stated credit amount before sending a request. Check current availability with a bounded test.",
+        "description": "Fetch public captions for 1–100 bare YouTube video IDs in input order. Each row is ok, not_found, error or deferred. Reserve three credits per input row and refund every unsuccessful row. format=text joins source segments; format=segments preserves millisecond offsets and durations. language is the source-reported track name or null. JSON only; SSE is not implemented. Work that cannot start within the execution budget is deferred and unbilled. Retrying a batch with the same idempotency key replays it without new source work.",
         "x-credit-cost": 3,
         "x-launch-status": "beta",
         "parameters": [
@@ -7691,7 +7691,119 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Fetch public captions for 1–100 bare YouTube video IDs in input order. Each row is ok, not_found, error or deferred. Reserve three credits per input row and refund every unsuccessful row. format=text joins source segments; format=segments preserves millisecond offsets and durations. language is the source-reported track name or null. JSON only; SSE is not implemented. Work that cannot start within the execution budget is deferred and unbilled. Retrying a batch with the same idempotency key replays it without new source work.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "id",
+                                  "status",
+                                  "transcript",
+                                  "language",
+                                  "ext"
+                                ],
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "ok",
+                                      "not_found",
+                                      "error",
+                                      "deferred"
+                                    ]
+                                  },
+                                  "transcript": {
+                                    "oneOf": [
+                                      {
+                                        "type": "null"
+                                      },
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "required": [
+                                            "start_ms",
+                                            "duration_ms",
+                                            "text"
+                                          ],
+                                          "properties": {
+                                            "start_ms": {
+                                              "type": "number",
+                                              "minimum": 0
+                                            },
+                                            "duration_ms": {
+                                              "type": "number",
+                                              "minimum": 0
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "language": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "ext": {
+                                    "type": "object",
+                                    "properties": {
+                                      "reason": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "succeeded": {
+                              "type": "integer"
+                            },
+                            "format": {
+                              "type": "string",
+                              "enum": [
+                                "text",
+                                "segments"
+                              ]
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -7745,15 +7857,29 @@
                 "properties": {
                   "ids": {
                     "type": "array",
+                    "minItems": 1,
+                    "maxItems": 100,
                     "items": {
-                      "type": "string"
-                    }
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_-]{11}$"
+                    },
+                    "example": [
+                      "bjVIDXPP7Uk",
+                      "00000000000"
+                    ]
                   },
                   "language": {
-                    "type": "string"
+                    "type": "string",
+                    "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*$",
+                    "example": "en"
                   },
                   "format": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "text",
+                      "segments"
+                    ],
+                    "default": "text"
                   }
                 }
               }
@@ -7762,7 +7888,14 @@
         },
         "tags": [
           "YouTube"
-        ]
+        ],
+        "x-credit-cost-formula": "3 credits per successful row; reserve ids.length × 3 and refund not_found, error and deferred rows.",
+        "x-credit-pricing": {
+          "type": "per_successful_input",
+          "creditsPerItem": 3,
+          "arrayParameter": "ids",
+          "maxItems": 100
+        }
       }
     },
     "/youtube/video/sponsors": {
