@@ -16040,7 +16040,7 @@
       "get": {
         "operationId": "get_linkedin_profile_skills",
         "summary": "LinkedIn Profile Skills",
-        "description": "Use LinkedIn Profile Skills to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Names of skills exposed on the logged-out profile. Endorsements and skill-assessment status remain null. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16048,10 +16048,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
+            "example": "https://www.linkedin.com/in/andrewyng/",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical public HTTPS LinkedIn /in/ profile URL without query or fragment."
           },
           {
             "name": "page",
@@ -16060,7 +16061,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "Only page=1 is supported. The source returns one visible public section; deeper pages return 422."
           },
           {
             "name": "urn",
@@ -16068,7 +16070,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "cursor",
@@ -16076,7 +16079,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "Cache-Control",
@@ -16109,7 +16113,80 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Names of skills exposed on the logged-out profile. Endorsements and skill-assessment status remain null. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "skill": {
+                                    "type": "string"
+                                  },
+                                  "is_passed_skill_assessment": {
+                                    "type": "null"
+                                  },
+                                  "endorsements": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "enum": [
+                                false
+                              ]
+                            },
+                            "profile_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "apify"
+                              ]
+                            },
+                            "source_actor": {
+                              "type": "string",
+                              "enum": [
+                                "lergassy~linkedin-profile-scraper"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -16280,7 +16357,7 @@
       "get": {
         "operationId": "get_linkedin_profile_certifications",
         "summary": "LinkedIn Profile Certifications",
-        "description": "Use LinkedIn Profile Certifications to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public certification names, issuer labels, credential links and source display dates. Dates are not expanded into invented days; verification remains unknown. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16288,10 +16365,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
+            "example": "https://www.linkedin.com/in/dharmesh/",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical public HTTPS LinkedIn /in/ profile URL without query or fragment."
           },
           {
             "name": "page",
@@ -16300,7 +16378,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "Only page=1 is supported. The source returns one visible public section; deeper pages return 422."
           },
           {
             "name": "urn",
@@ -16308,7 +16387,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "cursor",
@@ -16316,7 +16396,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "Cache-Control",
@@ -16349,7 +16430,122 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public certification names, issuer labels, credential links and source display dates. Dates are not expanded into invented days; verification remains unknown. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "issuer": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "issued_at_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "expires_at_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "credential_id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "issuer_url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "logo_url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "verified": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "enum": [
+                                false
+                              ]
+                            },
+                            "profile_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "apify"
+                              ]
+                            },
+                            "source_actor": {
+                              "type": "string",
+                              "enum": [
+                                "lergassy~linkedin-profile-scraper"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -16400,7 +16596,7 @@
       "get": {
         "operationId": "get_linkedin_profile_publications",
         "summary": "LinkedIn Profile Publications",
-        "description": "Use LinkedIn Profile Publications to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public publication cards, descriptions, links and date labels. The source sometimes puts geography in its publisher field, so publisher remains null and the original label is retained in source_publisher_display. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16408,10 +16604,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
+            "example": "https://www.linkedin.com/in/dharmesh/",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical public HTTPS LinkedIn /in/ profile URL without query or fragment."
           },
           {
             "name": "page",
@@ -16420,7 +16617,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "Only page=1 is supported. The source returns one visible public section; deeper pages return 422."
           },
           {
             "name": "urn",
@@ -16428,7 +16626,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "cursor",
@@ -16436,7 +16635,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "Cache-Control",
@@ -16469,7 +16669,104 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public publication cards, descriptions, links and date labels. The source sometimes puts geography in its publisher field, so publisher remains null and the original label is retained in source_publisher_display. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "date_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "source_publisher_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "publisher": {
+                                    "type": "null"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "enum": [
+                                false
+                              ]
+                            },
+                            "profile_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "apify"
+                              ]
+                            },
+                            "source_actor": {
+                              "type": "string",
+                              "enum": [
+                                "lergassy~linkedin-profile-scraper"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -16640,7 +16937,7 @@
       "get": {
         "operationId": "get_linkedin_profile_recommendations",
         "summary": "LinkedIn Profile Recommendations",
-        "description": "Use LinkedIn Profile Recommendations to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public recommendations received, with text and the recommender’s profile link when exposed. Dates and URNs are unknown. Recommendations given are unavailable. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -16648,10 +16945,11 @@
             "name": "url",
             "in": "query",
             "required": true,
-            "example": "https://www.linkedin.com/in/williamhgates/",
+            "example": "https://www.linkedin.com/in/dharmesh/",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical public HTTPS LinkedIn /in/ profile URL without query or fragment."
           },
           {
             "name": "page",
@@ -16660,7 +16958,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1
-            }
+            },
+            "description": "Only page=1 is supported. The source returns one visible public section; deeper pages return 422."
           },
           {
             "name": "type",
@@ -16680,7 +16979,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "cursor",
@@ -16688,7 +16988,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the configured public source; returns 422 before the source call."
           },
           {
             "name": "Cache-Control",
@@ -16721,7 +17022,103 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public recommendations received, with text and the recommender’s profile link when exposed. Dates and URNs are unknown. Recommendations given are unavailable. Only the visible public section is returned; no complete history or deeper pagination. Empty means not exposed by this response, not none exist. Optional urn and cursor are unsupported.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "text": {
+                                    "type": "string"
+                                  },
+                                  "date": {
+                                    "type": "null"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "received"
+                                    ]
+                                  },
+                                  "recommender": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "urn": {
+                                        "type": "null"
+                                      },
+                                      "headline": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "type": "boolean",
+                              "enum": [
+                                false
+                              ]
+                            },
+                            "profile_url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "source": {
+                              "type": "string",
+                              "enum": [
+                                "apify"
+                              ]
+                            },
+                            "source_actor": {
+                              "type": "string",
+                              "enum": [
+                                "lergassy~linkedin-profile-scraper"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

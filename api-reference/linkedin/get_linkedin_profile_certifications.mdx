@@ -3,4 +3,10 @@ title: "LinkedIn Profile Certifications"
 openapi: "GET /linkedin/profile/certifications"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public certification names, issuer labels, credential links and source display dates. Dates are not expanded into invented days; verification remains unknown.
+
+This reads one visible public profile section. It is not a complete history: `complete` is false, `total` and `next_cursor` are null. An empty section means the source did not expose entries, not that the member has none. Only `page=1` is supported; `urn`, `cursor` and deeper pages return 422 before an upstream request. Returned profile identity must match the requested URL.
+
+A fresh nonempty successful call costs **5 SocialQuery credits**. Cache hits, successful idempotent replays and empty results cost zero. Failed requests are refunded. Use `X-Max-Credits: 5` to cap the charge.
+
+Source: [Apify public LinkedIn profile Actor](https://apify.com/lergassy/linkedin-profile-scraper), pinned build 0.1.58. Source access uses limited permissions with one profile, a 40-second execution timeout and a $0.01 run ceiling. Availability and public sections vary by member.
