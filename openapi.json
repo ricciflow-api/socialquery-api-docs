@@ -51084,7 +51084,7 @@
       "get": {
         "operationId": "get_finance_options",
         "summary": "Finance Options",
-        "description": "Use Finance Options to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "One complete current Yahoo-listed option expiry, with calls and puts flattened into option_contract records. Verifies the nearest chain and available expiries before fetching an explicit expiry; unlisted dates return a free empty list. Delayed quotes, not execution-grade data. Bounded to 10,000 contracts and 4 MiB; incomplete responses fail without charging.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -51095,15 +51095,18 @@
             "example": "AAPL",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Yahoo ticker symbol, case-insensitive. A colon exchange suffix is ignored; international Yahoo suffixes are preserved. One symbol per call."
           },
           {
             "name": "expiry",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Real YYYY-MM-DD date. Defaults to the source’s nearest listed expiry. A date absent from the corroborated current available-expiry list returns an empty list."
           },
           {
             "name": "Cache-Control",
@@ -51136,7 +51139,219 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "One complete current Yahoo-listed option expiry, with calls and puts flattened into option_contract records. Verifies the nearest chain and available expiries before fetching an explicit expiry; unlisted dates return a free empty list. Delayed quotes, not execution-grade data. Bounded to 10,000 contracts and 4 MiB; incomplete responses fail without charging.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 10000,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "option_contract": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "symbol": {
+                                        "type": "string"
+                                      },
+                                      "contract_symbol": {
+                                        "type": "string"
+                                      },
+                                      "expiry": {
+                                        "type": "string"
+                                      },
+                                      "contract_size": {
+                                        "type": "string"
+                                      },
+                                      "currency": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "call",
+                                          "put"
+                                        ]
+                                      },
+                                      "strike": {
+                                        "type": "number",
+                                        "minimum": 0
+                                      },
+                                      "last_price": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "bid": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "ask": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "change": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "percent_change": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "implied_volatility": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "volume": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "open_interest": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "in_the_money": {
+                                        "type": "boolean"
+                                      },
+                                      "last_trade_date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "symbol",
+                                      "contract_symbol",
+                                      "expiry",
+                                      "contract_size",
+                                      "currency",
+                                      "type",
+                                      "strike",
+                                      "last_price",
+                                      "bid",
+                                      "ask",
+                                      "change",
+                                      "percent_change",
+                                      "implied_volatility",
+                                      "volume",
+                                      "open_interest",
+                                      "in_the_money",
+                                      "last_trade_date"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "option_contract"
+                                ]
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "symbol": {
+                              "type": "string"
+                            },
+                            "expiry": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "available_expiries": {
+                              "type": "array",
+                              "maxItems": 250,
+                              "items": {
+                                "type": "string",
+                                "format": "date"
+                              }
+                            },
+                            "underlying_price": {
+                              "type": "number",
+                              "minimum": 0
+                            },
+                            "underlying_currency": {
+                              "type": "string"
+                            },
+                            "underlying_quote_time": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "underlying_delay_minutes": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "dropped",
+                            "symbol",
+                            "expiry",
+                            "available_expiries",
+                            "underlying_price",
+                            "underlying_currency",
+                            "underlying_quote_time",
+                            "underlying_delay_minutes",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

@@ -1,6 +1,18 @@
 ---
-title: "Finance Options"
+title: "Option Chains"
 openapi: "GET /finance/options"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get one complete current Yahoo-listed expiry as a flat list of `option_contract` records: calls followed by puts, with the source order retained within each side. No strikes are silently filtered or sampled. Each record preserves the contract symbol, strike, expiry, bid/ask, last price, price changes, volume, open interest, implied volatility, moneyness, contract-size classification, currency and last-trade time. Missing optional market values stay `null`; source zero values stay zero.
+
+`keyword` is one Yahoo ticker symbol, case-insensitive. For `AAPL:US`, the colon suffix is ignored; Yahoo symbols such as `BRK-B` or `7203.T` retain their own suffixes. `expiry` is an optional real `YYYY-MM-DD` date. Without it, the source's nearest listed expiry is used.
+
+The first source read checks the nearest complete chain and its available-expiry list. An explicit listed date uses a second read when necessary. If the date is not listed, the response contains an empty list and costs zero credits. A failed or partial source response is never interpreted as an empty chain. Unknown instruments or instruments without corroborated option data can fail without charge; no unrelated symbol is substituted.
+
+`total` and `returned_count` count the returned contracts for that expiry. `available_expiries` lists the source's current expiry choices. No cursor is needed because one successful response contains the entire selected chain. The adapter allows up to **10,000 contracts**, 250 expiry choices and a **4 MiB source response**. Larger, malformed or partial payloads fail without charging. Contract expiry, call/put marker, strike encoding and duplicate identities are validated. Adjusted native contract roots are preserved after corporate actions.
+
+Quotes are delayed, commonly by about 15 minutes, and individual contracts can have stale last trades. `underlying_quote_time` and `underlying_delay_minutes` describe the underlying stock quote; they are not a guaranteed timestamp or delay for each option. This is not historical chain reconstruction or an execution-grade market feed.
+
+The bounded provider runs use the existing configured allowance, pinned build, limited permissions, a 20-second run timeout and 25-second request deadline each. At most two runs and ten source runs/minute are allowed. No Yahoo account cookies or user credentials are required.
+
+A fresh nonempty response uses the catalog price shown above. Empty results, errors, cache hits and identical successful replays cost zero. Set `X-Max-Credits` to the listed credit price before calling.
