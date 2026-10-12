@@ -3,4 +3,6 @@ title: "Threads Post Comments"
 openapi: "GET /threads/post/comments"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Return a public Threads post reply-preview window from ScrapeCreators. Replies are normalized into comment wrappers; related posts and author continuations are excluded. Returns at most 25 rows, often fewer, with no cursor. The source-reported reply count describes the post, not the size or completeness of this window. Deeper reads above 25 return 422 without a credit charge. Date filters apply only to the returned source window; undated rows are retained. Exact parent-comment IDs are unknown and remain null.
+
+One uncached successful call costs **1 credit**; failed calls and cache hits cost zero. Disabled like counts stay null. `trim=true` omits reply counts while preserving the normalized identifiers and author data. Unknown sentiment remains null. Full conversation retrieval and the deeper 50-reply mode are not yet supported.

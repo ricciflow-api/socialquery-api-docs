@@ -19742,7 +19742,7 @@
       "get": {
         "operationId": "get_threads_post_comments",
         "summary": "Threads Post Comments",
-        "description": "Inspect discussion records with Threads Post Comments. Supply the accepted resource identifier and follow the operation's paging rules. Returned records may represent only part of the discussion.",
+        "description": "Return a public Threads post reply-preview window from ScrapeCreators. Replies are normalized into comment wrappers; related posts and author continuations are excluded. Returns at most 25 rows, often fewer, with no cursor. The source-reported reply count describes the post, not the size or completeness of this window. Deeper reads above 25 return 422 without a credit charge. Date filters apply only to the returned source window; undated rows are retained. Exact parent-comment IDs are unknown and remain null.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -19761,18 +19761,20 @@
             "required": false,
             "schema": {
               "type": "boolean"
-            }
+            },
+            "description": "When true, omit reply counts from the normalized comment records. IDs, text, author, likes and timestamps remain. No media or raw provider records are returned in either mode."
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
-            "example": 50,
+            "example": 25,
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
-            }
+              "maximum": 25
+            },
+            "description": "Maximum preview rows to return, 1–25. Larger requests fail without charging."
           },
           {
             "name": "since",
@@ -19780,7 +19782,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Filter only this preview window by YYYY-MM-DD or ISO timestamp with an explicit timezone. Date-only until includes the whole UTC day. Undated rows are kept. No archive traversal or alias parameters are supported."
           },
           {
             "name": "until",
@@ -19788,7 +19791,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Filter only this preview window by YYYY-MM-DD or ISO timestamp with an explicit timezone. Date-only until includes the whole UTC day. Undated rows are kept. No archive traversal or alias parameters are supported."
           },
           {
             "name": "Cache-Control",
@@ -19811,7 +19815,185 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return a public Threads post reply-preview window from ScrapeCreators. Replies are normalized into comment wrappers; related posts and author continuations are excluded. Returns at most 25 rows, often fewer, with no cursor. The source-reported reply count describes the post, not the size or completeness of this window. Deeper reads above 25 return 422 without a credit charge. Date filters apply only to the returned source window; undated rows are retained. Exact parent-comment IDs are unknown and remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 25,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "comment": {
+                                    "type": "object",
+                                    "required": [
+                                      "id",
+                                      "post_id",
+                                      "parent_id",
+                                      "text",
+                                      "author",
+                                      "engagement",
+                                      "published_at"
+                                    ],
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "post_id": {
+                                        "type": "string"
+                                      },
+                                      "parent_id": {
+                                        "type": "null"
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "text": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "username": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "replies": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "source_shortcode": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "sentiment": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 25
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "post_id": {
+                              "type": "string"
+                            },
+                            "source_reported_replies": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
