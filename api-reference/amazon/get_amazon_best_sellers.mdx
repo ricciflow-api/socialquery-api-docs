@@ -1,6 +1,8 @@
 ---
-title: "Amazon Best Sellers"
+title: "Amazon Best Sellers and New Releases"
 openapi: "GET /amazon/best-sellers"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Page 1 and page 2 are supported. Verified US pages returned 30 rows from each 50-rank window (ranks 1–30 and 51–80); this is partial board coverage. A cursor appears only when the source confirms another page, so use page=2 when the source total is unknown. Other list types are rejected with 422 and no net charge. A nonempty live page costs 1 credit; a successful empty page costs zero after the initial 1-credit hold is refunded. Prices preserve decimals; missing stock, rating counts and totals remain null. US boards have been checked live; other configured marketplaces still need production verification.
+
+The provider allowance is finite and has no automatic refill. Coverage remains in preview while remaining filters, markets and source limitations are verified.

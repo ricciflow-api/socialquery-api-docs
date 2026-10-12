@@ -1,6 +1,8 @@
 ---
-title: "TikTok Hashtag"
+title: "TikTok Hashtag Details"
 openapi: "GET /tiktok/hashtag"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read TikTok public hashtag metadata by name, with or without #. Lifetime views appear in engagement.views and tagged-video count in ext.video_count. A hashtag has no author or publication date. hashtag_id may corroborate a name lookup; ID-only lookup is not supported. Source identity and URLs are checked before returning data. Uses the US source; no regional selection. Costs 1 credit on a live success.
+
+The provider allowance is finite and has no automatic refill. Coverage remains in preview while remaining filters, markets and source limitations are verified.

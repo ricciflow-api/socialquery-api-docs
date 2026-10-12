@@ -3,4 +3,6 @@ title: "Amazon Deals"
 openapi: "GET /amazon/deals"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the first page of current Amazon deals. Products include source ASIN, title, sale/list prices, image, and promotion labels/percentages when supplied. The verified US page contained 30 deals. No stock, delivery, savings amount or pagination is inferred. Costs 1 credit for a live success. Other configured marketplaces still need production verification.
+
+The provider allowance is finite and has no automatic refill. Coverage remains in preview while remaining filters, markets and source limitations are verified.

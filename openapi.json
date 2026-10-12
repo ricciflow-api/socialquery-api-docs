@@ -27123,18 +27123,19 @@
       "get": {
         "operationId": "get_tiktok_hashtag",
         "summary": "TikTok Hashtag",
-        "description": "Use TikTok Hashtag to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read TikTok public hashtag metadata by name, with or without #. Lifetime views appear in engagement.views and tagged-video count in ext.video_count. A hashtag has no author or publication date. hashtag_id may corroborate a name lookup; ID-only lookup is not supported. Source identity and URLs are checked before returning data. Uses the US source; no regional selection. Costs 1 credit on a live success.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "hashtag",
             "in": "query",
-            "required": false,
-            "example": "kpop",
+            "required": true,
+            "example": "food",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Hashtag name, with or without a leading #."
           },
           {
             "name": "hashtag_id",
@@ -27142,7 +27143,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Optional numeric identity check alongside hashtag. ID-only lookup is not supported."
           },
           {
             "name": "Cache-Control",
@@ -27175,7 +27177,146 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read TikTok public hashtag metadata by name, with or without #. Lifetime views appear in engagement.views and tagged-video count in ext.video_count. A hashtag has no author or publication date. hashtag_id may corroborate a name lookup; ID-only lookup is not supported. Source identity and URLs are checked before returning data. Uses the US source; no regional selection. Costs 1 credit on a live success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "content": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "media_urls": {
+                                  "type": "null"
+                                },
+                                "thumbnail_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "duration_seconds": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "username": {
+                                  "type": "null"
+                                },
+                                "display_name": {
+                                  "type": "null"
+                                },
+                                "avatar_url": {
+                                  "type": "null"
+                                },
+                                "verified": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "engagement": {
+                              "type": "object",
+                              "properties": {
+                                "views": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ]
+                                },
+                                "likes": {
+                                  "type": "null"
+                                },
+                                "comments": {
+                                  "type": "null"
+                                },
+                                "shares": {
+                                  "type": "null"
+                                },
+                                "saves": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "flags": {
+                              "type": "object",
+                              "properties": {
+                                "nsfw": {
+                                  "type": "null"
+                                },
+                                "spoiler": {
+                                  "type": "null"
+                                },
+                                "pinned": {
+                                  "type": "null"
+                                },
+                                "deleted": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "published_at": {
+                              "type": "null"
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "title": {
+                                  "type": "string"
+                                },
+                                "hashtag": {
+                                  "type": "string"
+                                },
+                                "video_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ]
+                                },
+                                "is_commerce": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -45615,7 +45756,7 @@
       "get": {
         "operationId": "get_amazon_best_sellers",
         "summary": "Amazon Best Sellers",
-        "description": "Use Amazon Best Sellers to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Page 1 and page 2 are supported. Verified US pages returned 30 rows from each 50-rank window (ranks 1–30 and 51–80); this is partial board coverage. A cursor appears only when the source confirms another page, so use page=2 when the source total is unknown. Other list types are rejected with 422 and no net charge. A nonempty live page costs 1 credit; a successful empty page costs zero after the initial 1-credit hold is refunded. Prices preserve decimals; missing stock, rating counts and totals remain null. US boards have been checked live; other configured marketplaces still need production verification.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -45661,12 +45802,10 @@
               "type": "string",
               "enum": [
                 "BEST_SELLERS",
-                "NEW_RELEASES",
-                "MOVERS_AND_SHAKERS",
-                "MOST_WISHED_FOR",
-                "GIFT_IDEAS"
+                "NEW_RELEASES"
               ]
-            }
+            },
+            "description": "Supported source list type. Other reference-product list types remain unavailable."
           },
           {
             "name": "page",
@@ -45675,8 +45814,9 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
-            }
+              "maximum": 2
+            },
+            "description": "Source page 1 or 2; use page=2 if the source provides no next_cursor."
           },
           {
             "name": "cursor",
@@ -45684,7 +45824,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque next_cursor emitted only when the source confirms another page. Cannot be combined with page."
           },
           {
             "name": "Cache-Control",
@@ -45717,7 +45858,191 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read one Amazon BEST_SELLERS or NEW_RELEASES page for a department or department/node path. Page 1 and page 2 are supported. Verified US pages returned 30 rows from each 50-rank window (ranks 1–30 and 51–80); this is partial board coverage. A cursor appears only when the source confirms another page, so use page=2 when the source total is unknown. Other list types are rejected with 422 and no net charge. A nonempty live page costs 1 credit; a successful empty page costs zero after the initial 1-credit hold is refunded. Prices preserve decimals; missing stock, rating counts and totals remain null. US boards have been checked live; other configured marketplaces still need production verification.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "null"
+                                      },
+                                      "seller": {
+                                        "type": "null"
+                                      },
+                                      "brand": {
+                                        "type": "null"
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "currency": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      },
+                                      "reviews_count": {
+                                        "type": "null"
+                                      },
+                                      "features": {
+                                        "type": "null"
+                                      },
+                                      "specifications": {
+                                        "type": "null"
+                                      },
+                                      "variations": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "rank": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          },
+                                          "position": {
+                                            "type": "integer"
+                                          },
+                                          "list_type": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "promotion": {
+                                            "type": [
+                                              "object",
+                                              "null"
+                                            ],
+                                            "properties": {
+                                              "label": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "amount_off": {
+                                                "type": "null"
+                                              },
+                                              "percent_off": {
+                                                "type": [
+                                                  "number",
+                                                  "null"
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_page": {
+                              "type": "integer"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -45761,14 +46086,16 @@
         },
         "tags": [
           "Amazon"
-        ]
+        ],
+        "x-credit-cost-min": 0,
+        "x-credit-cost-formula": "Reserve 1 credit; charge 1 for a nonempty result and 0 for a successful empty result."
       }
     },
     "/amazon/deals": {
       "get": {
         "operationId": "get_amazon_deals",
         "summary": "Amazon Deals",
-        "description": "Use Amazon Deals to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the first page of current Amazon deals. Products include source ASIN, title, sale/list prices, image, and promotion labels/percentages when supplied. The verified US page contained 30 deals. No stock, delivery, savings amount or pagination is inferred. Costs 1 credit for a live success. Other configured marketplaces still need production verification.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -45827,7 +46154,191 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the first page of current Amazon deals. Products include source ASIN, title, sale/list prices, image, and promotion labels/percentages when supplied. The verified US page contained 30 deals. No stock, delivery, savings amount or pagination is inferred. Costs 1 credit for a live success. Other configured marketplaces still need production verification.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "null"
+                                      },
+                                      "seller": {
+                                        "type": "null"
+                                      },
+                                      "brand": {
+                                        "type": "null"
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "currency": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      },
+                                      "reviews_count": {
+                                        "type": "null"
+                                      },
+                                      "features": {
+                                        "type": "null"
+                                      },
+                                      "specifications": {
+                                        "type": "null"
+                                      },
+                                      "variations": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "rank": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          },
+                                          "position": {
+                                            "type": "integer"
+                                          },
+                                          "list_type": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "promotion": {
+                                            "type": [
+                                              "object",
+                                              "null"
+                                            ],
+                                            "properties": {
+                                              "label": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "amount_off": {
+                                                "type": "null"
+                                              },
+                                              "percent_off": {
+                                                "type": [
+                                                  "number",
+                                                  "null"
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_page": {
+                              "type": "integer"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -45878,7 +46389,7 @@
       "get": {
         "operationId": "get_amazon_seller",
         "summary": "Amazon Seller",
-        "description": "Use Amazon Seller to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read a public Amazon seller identity, storefront URL and business name. The source returned inconsistent aggregate rating/count fields during verification, so rating.average and rating.count are null. This is a seller profile, with no offer price or availability. Business addresses and private contact data are not included. Costs 1 credit for a live success. US seller identity has been checked live; other configured marketplaces still need production verification.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -45946,7 +46457,97 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read a public Amazon seller identity, storefront URL and business name. The source returned inconsistent aggregate rating/count fields during verification, so rating.average and rating.count are null. This is a seller profile, with no offer price or availability. Business addresses and private contact data are not included. Costs 1 credit for a live success. US seller identity has been checked live; other configured marketplaces still need production verification.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "domain": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "object",
+                              "properties": {
+                                "base": {
+                                  "type": "null"
+                                },
+                                "tax": {
+                                  "type": "null"
+                                },
+                                "shipping": {
+                                  "type": "null"
+                                },
+                                "total": {
+                                  "type": "null"
+                                },
+                                "currency": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "rating": {
+                              "type": "object",
+                              "properties": {
+                                "average": {
+                                  "type": "null"
+                                },
+                                "count": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "condition": {
+                              "type": "null"
+                            },
+                            "availability": {
+                              "type": "null"
+                            },
+                            "annotation": {
+                              "type": "null"
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "business_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              }
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

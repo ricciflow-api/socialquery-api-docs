@@ -1,6 +1,8 @@
 ---
-title: "Amazon Seller"
+title: "Amazon Seller Profile"
 openapi: "GET /amazon/seller"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read a public Amazon seller identity, storefront URL and business name. The source returned inconsistent aggregate rating/count fields during verification, so rating.average and rating.count are null. This is a seller profile, with no offer price or availability. Business addresses and private contact data are not included. Costs 1 credit for a live success. US seller identity has been checked live; other configured marketplaces still need production verification.
+
+The provider allowance is finite and has no automatic refill. Coverage remains in preview while remaining filters, markets and source limitations are verified.
