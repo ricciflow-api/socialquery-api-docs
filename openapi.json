@@ -61950,7 +61950,7 @@
       "get": {
         "operationId": "get_home_depot_stores",
         "summary": "Home Depot Stores",
-        "description": "Use Home Depot Stores to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns up to 20 Home Depot stores near a five-digit US ZIP code, ordered by source distance. Preserves four-digit store IDs, name, address, phone, coordinates, store type, distance in miles and seven days of local opening hours. Uses the site's anonymous native store search, not its default-store page cache. This is a bounded nearest-store window, not an exhaustive directory.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -61960,8 +61960,10 @@
             "required": true,
             "example": "95032",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{5}$"
+            },
+            "description": "Five-digit US ZIP code. Leading zeroes are preserved; no city, radius or pagination input is supported."
           },
           {
             "name": "Cache-Control",
@@ -61994,7 +61996,168 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns up to 20 Home Depot stores near a five-digit US ZIP code, ordered by source distance. Preserves four-digit store IDs, name, address, phone, coordinates, store type, distance in miles and seven days of local opening hours. Uses the site's anonymous native store search, not its default-store page cache. This is a bounded nearest-store window, not an exhaustive directory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 20,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "place": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "category": {
+                                        "type": "string"
+                                      },
+                                      "address": {
+                                        "type": "string"
+                                      },
+                                      "phone": {
+                                        "type": "string"
+                                      },
+                                      "latitude": {
+                                        "type": "number"
+                                      },
+                                      "longitude": {
+                                        "type": "number"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "street_address": {
+                                            "type": "string"
+                                          },
+                                          "city": {
+                                            "type": "string"
+                                          },
+                                          "state": {
+                                            "type": "string"
+                                          },
+                                          "postcode": {
+                                            "type": "string"
+                                          },
+                                          "country": {
+                                            "const": "US"
+                                          },
+                                          "distance_miles": {
+                                            "type": "number"
+                                          },
+                                          "store_type": {
+                                            "type": "string"
+                                          },
+                                          "hours": {
+                                            "type": "array",
+                                            "minItems": 7,
+                                            "maxItems": 7,
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "day": {
+                                                  "type": "string"
+                                                },
+                                                "open": {
+                                                  "type": "string"
+                                                },
+                                                "close": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "day",
+                                                "open",
+                                                "close"
+                                              ]
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "street_address",
+                                          "city",
+                                          "state",
+                                          "postcode",
+                                          "country",
+                                          "distance_miles",
+                                          "store_type",
+                                          "hours"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "url",
+                                      "category",
+                                      "address",
+                                      "phone",
+                                      "latitude",
+                                      "longitude",
+                                      "ext"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "place"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "limit": {
+                              "const": 20
+                            },
+                            "source_window_full": {
+                              "type": "boolean"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "query",
+                            "source",
+                            "limit",
+                            "source_window_full",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

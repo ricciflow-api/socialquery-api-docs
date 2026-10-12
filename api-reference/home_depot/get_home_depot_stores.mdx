@@ -3,4 +3,10 @@ title: "Home Depot Stores"
 openapi: "GET /home_depot/stores"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Supply a five-digit US ZIP code as `query`, for example `94040` or `10001`. The response contains the native nearest-store window of up to 20 records in increasing source distance order. There is no pagination cursor or exhaustive total. `source_window_full: true` means the 20-record window was filled.
+
+`place.id` is the retailer's four-digit store ID, including leading zeroes such as `0640`. Records include names, native store-page URLs, full addresses, phone numbers, coordinates, `ext.distance_miles`, `ext.store_type` and seven entries in `ext.hours`. Hour strings use local 24-hour time as published by the source; they do not establish current open status, holiday exceptions or live inventory.
+
+The provider calls Home Depot's anonymous native store search from the public locator page with customer credentials omitted. The separately embedded default-store cache is ignored because it can disagree with the requested ZIP. Requests and responses must match the exact source URL and ZIP; malformed or incomplete records fail without a net charge.
+
+Each fresh request costs **1 SocialQuery credit** and uses one basic Firecrawl request within its configured allowance. A source-confirmed missing ZIP returns `404 NOT_FOUND` without a net charge. Cache hits and successful idempotent replays are free. Unsupported filters return validation errors.
