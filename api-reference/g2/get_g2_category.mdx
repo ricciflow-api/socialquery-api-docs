@@ -1,6 +1,14 @@
 ---
-title: "G2 Category"
+title: "G2 Category Products"
 openapi: "GET /g2/category"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a G2 `category` slug, such as `marketing-automation`. `sort` accepts `g2-score` (default), `popularity` or `satisfaction`, using G2's corresponding native order. No numeric G2 Score is inferred.
+
+`items` contains source list positions and public product names, slugs, URLs, operating systems and aggregate ratings. A product with no published aggregate rating has `rating: null`; that is not a claim of zero reviews. `returned_count` counts this page, while `total` remains null because the exact catalog total is unavailable.
+
+To continue, send `next_cursor` as `cursor` with the same category and sort. Alternatively use `page`, from 1 through 100. The adapter checks the source's active page, selected sort and Next link. Changed cursor filters are rejected. Ranking changes can repeat or move products between pages.
+
+`source_has_more` indicates a source Next link. At the 100-page ceiling, the response sets `truncated: true` and returns no further cursor if more source pages exist. A natural last page has `next_cursor: null`, `source_has_more: false` and `truncated: false`.
+
+Each fresh request uses one basic Firecrawl fetch of the exact G2 page. Failed or inconsistent pages are not silently converted to empty successes. Successful fresh requests use the documented SocialQuery price; cache hits and successful idempotent replays are free.
