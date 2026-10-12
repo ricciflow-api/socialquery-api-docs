@@ -4962,7 +4962,7 @@
       "get": {
         "operationId": "get_tiktok_post_comments",
         "summary": "TikTok Post Comments",
-        "description": "Inspect discussion records with TikTok Post Comments. Supply the accepted resource identifier and follow the operation's paging rules. Returned records may represent only part of the discussion.",
+        "description": "Current public comment window from a canonical post URL. One provider page per request, at most three pages or 200 remembered IDs. Instagram supports top (small non-paginated window) and recent; TikTok retains native order and rejects explicit sort. Dates filter comment publication on the current page. Reply counts are retained but replies/enrichments/page scanning are not implemented. Trial capacity is capped and ends October 19, 2026 UTC; unsupported parameters and source failures do not incur a net SocialQuery charge.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -5137,7 +5137,185 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Normalized public comment page with explicit continuation and truncation state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "comment": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "post_id": {
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "username",
+                                          "display_name",
+                                          "verified"
+                                        ]
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "replies": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "likes",
+                                          "replies"
+                                        ]
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "parent_comment_id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "replies": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "post_id",
+                                      "text",
+                                      "author",
+                                      "engagement",
+                                      "published_at",
+                                      "parent_comment_id",
+                                      "replies"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "comment"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_has_more": {
+                              "type": "boolean"
+                            },
+                            "truncated": {
+                              "type": "boolean"
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 3
+                            },
+                            "sort": {
+                              "type": "string",
+                              "enum": [
+                                "top",
+                                "recent",
+                                "native"
+                              ]
+                            },
+                            "post_id": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "source_has_more",
+                            "truncated",
+                            "page",
+                            "sort",
+                            "post_id",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -6529,7 +6707,7 @@
       "get": {
         "operationId": "get_instagram_post_comments",
         "summary": "Instagram Post Comments",
-        "description": "Inspect discussion records with Instagram Post Comments. Supply the accepted resource identifier and follow the operation's paging rules. Returned records may represent only part of the discussion.",
+        "description": "Current public comment window from a canonical post URL. One provider page per request, at most three pages or 200 remembered IDs. Instagram supports top (small non-paginated window) and recent; TikTok retains native order and rejects explicit sort. Dates filter comment publication on the current page. Reply counts are retained but replies/enrichments/page scanning are not implemented. Trial capacity is capped and ends October 19, 2026 UTC; unsupported parameters and source failures do not incur a net SocialQuery charge.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -6704,7 +6882,185 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Normalized public comment page with explicit continuation and truncation state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "comment": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "post_id": {
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "username",
+                                          "display_name",
+                                          "verified"
+                                        ]
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "replies": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "likes",
+                                          "replies"
+                                        ]
+                                      },
+                                      "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                      },
+                                      "parent_comment_id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "replies": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "post_id",
+                                      "text",
+                                      "author",
+                                      "engagement",
+                                      "published_at",
+                                      "parent_comment_id",
+                                      "replies"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "comment"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source_has_more": {
+                              "type": "boolean"
+                            },
+                            "truncated": {
+                              "type": "boolean"
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 3
+                            },
+                            "sort": {
+                              "type": "string",
+                              "enum": [
+                                "top",
+                                "recent",
+                                "native"
+                              ]
+                            },
+                            "post_id": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "source_has_more",
+                            "truncated",
+                            "page",
+                            "sort",
+                            "post_id",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

@@ -3,4 +3,14 @@ title: "Instagram Post Comments"
 openapi: "GET /instagram/post/comments"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a canonical public post `url`. `sort=top` (default) returns a small non-paginated popular-comment window. Use `sort=recent` for source pagination.
+
+Each response contains one source page in `items[].comment`, including the comment ID, post ID, author, text, publication time and available like/reply counts. Missing values are null, including reply bodies: a reply count does not mean replies were fetched.
+
+Return `next_cursor` unchanged with the same URL, sort and date filters to continue. Cursors are bound to those inputs and deduplicate earlier pages. The current adapter allows at most three pages or 200 remembered IDs. If more source data remains at that boundary, `truncated` and `source_has_more` are true and `next_cursor` is null. A missing cursor alone does not establish that every historical comment was retrieved.
+
+`since` and `until` accept inclusive YYYY-MM-DD comment-publication dates. They filter the current source page; a filtered empty page can still have a cursor. Enrichments, reply expansion, classification and `scan_pages` are unavailable and return 422. This is a changing public window, not a complete archive.
+
+<Note>The EnsembleData trial shares 50 provider units per rolling day and stops October 19, 2026 UTC. Failed reservations block source calls. Instagram reserves four units per page, including a fresh shortcode-to-media identity check; TikTok reserves one. These provider units are separate from SocialQuery's documented customer credit price. No paid source plan or automatic renewal is enabled.</Note>
+
+Fresh successful pages use the documented customer credit price; cached responses and successful idempotent replays are free. Malformed or mismatched source responses fail without a net customer charge.
