@@ -67296,7 +67296,7 @@
       "get": {
         "operationId": "get_hm_search_suggestions",
         "summary": "Hm Search Suggestions",
-        "description": "Find records through Hm Search Suggestions using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Read H&M's current anonymous phrase and content suggestions for a query and storefront locale. Native source order; no customer history, popularity metrics, product results or pagination. Empty matches are valid; blocked queries return 404 without a net credit charge.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -67304,9 +67304,11 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "tshirt",
+            "example": "dress",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -67314,8 +67316,11 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-zA-Z]{2}_[a-zA-Z]{2}$",
+              "default": "en_us"
+            },
+            "description": "H&M storefront locale, for example en_us or de_de."
           },
           {
             "name": "Cache-Control",
@@ -67348,7 +67353,84 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read H&M's current anonymous phrase and content suggestions for a query and storefront locale. Native source order; no customer history, popularity metrics, product results or pagination. Empty matches are valid; blocked queries return 404 without a net credit charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "type": "string"
+                            },
+                            "language": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "phrase",
+                                      "content"
+                                    ]
+                                  },
+                                  "text": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "text",
+                                  "url"
+                                ]
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "query",
+                            "language",
+                            "items",
+                            "total",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -68138,7 +68220,7 @@
       "get": {
         "operationId": "get_hm_product_suppliers",
         "summary": "Hm Product Suppliers",
-        "description": "Use Hm Product Suppliers to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read H&M’s published global supplier/factory list for a ten-digit article code. Preserves country, supplier and factory identity, business addresses and source-text worker ranges. This does not identify an individual item’s batch or exact factory, and entries may retain last-known information. Uses the public supplier-details service with its PDH fallback for en_us. An absent supplier list returns 404 without net SocialQuery charge. Direct transport can fall back to one fresh basic Firecrawl scrape of the same public JSON service.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -68148,16 +68230,21 @@
             "required": true,
             "example": "0963662139",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[0-9]{10}$"
+            },
+            "description": "Ten-digit article code from productpage.<article>.html, preserving leading zeros."
           },
           {
             "name": "language",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-zA-Z]{2}_[a-zA-Z]{2}$",
+              "default": "en_us"
+            },
+            "description": "Locale requested from H&M. The locale-agnostic PDH fallback is used only for en_us."
           },
           {
             "name": "Cache-Control",
@@ -68190,7 +68277,146 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read H&M’s published global supplier/factory list for a ten-digit article code. Preserves country, supplier and factory identity, business addresses and source-text worker ranges. This does not identify an individual item’s batch or exact factory, and entries may retain last-known information. Uses the public supplier-details service with its PDH fallback for en_us. An absent supplier list returns 404 without net SocialQuery charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product_id": {
+                              "type": "string"
+                            },
+                            "language": {
+                              "type": "string"
+                            },
+                            "countries": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "suppliers": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "factories": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "address": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "workers_range": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "name",
+                                              "address",
+                                              "workers_range"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name",
+                                        "factories"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "suppliers"
+                                ]
+                              }
+                            },
+                            "country_count": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "supplier_count": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "factory_count": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "sources_attempted": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "transport": {
+                              "enum": [
+                                "direct",
+                                "firecrawl_basic"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "product_id",
+                            "language",
+                            "countries",
+                            "country_count",
+                            "supplier_count",
+                            "factory_count",
+                            "source",
+                            "sources_attempted",
+                            "coverage_note",
+                            "transport"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

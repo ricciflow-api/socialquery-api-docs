@@ -1,6 +1,12 @@
 ---
-title: "Hm Search Suggestions"
+title: "H&M Search Suggestions"
 openapi: "GET /hm/search/suggestions"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Fetch H&M's current anonymous search suggestions. Pass a nonempty `query` up to 200 characters; `language` defaults to `en_us` and accepts storefront locales such as `de_de`.
+
+`items` preserves the source's phrase order followed by related content. Each item has `type`, `text` and `url`. Phrase suggestions have no source link, so their `url` is null. Content links point to H&M. Exact duplicate entries are removed. `total` counts the suggestions returned; it is not a count of matching products or searches. `next_cursor` is always null.
+
+No customer account, cookies or search history are used. The adapter calls the anonymous suggestion service used by H&M's public website. It does not synthesize suggestions from product search results, and it does not supply popularity scores, product inventory or autocomplete pagination.
+
+An unmatched query may return an empty list. A source-blocked query returns 404 without a net SocialQuery credit charge. A fresh successful request uses the documented price; cached responses and successful idempotent replays are free. Suggestions can change over time and between storefront locales.

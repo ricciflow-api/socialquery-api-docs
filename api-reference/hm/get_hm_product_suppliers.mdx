@@ -1,6 +1,14 @@
 ---
-title: "Hm Product Suppliers"
+title: "H&M Product Suppliers"
 openapi: "GET /hm/product/suppliers"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read H&M's published supplier and factory list for an article. Pass the ten-digit code from the product page as `product_id`, preserving leading zeros, for example `0963662139`. A seven-digit product-family code is not accepted. `language` defaults to `en_us`.
+
+`countries[].suppliers[].factories[]` preserves the source hierarchy and IDs. Factories include their published business address and `workers_range`, retained as source text. A range such as `1001-1500` is not an exact employee count. Country, supplier and factory counts describe entries in the response, not distinct organizations across countries.
+
+The list covers factories that made this article globally. It does not identify which factory made an individual item, its batch, or its label country. H&M says some entries can retain the last information from a past supplier relationship. Proper names and addresses are returned as the source supplies them.
+
+The adapter calls the public supplier-details service used by H&M's product UI. For `en_us`, it can use the UI's PDH fallback after a transport failure or primary 403/5xx. Missing lists and inconsistent data are not silently retried as successful empty results. `source` identifies the service that responded; `sources_attempted` records the attempted URLs. If direct requests fail in production, the route uses the existing Firecrawl provider for one fresh basic scrape of the same JSON service. `transport` identifies `direct` or `firecrawl_basic`. Firecrawl metadata must identify that exact URL and a successful JSON response; the same hierarchy validation applies. No new provider credential is needed.
+
+An absent published list returns 404 without a net SocialQuery credit charge. Fresh successful requests use the documented credit price; cached responses and successful idempotent replays are free. This endpoint does not provide inventory, exact headcount or a guarantee of a current supplier relationship.
