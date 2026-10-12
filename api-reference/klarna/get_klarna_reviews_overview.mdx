@@ -1,6 +1,16 @@
 ---
-title: "Klarna Reviews Overview"
+title: "Klarna Review Overview"
 openapi: "GET /klarna/reviews/overview"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native regional review aggregates and bounded review examples. `score_count` counts ratings; `user_review_count` and `pro_review_count` count reviews, which can include unrated entries. Those totals must not be treated as interchangeable. Each score-distribution item contains a star level and native count. A source-confirmed unrated region can return empty distribution arrays; no zero-filled distribution is fabricated.
+
+`user_reviews`, `pro_reviews` and `customer_reviews` remain separate. The source is asked for up to three user and three professional examples; its native customer sample is retained when present. Each example keeps date, language, country, publisher, native score/scale, excerpt, title, author, product label, pros/cons and source link when provided. Examples can span countries or variants grouped by Klarna; a regional lookup is not a claim that every example was written in that country or for an identical variant. Source links are metadata and are never followed.
+
+`sample_count` counts examples actually returned. Each section retains `has_next`, `next_batch_id` and `source_section` as native metadata. This overview does not retrieve the full review corpus or accept pagination/labeling parameters. `has_ratings_or_reviews: false` indicates an independently verified product with an explicitly empty regional review response; it costs zero credits.
+
+Supply `product_id` or a regional HTTPS `www.klarna.com` shopping product URL. If both are supplied, their IDs must match. The URL region must match `region`; URLs are parsed and never followed. A separate native product lookup confirms identity before fetching insights. A source-confirmed missing product returns 404.
+
+All 13 catalog regions are supported. UK, Swedish and Danish products retain native legacy source paths with null absolute URLs. Source grouping can differ by region. No customer account or personalized data is accessed.
+
+A fresh nonempty result costs **5 credits**. Source-confirmed empty results, failures, cache hits and successful idempotent replays have no net charge. Calls use two anonymous source reads, share Klarna's 20-request/minute ceiling, and have a 25-second total timeout and 2 MiB limit per response.

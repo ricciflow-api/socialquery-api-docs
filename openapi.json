@@ -72783,7 +72783,7 @@
       "get": {
         "operationId": "get_klarna_reviews_overview",
         "summary": "Klarna Reviews Overview",
-        "description": "Use Klarna Reviews Overview to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Regional source review aggregates and bounded examples, after independent product identity validation. Rating counts and review counts are distinct; empty regional overview results have no net charge.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -72793,8 +72793,10 @@
             "required": false,
             "example": "3331931731",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "Native positive product ID. Supply this or a matching regional Klarna product URL; conflicting inputs fail."
           },
           {
             "name": "url",
@@ -72802,7 +72804,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "HTTPS www.klarna.com regional shopping product URL. Region must match the request, and any supplied product_id must match its ID. URLs are parsed, not followed."
           },
           {
             "name": "region",
@@ -72858,7 +72861,584 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Regional source review aggregates and bounded examples, after independent product identity validation. Rating counts and review counts are distinct; empty regional overview results have no net charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "source_path": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "source_path",
+                                "url"
+                              ]
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "score": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "score_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "user_review_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "pro_review_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "user_score_distribution": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "stars": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 5
+                                  },
+                                  "count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "required": [
+                                  "stars",
+                                  "count"
+                                ]
+                              }
+                            },
+                            "pro_score_distribution": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "stars": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 5
+                                  },
+                                  "count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  }
+                                },
+                                "required": [
+                                  "stars",
+                                  "count"
+                                ]
+                              }
+                            },
+                            "user_reviews": {
+                              "type": "object",
+                              "properties": {
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "country_code": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "domain": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "excerpt": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "native_type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "pros": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "cons": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "score": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "score_max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      }
+                                    },
+                                    "required": [
+                                      "date",
+                                      "language",
+                                      "country_code",
+                                      "source",
+                                      "domain",
+                                      "excerpt",
+                                      "author",
+                                      "product_name",
+                                      "native_type",
+                                      "title",
+                                      "pros",
+                                      "cons",
+                                      "source_url",
+                                      "score",
+                                      "score_max"
+                                    ]
+                                  }
+                                },
+                                "next_batch_id": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "has_next": {
+                                  "type": "boolean"
+                                },
+                                "source_section": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "items",
+                                "next_batch_id",
+                                "has_next",
+                                "source_section"
+                              ]
+                            },
+                            "pro_reviews": {
+                              "type": "object",
+                              "properties": {
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "country_code": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "domain": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "excerpt": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "native_type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "pros": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "cons": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "score": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "score_max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      }
+                                    },
+                                    "required": [
+                                      "date",
+                                      "language",
+                                      "country_code",
+                                      "source",
+                                      "domain",
+                                      "excerpt",
+                                      "author",
+                                      "product_name",
+                                      "native_type",
+                                      "title",
+                                      "pros",
+                                      "cons",
+                                      "source_url",
+                                      "score",
+                                      "score_max"
+                                    ]
+                                  }
+                                },
+                                "next_batch_id": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "has_next": {
+                                  "type": "boolean"
+                                },
+                                "source_section": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "items",
+                                "next_batch_id",
+                                "has_next",
+                                "source_section"
+                              ]
+                            },
+                            "customer_reviews": {
+                              "type": "object",
+                              "properties": {
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "country_code": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "domain": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "excerpt": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "product_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "native_type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "pros": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "cons": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "source_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "score": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "score_max": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      }
+                                    },
+                                    "required": [
+                                      "date",
+                                      "language",
+                                      "country_code",
+                                      "source",
+                                      "domain",
+                                      "excerpt",
+                                      "author",
+                                      "product_name",
+                                      "native_type",
+                                      "title",
+                                      "pros",
+                                      "cons",
+                                      "source_url",
+                                      "score",
+                                      "score_max"
+                                    ]
+                                  }
+                                },
+                                "next_batch_id": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "has_next": {
+                                  "type": "boolean"
+                                },
+                                "source_section": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "items",
+                                "next_batch_id",
+                                "has_next",
+                                "source_section"
+                              ]
+                            },
+                            "sample_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "has_ratings_or_reviews": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note",
+                            "score",
+                            "score_count",
+                            "user_review_count",
+                            "pro_review_count",
+                            "user_score_distribution",
+                            "pro_score_distribution",
+                            "user_reviews",
+                            "pro_reviews",
+                            "customer_reviews",
+                            "sample_count",
+                            "has_ratings_or_reviews"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -72915,7 +73495,7 @@
       "get": {
         "operationId": "get_klarna_product_price_history",
         "summary": "Klarna Product Price History",
-        "description": "Use Klarna Product Price History to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Native daily national-price history with independent regional product identity, source currency and extrema validation. Preserves native timestamps and offer metadata separately, without interpolating missing history.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -72925,8 +73505,10 @@
             "required": false,
             "example": "3331931731",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "Native positive product ID. Supply this or a matching regional Klarna product URL; conflicting inputs fail."
           },
           {
             "name": "url",
@@ -72934,7 +73516,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "HTTPS www.klarna.com regional shopping product URL. Region must match the request, and any supplied product_id must match its ID. URLs are parsed, not followed."
           },
           {
             "name": "region",
@@ -72969,8 +73552,10 @@
                 "ONE_MONTH",
                 "THREE_MONTHS",
                 "INFINITE_DAYS"
-              ]
-            }
+              ],
+              "default": "ONE_MONTH"
+            },
+            "description": "Native daily-history interval. ONE_MONTH is the default; THREE_MONTHS and INFINITE_DAYS request the corresponding source windows, without inventing earlier history."
           },
           {
             "name": "Cache-Control",
@@ -73003,7 +73588,169 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native daily national-price history with independent regional product identity, source currency and extrema validation. Preserves native timestamps and offer metadata separately, without interpolating missing history.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "source_path": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "title",
+                                "source_path",
+                                "url"
+                              ]
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "timestamp": {
+                                    "type": "string"
+                                  },
+                                  "source_offer_timestamp_epoch": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "price": {
+                                    "type": "number",
+                                    "minimum": 0
+                                  },
+                                  "merchant_id": {
+                                    "type": "string"
+                                  },
+                                  "merchant_name": {
+                                    "type": "string"
+                                  },
+                                  "offer_id": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "timestamp",
+                                  "source_offer_timestamp_epoch",
+                                  "price",
+                                  "merchant_id",
+                                  "merchant_name",
+                                  "offer_id"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "interval": {
+                              "type": "string",
+                              "enum": [
+                                "ONE_MONTH",
+                                "THREE_MONTHS",
+                                "INFINITE_DAYS"
+                              ]
+                            },
+                            "currency": {
+                              "type": "string"
+                            },
+                            "lowest": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "highest": {
+                              "type": [
+                                "number",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "merchants": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name"
+                                ]
+                              }
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note",
+                            "items",
+                            "returned_count",
+                            "interval",
+                            "currency",
+                            "lowest",
+                            "highest",
+                            "merchants",
+                            "next_cursor"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

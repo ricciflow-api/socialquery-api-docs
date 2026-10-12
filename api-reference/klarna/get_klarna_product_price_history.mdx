@@ -3,4 +3,16 @@ title: "Klarna Product Price History"
 openapi: "GET /klarna/product/price-history"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native daily national-price observations for a verified regional product. `interval` supports `ONE_MONTH` (default), `THREE_MONTHS` and `INFINITE_DAYS`. These are native source windows, not fixed local slices or a promise of a complete lifetime archive.
+
+Each point retains `timestamp`, `price`, merchant ID/name, offer ID and `source_offer_timestamp_epoch`. The daily timestamp includes the original source timezone offset. **The offer timestamp is separate metadata and is not the observation date**; it can repeat across several daily points. Missing dates are not interpolated.
+
+`lowest` and `highest` must match extrema of the returned points. Currency must match the requested region. Reordered or duplicate daily timestamps, mismatched identities and inconsistent extrema fail explicitly. The response is bounded to 10,000 daily points, with no fabricated cursor or silent truncation. `merchants` is native merchant metadata and may include merchants that have no observations in the selected interval.
+
+These are historical price observations, not verified sale transactions or live stock guarantees.
+
+Supply `product_id` or a regional HTTPS `www.klarna.com` shopping product URL. If both are supplied, their IDs must match. The URL region must match `region`; URLs are parsed and never followed. A separate native product lookup confirms identity before fetching insights. A source-confirmed missing product returns 404.
+
+All 13 catalog regions are supported. UK, Swedish and Danish products retain native legacy source paths with null absolute URLs. Source grouping can differ by region. No customer account or personalized data is accessed.
+
+A fresh nonempty result costs **5 credits**. Source-confirmed empty results, failures, cache hits and successful idempotent replays have no net charge. Calls use two anonymous source reads, share Klarna's 20-request/minute ceiling, and have a 25-second total timeout and 2 MiB limit per response.
