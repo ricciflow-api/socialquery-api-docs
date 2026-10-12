@@ -3,4 +3,8 @@ title: "LinkedIn Company Also Viewed"
 openapi: "GET /linkedin/company/also-viewed"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public related-company window. Use returned company URLs; numeric company IDs and follower counts are unavailable. No continuation is available.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.

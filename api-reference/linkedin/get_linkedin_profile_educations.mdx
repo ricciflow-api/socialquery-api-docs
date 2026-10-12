@@ -3,4 +3,8 @@ title: "LinkedIn Profile Educations"
 openapi: "GET /linkedin/profile/educations"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+One public education window with observed school names, URLs and years. Only page=1 is supported. Numeric school IDs, degrees and complete history are unavailable.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.

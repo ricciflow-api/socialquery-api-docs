@@ -3,4 +3,8 @@ title: "LinkedIn Profile With Posts"
 openapi: "GET /linkedin/profile/with-posts"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public profile, recent visible posts and public education in one call. Read background.summary for About text. Work experience and skills remain null because the source does not expose them. This is not a complete profile or post archive.
+
+A successful uncached call costs **10 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.

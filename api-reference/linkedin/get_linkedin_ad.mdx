@@ -3,4 +3,8 @@ title: "LinkedIn Ad"
 openapi: "GET /linkedin/ad"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public LinkedIn Ad Library detail. Campaign start date is exposed as published_at, not as a social-post publication timestamp. Impression ranges stay in post.ext.impressions_display; exact views remain null. Social reaction and comment counts are unavailable.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.

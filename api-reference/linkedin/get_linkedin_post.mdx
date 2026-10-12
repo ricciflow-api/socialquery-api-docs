@@ -3,4 +3,8 @@ title: "LinkedIn Post"
 openapi: "GET /linkedin/post"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Public LinkedIn activity post with observed text, author, dates, likes and comments. Only activity URLs are supported. Shares, reaction breakdowns and unavailable media fields remain null. Embedded comment previews are not a comment feed.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.

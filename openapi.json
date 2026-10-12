@@ -8673,7 +8673,7 @@
       "get": {
         "operationId": "get_linkedin_profile",
         "summary": "LinkedIn Profile",
-        "description": "Use LinkedIn Profile to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public LinkedIn profile identity, follower count and About summary. Headline, member ID, URN, connection count, verification and private status are unavailable when the public source omits them. Bio is not replaced by the About summary; read author.ext.summary.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -8707,7 +8707,221 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public LinkedIn profile identity, follower count and About summary. Headline, member ID, URN, connection count, verification and private status are unavailable when the public source omits them. Bio is not replaced by the About summary; read author.ext.summary.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "username": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "display_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "bio": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "location": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "external_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "joined_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "last_post_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "followers": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "following": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "posts_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "likes_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "verified": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "private": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "urn": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "member_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "company_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "summary": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "cover_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "headquarters": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count_display": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "followers_note": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "founded_year": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "industries": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "specialities": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -8751,14 +8965,15 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/company": {
       "get": {
         "operationId": "get_linkedin_company",
         "summary": "LinkedIn Company",
-        "description": "Use LinkedIn Company to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public company identity and About data. Company follower totals are withheld because the source count could not be corroborated. Unknown location details, funding and status flags are not invented.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -8792,7 +9007,221 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public company identity and About data. Company follower totals are withheld because the source count could not be corroborated. Unknown location details, funding and status flags are not invented.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "username": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "display_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "bio": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "location": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "external_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "joined_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "last_post_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "followers": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "following": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "posts_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "likes_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "verified": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "private": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "urn": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "member_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "company_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "summary": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "cover_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "headquarters": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count_display": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "followers_note": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "founded_year": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "industries": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "specialities": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -8836,7 +9265,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/company/by-domain": {
@@ -9963,7 +10393,7 @@
       "get": {
         "operationId": "get_linkedin_company_also_viewed",
         "summary": "LinkedIn Company Also Viewed",
-        "description": "Use LinkedIn Company Also Viewed to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public related-company window. Use returned company URLs; numeric company IDs and follower counts are unavailable. No continuation is available.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -10005,7 +10435,246 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public related-company window. Use returned company URLs; numeric company IDs and follower counts are unavailable. No continuation is available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "author": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "username": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "display_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "avatar_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "bio": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "location": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "external_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "joined_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "last_post_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "followers": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "following": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "posts_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "likes_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "verified": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "private": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "urn": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "member_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "company_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "summary": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "cover_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "headquarters": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "employee_count_display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "followers_note": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "employee_count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "founded_year": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "industries": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "specialities": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -10055,14 +10724,15 @@
         ],
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/company/employees-count": {
       "get": {
         "operationId": "get_linkedin_company_employees_count",
         "summary": "LinkedIn Company Employees Count",
-        "description": "Use LinkedIn Company Employees Count to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public company employee count for a numeric company_id. Location filtering and employee demographic breakdowns are unavailable; byGroup is null.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -10081,7 +10751,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
           },
           {
             "name": "Cache-Control",
@@ -10104,7 +10775,41 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public company employee count for a numeric company_id. Location filtering and employee demographic breakdowns are unavailable; byGroup is null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "byGroup": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -10148,7 +10853,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/profile/interests/schools": {
@@ -10884,7 +11590,7 @@
       "get": {
         "operationId": "get_linkedin_profile_with_posts",
         "summary": "LinkedIn Profile With Posts",
-        "description": "Use LinkedIn Profile With Posts to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public profile, recent visible posts and public education in one call. Read background.summary for About text. Work experience and skills remain null because the source does not expose them. This is not a complete profile or post archive.",
         "x-credit-cost": 10,
         "x-launch-status": "beta",
         "parameters": [
@@ -10918,7 +11624,500 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public profile, recent visible posts and public education in one call. Read background.summary for About text. Work experience and skills remain null because the source does not expose them. This is not a complete profile or post archive.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "username": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "display_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "avatar_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "bio": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "location": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "external_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "joined_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "last_post_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "followers": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "following": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "posts_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "likes_count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "verified": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "private": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "urn": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "member_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "company_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "summary": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "cover_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "headquarters": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count_display": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "followers_note": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "employee_count": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "founded_year": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "industries": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "specialities": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "posts": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "thumbnail_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "duration_seconds": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "comments": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "shares": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "saves": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "spoiler": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "pinned": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "deleted": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "activity_urn": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "content_urn": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "reaction_counts": {
+                                            "type": "null"
+                                          },
+                                          "author_followers": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "source_activity_type": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "content_category": {
+                                        "type": "null"
+                                      },
+                                      "estimated_reach": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "background": {
+                              "type": "object",
+                              "properties": {
+                                "summary": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "experiences": {
+                                  "type": "null"
+                                },
+                                "educations": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "null"
+                                      },
+                                      "school": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "degree": {
+                                        "type": "null"
+                                      },
+                                      "field_of_study": {
+                                        "type": "null"
+                                      },
+                                      "date": {
+                                        "type": "object",
+                                        "properties": {
+                                          "start": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "end": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "skills": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "source_window_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -10962,7 +12161,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 10 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/post/with-comments": {
@@ -11054,7 +12254,7 @@
       "get": {
         "operationId": "get_linkedin_post",
         "summary": "LinkedIn Post",
-        "description": "Use LinkedIn Post to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public LinkedIn activity post with observed text, author, dates, likes and comments. Only activity URLs are supported. Shares, reaction breakdowns and unavailable media fields remain null. Embedded comment previews are not a comment feed.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -11088,7 +12288,229 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public LinkedIn activity post with observed text, author, dates, likes and comments. Only activity URLs are supported. Shares, reaction breakdowns and unavailable media fields remain null. Embedded comment previews are not a comment feed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "post": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "text": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "media_urls": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "thumbnail_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "duration_seconds": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    }
+                                  }
+                                },
+                                "author": {
+                                  "type": "object",
+                                  "properties": {
+                                    "username": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "display_name": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "avatar_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "verified": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "engagement": {
+                                  "type": "object",
+                                  "properties": {
+                                    "views": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "likes": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "comments": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "shares": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "saves": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    }
+                                  }
+                                },
+                                "flags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "nsfw": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "spoiler": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "pinned": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "deleted": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "published_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "activity_urn": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "content_urn": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "reaction_counts": {
+                                      "type": "null"
+                                    },
+                                    "author_followers": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "source_activity_type": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "computed": {
+                              "type": "object",
+                              "properties": {
+                                "engagement_rate": {
+                                  "type": "null"
+                                },
+                                "language": {
+                                  "type": "null"
+                                },
+                                "content_category": {
+                                  "type": "null"
+                                },
+                                "estimated_reach": {
+                                  "type": "null"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -11132,7 +12554,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/search/people": {
@@ -11622,7 +13045,7 @@
       "get": {
         "operationId": "get_linkedin_profile_posts",
         "summary": "LinkedIn Profile Posts",
-        "description": "Use LinkedIn Profile Posts to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1\u201350, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -11642,8 +13065,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
-            }
+              "maximum": 50,
+              "default": 20
+            },
+            "description": "Truncate the visible source window; never fetches older posts."
           },
           {
             "name": "urn",
@@ -11651,7 +13076,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
           },
           {
             "name": "since",
@@ -11690,7 +13116,261 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "One bounded window of publicly visible recent posts, often six rows. Limit (1\u201350, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "thumbnail_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "duration_seconds": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "comments": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "shares": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "saves": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "spoiler": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "pinned": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "deleted": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "activity_urn": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "content_urn": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "reaction_counts": {
+                                            "type": "null"
+                                          },
+                                          "author_followers": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "source_activity_type": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "content_category": {
+                                        "type": "null"
+                                      },
+                                      "estimated_reach": {
+                                        "type": "null"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source_window_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -11734,7 +13414,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/profile/reactions": {
@@ -12399,7 +14080,7 @@
       "get": {
         "operationId": "get_linkedin_profile_educations",
         "summary": "LinkedIn Profile Educations",
-        "description": "Use LinkedIn Profile Educations to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "One public education window with observed school names, URLs and years. Only page=1 is supported. Numeric school IDs, degrees and complete history are unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -12418,7 +14099,8 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
+              "minimum": 1,
+              "maximum": 1
             }
           },
           {
@@ -12427,7 +14109,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
           },
           {
             "name": "cursor",
@@ -12435,7 +14118,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
           },
           {
             "name": "Cache-Control",
@@ -12458,7 +14142,91 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "One public education window with observed school names, URLs and years. Only page=1 is supported. Numeric school IDs, degrees and complete history are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "null"
+                                  },
+                                  "school": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "degree": {
+                                    "type": "null"
+                                  },
+                                  "field_of_study": {
+                                    "type": "null"
+                                  },
+                                  "date": {
+                                    "type": "object",
+                                    "properties": {
+                                      "start": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "end": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -12502,7 +14270,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/profile/skills": {
@@ -15084,7 +16853,7 @@
       "get": {
         "operationId": "get_linkedin_profile_stats",
         "summary": "LinkedIn Profile Stats",
-        "description": "Use LinkedIn Profile Stats to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public follower count and connection count when exposed. Unavailable connection counts remain null, not zero.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -15118,7 +16887,45 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public follower count and connection count when exposed. Unavailable connection counts remain null, not zero.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "follower_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "connection_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -15162,7 +16969,8 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/company/job-count": {
@@ -32420,7 +34228,7 @@
       "get": {
         "operationId": "get_linkedin_ad",
         "summary": "LinkedIn Ad",
-        "description": "Use LinkedIn Ad to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public LinkedIn Ad Library detail. Campaign start date is exposed as published_at, not as a social-post publication timestamp. Impression ranges stay in post.ext.impressions_display; exact views remain null. Social reaction and comment counts are unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -32454,7 +34262,372 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public LinkedIn Ad Library detail. Campaign start date is exposed as published_at, not as a social-post publication timestamp. Impression ranges stay in post.ext.impressions_display; exact views remain null. Social reaction and comment counts are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "post": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "text": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "media_urls": {
+                                      "type": [
+                                        "array",
+                                        "null"
+                                      ],
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "thumbnail_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "duration_seconds": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    }
+                                  }
+                                },
+                                "author": {
+                                  "type": "object",
+                                  "properties": {
+                                    "username": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "display_name": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "avatar_url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "verified": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "engagement": {
+                                  "type": "object",
+                                  "properties": {
+                                    "views": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "likes": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "comments": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "shares": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "saves": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    }
+                                  }
+                                },
+                                "flags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "nsfw": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "spoiler": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "pinned": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "deleted": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "published_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "url": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "description": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "headline": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "poster": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "adType": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "creativeType": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "advertiser": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "cta": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "adDuration": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "sponsoredMessageSender": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "image": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "video": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "organicVideo": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "preRollVideo": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "advertiserLinkedinPage": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "advertiserLogo": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "destinationUrl": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "landingPage": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "sponsoredMessageSenderAvatar": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "startDate": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "endDate": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "impressions_display": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "totalImpressions": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "carouselImages": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "impressionsByCountry": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "country": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "impressions": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "computed": {
+                              "type": "object",
+                              "properties": {
+                                "engagement_rate": {
+                                  "type": "null"
+                                },
+                                "language": {
+                                  "type": "null"
+                                },
+                                "content_category": {
+                                  "type": "null"
+                                },
+                                "estimated_reach": {
+                                  "type": "null"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -32498,14 +34671,15 @@
         },
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/ads/search": {
       "get": {
         "operationId": "get_linkedin_ads_search",
         "summary": "LinkedIn Ads Search",
-        "description": "Find records through LinkedIn Ads Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search the public LinkedIn Ad Library. Use company or keyword and optional country/date filters. Company matching follows source search relevance, not exact advertiser identity. Return the opaque next_cursor with identical filters for another page. Impression ranges remain display text, not exact counts.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -32532,7 +34706,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Currently unsupported by this public source; supplying this parameter returns 422."
           },
           {
             "name": "countries",
@@ -32572,7 +34747,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque svli1_ cursor, bound to unchanged company/keyword/country/date filters. Do not combine with paginationToken."
           },
           {
             "name": "Cache-Control",
@@ -32595,7 +34771,230 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search the public LinkedIn Ad Library. Use company or keyword and optional country/date filters. Company matching follows source search relevance, not exact advertiser identity. Return the opaque next_cursor with identical filters for another page. Impression ranges remain display text, not exact counts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "headline": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "poster": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "adType": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "creativeType": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "advertiser": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "cta": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "adDuration": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "sponsoredMessageSender": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "image": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "video": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "organicVideo": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "preRollVideo": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "advertiserLinkedinPage": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "advertiserLogo": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "destinationUrl": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "landingPage": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "sponsoredMessageSenderAvatar": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "startDate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "endDate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "impressions_display": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "totalImpressions": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "carouselImages": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "impressionsByCountry": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "country": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "impressions": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "total": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -32646,7 +35045,8 @@
         ],
         "tags": [
           "LinkedIn"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call, including each ad-search page. Failed requests and cache hits cost zero."
       }
     },
     "/linkedin/profile/posts/archive": {

@@ -3,4 +3,8 @@ title: "LinkedIn Ads Search"
 openapi: "GET /linkedin/ads/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search the public LinkedIn Ad Library. Use company or keyword and optional country/date filters. Company matching follows source search relevance, not exact advertiser identity. Return the opaque next_cursor with identical filters for another page. Impression ranges remain display text, not exact counts.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.

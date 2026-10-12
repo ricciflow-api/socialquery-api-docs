@@ -3,4 +3,8 @@ title: "LinkedIn Profile Posts"
 openapi: "GET /linkedin/profile/posts"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+One bounded window of publicly visible recent posts, often six rows. Limit (1–50, default 20) and date filters apply locally. No continuation is available. Fewer rows than limit does not mean complete history; engagement fields may be unavailable.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero.
+
+This adapter uses public incognito data. Missing fields remain null. Unsupported filters return 422 rather than being silently ignored. Source windows and unavailable metadata differ from richer signed-in datasets.
