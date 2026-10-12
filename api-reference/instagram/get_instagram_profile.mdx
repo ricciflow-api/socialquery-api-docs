@@ -3,4 +3,8 @@ title: "Instagram Profile"
 openapi: "GET /instagram/profile"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns a public profile by `handle` (plain username or canonical Instagram profile URL). The current trial source returns identity, display name, avatar, verification and privacy flags. Biography, followers, following and post count are **null** when unavailable; do not interpret null as zero.
+
+<Note>The current EnsembleData source is a limited trial through October 18, 2026 UTC, with 50 shared provider units per rolling day. A missing or exhausted allowance returns an availability error without a net SocialQuery credit charge. Other configured sources may be tried when eligible; provider availability and response detail can differ. This is not a guarantee of continuous trial capacity.</Note>
+
+Additional query parameters are rejected by this source. Cached results and idempotent replay use the standard zero-credit behavior. See the API response for credits used and request identity.

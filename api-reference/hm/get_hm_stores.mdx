@@ -1,6 +1,14 @@
 ---
-title: "Hm Stores"
+title: "H&M Stores"
 openapi: "GET /hm/stores"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Retrieve stores from [H&M's public locator](https://www2.hm.com/en_us/customer-service/shopping-at-hm/store-locator.html), using its first-party directory API. No additional provider key is required.
+
+Pass a two-letter country code in `query`, such as `us` or `de`. The optional `language` uses a storefront locale such as `en_us`, which is the default. Other query parameters are rejected. Country coverage follows the source; a market appearing in the countries endpoint does not guarantee a store listing.
+
+`items[].store` contains store identity, source country, address, phone, coordinates, lifecycle status, opening date, weekly hours, date-specific exceptions and departments. `OPEN` means an operating store; `TEMPCLOSED` means temporarily closed. Neither value means the store is open at this moment. Hours are local wall-clock times, not UTC. Missing optional fields remain null.
+
+Results are filtered to the requested country code. The US source also lists Puerto Rico; `query=us` excludes those records. `source_record_count` and `source_countries` disclose the original source scope. `total` and `returned_count` describe the filtered result, and `next_cursor` is null because the source returns one directory response.
+
+This endpoint does not report stock, store inventory, permanent closure history or real-time open status. Blocked, malformed or mismatched source responses fail without a net SocialQuery credit charge. Fresh successful calls cost the documented credits; cached responses and successful idempotent replays are free.

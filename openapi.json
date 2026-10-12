@@ -67043,7 +67043,7 @@
       "get": {
         "operationId": "get_hm_stores",
         "summary": "Hm Stores",
-        "description": "Use Hm Stores to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "H&M public store-locator directory, filtered to the requested two-letter country code. language is a storefront locale such as en_us (default). Preserves OPEN/TEMPCLOSED lifecycle status, local weekly hours, holiday exceptions and departments. The US source includes Puerto Rico; only US records are returned for query=us. No pagination, inventory, real-time open-now guarantee or closed-store history. Blocked or invalid source responses fail without a net SocialQuery charge.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -67053,16 +67053,21 @@
             "required": true,
             "example": "us",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-zA-Z]{2}$"
+            },
+            "description": "Two-letter country code, for example us or de."
           },
           {
             "name": "language",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-zA-Z]{2}_[a-zA-Z]{2}$",
+              "default": "en_us"
+            },
+            "description": "Storefront locale used by the public directory."
           },
           {
             "name": "Cache-Control",
@@ -67095,7 +67100,315 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "H&M public store-locator directory, filtered to the requested two-letter country code. language is a storefront locale such as en_us (default). Preserves OPEN/TEMPCLOSED lifecycle status, local weekly hours, holiday exceptions and departments. The US source includes Puerto Rico; only US records are returned for query=us. No pagination, inventory, real-time open-now guarantee or closed-store history. Blocked or invalid source responses fail without a net SocialQuery charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "store": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "country_code": {
+                                        "type": "string"
+                                      },
+                                      "country": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "city": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "phone": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "opening_date": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "status": {
+                                        "type": "string",
+                                        "enum": [
+                                          "OPEN",
+                                          "TEMPCLOSED"
+                                        ]
+                                      },
+                                      "latitude": {
+                                        "type": "number",
+                                        "minimum": -90,
+                                        "maximum": 90
+                                      },
+                                      "longitude": {
+                                        "type": "number",
+                                        "minimum": -180,
+                                        "maximum": 180
+                                      },
+                                      "address": {
+                                        "type": "object",
+                                        "properties": {
+                                          "line1": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "line2": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "postal_code": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "postal_city": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "language": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "line1",
+                                          "line2",
+                                          "postal_code",
+                                          "postal_city",
+                                          "language"
+                                        ]
+                                      },
+                                      "opening_hours": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "day": {
+                                              "type": "integer",
+                                              "minimum": 1,
+                                              "maximum": 7
+                                            },
+                                            "name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "opens": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "closes": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "day",
+                                            "name",
+                                            "opens",
+                                            "closes"
+                                          ]
+                                        }
+                                      },
+                                      "opening_hour_exceptions": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "date": {
+                                              "type": "string"
+                                            },
+                                            "closed_all_day": {
+                                              "type": "boolean"
+                                            },
+                                            "opens": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "closes": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            }
+                                          },
+                                          "required": [
+                                            "date",
+                                            "closed_all_day",
+                                            "opens",
+                                            "closes"
+                                          ]
+                                        }
+                                      },
+                                      "departments": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "id": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "name": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "concepts": {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "id": {
+                                                    "type": [
+                                                      "string",
+                                                      "null"
+                                                    ]
+                                                  },
+                                                  "name": {
+                                                    "type": [
+                                                      "string",
+                                                      "null"
+                                                    ]
+                                                  }
+                                                },
+                                                "required": [
+                                                  "id",
+                                                  "name"
+                                                ]
+                                              }
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "name",
+                                            "concepts"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "country_code",
+                                      "country",
+                                      "city",
+                                      "phone",
+                                      "opening_date",
+                                      "status",
+                                      "latitude",
+                                      "longitude",
+                                      "address",
+                                      "opening_hours",
+                                      "opening_hour_exceptions",
+                                      "departments"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "store"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "country": {
+                              "type": "string"
+                            },
+                            "language": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "source_record_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_countries": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "country",
+                            "language",
+                            "source",
+                            "source_record_count",
+                            "source_countries",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
