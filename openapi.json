@@ -86829,7 +86829,7 @@
       "get": {
         "operationId": "get_polymarket_research",
         "summary": "Polymarket Research",
-        "description": "Find records through Polymarket Research using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Expand a research topic into up to six parallel public Gamma searches, deduplicate events by ID, filter unrelated titles by informative-word overlap and rank by lexical topic/title similarity. Costs 5 credits for a successful nonempty result. Every search must succeed; failures and empty results are uncharged. This is a bounded snapshot, not an exhaustive index or trading service. Framing prefixes such as last 30 days are stripped, not interpreted as date filters.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -86839,16 +86839,23 @@
             "required": true,
             "example": "trump 2028 election",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "description": "Natural-language topic. Leading last/past N days/weeks/months/years and what are people saying about framing is stripped. This does not apply a date filter."
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10
+            },
+            "description": "Maximum events requested per source search, not an overall result limit. Up to six source searches are combined."
           },
           {
             "name": "Cache-Control",
@@ -86881,7 +86888,128 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Expand a research topic into up to six parallel public Gamma searches, deduplicate events by ID, filter unrelated titles by informative-word overlap and rank by lexical topic/title similarity. Costs 5 credits for a successful nonempty result. Every search must succeed; failures and empty results are uncharged. This is a bounded snapshot, not an exhaustive index or trading service. Framing prefixes such as last 30 days are stripped, not interpreted as date filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "items",
+                            "total",
+                            "next_cursor",
+                            "dropped",
+                            "topic",
+                            "queries",
+                            "source_calls",
+                            "duplicates_removed",
+                            "unrelated_removed",
+                            "source_has_more",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 300,
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "id",
+                                  "title"
+                                ],
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "active": {
+                                    "type": "boolean"
+                                  },
+                                  "closed": {
+                                    "type": "boolean"
+                                  },
+                                  "markets": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "additionalProperties": true
+                                    }
+                                  }
+                                },
+                                "additionalProperties": true
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "dropped": {
+                              "const": 0
+                            },
+                            "topic": {
+                              "type": "string"
+                            },
+                            "queries": {
+                              "type": "array",
+                              "minItems": 1,
+                              "maxItems": 6,
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "source_calls": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 6
+                            },
+                            "duplicates_removed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "unrelated_removed": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_has_more": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

@@ -1,6 +1,14 @@
 ---
-title: "Polymarket Research"
+title: "Polymarket topic research"
 openapi: "GET /polymarket/research"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Supply a natural-language `query`, for example `last 30 days bitcoin halving`. SocialQuery removes framing prefixes, searches the core subject and individual informative words in parallel (up to six unique searches), deduplicates by event ID, discards unrelated titles, and ranks the remainder by lexical topic/title similarity. Native public Gamma event fields, including nested markets, are retained.
+
+A successful nonempty result costs **5 credits**, regardless of the number of source searches. Errors, empty results, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 5` to cap the charge. The official public [Gamma API](https://docs.polymarket.com/api-reference/search/search-markets-events-and-profiles) supplies metadata; this operation does not execute trades or access an account.
+
+`limit` defaults to 10 and accepts 1–50 **per source search**, so the combined result may exceed it. All source searches must finish within 25 seconds. A failed or malformed source page causes an uncharged error, never a partial-success snapshot. Source pages are capped at 2 MiB and the combined result at 3 MiB; reduce `limit` if a response is too large.
+
+`total` counts returned events. `duplicates_removed` and `unrelated_removed` explain consolidation; `dropped` is zero because malformed event pages fail the request. `source_has_more` is true if any source search reports more rows. This composite is a bounded first-page snapshot and has no continuation cursor (`next_cursor` is null); it does not claim the complete event index.
+
+Time phrases such as `last 30 days` are query framing **only**, not event-date filters. Prefixes `what are people saying about`, `tell me about`, and `research on/about` are also removed. Matching uses informative words and lexical similarity, not language-model analysis. Use `/v1/polymarket/search` for a single raw search.
