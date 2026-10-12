@@ -38533,7 +38533,7 @@
       "get": {
         "operationId": "get_reddit_profile",
         "summary": "Reddit Profile",
-        "description": "Use Reddit Profile to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read public Reddit account metadata by username, without the u/ prefix. Source account ID and karma scores are preserved. Karma is not likes or engagement. Follower counts, email verification, account relationships and private fields are unavailable. Initial upstream verification shares a fixed 200-provider-credit allowance; exhaustion blocks new provider calls.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -38543,7 +38543,8 @@
             "required": true,
             "example": "spez",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{2,25}$"
             }
           },
           {
@@ -38567,7 +38568,117 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read public Reddit account metadata by username, without the u/ prefix. Source account ID and karma scores are preserved. Karma is not likes or engagement. Follower counts, email verification, account relationships and private fields are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "username": {
+                                  "type": "string"
+                                },
+                                "display_name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "bio": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "joined_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "followers": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ]
+                                },
+                                "verified": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "ext": {
+                                  "type": "object",
+                                  "properties": {
+                                    "reddit_id": {
+                                      "type": "string"
+                                    },
+                                    "link_karma": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "comment_karma": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "total_karma": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ]
+                                    },
+                                    "is_employee": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "is_moderator": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -38618,7 +38729,7 @@
       "get": {
         "operationId": "get_reddit_profile_posts",
         "summary": "Reddit Profile Posts",
-        "description": "Use Reddit Profile Posts to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read one public account-submission page, up to 25 posts. Supports new, hot and top sorting; timeframe applies only to top. Cursors bind the account, sorting and date filters. Source timestamps are corroborated against epoch values. since requires new sorting and stops only when an ordered non-pinned source window crosses the bound; until filters each fetched page. The live index can repeat records. Deleted/private history, structured media, author avatars and content language are unavailable. Reddit scores are not likes; shares remain null. Initial upstream verification shares a fixed 200-provider-credit allowance; exhaustion blocks new provider calls.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -38628,7 +38739,8 @@
             "required": true,
             "example": "spez",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{2,25}$"
             }
           },
           {
@@ -38658,7 +38770,8 @@
                 "day",
                 "hour"
               ]
-            }
+            },
+            "description": "Only accepted with sort=top; defaults to all."
           },
           {
             "name": "cursor",
@@ -38666,7 +38779,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque source cursor; keep all request filters and limit unchanged. Maximum 100 source pages."
           },
           {
             "name": "since",
@@ -38674,7 +38788,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Valid YYYY-MM-DD or UTC ISO timestamp. since requires sort=new; until includes the entire UTC day for a date-only input. Apply to fetched source rows, retaining unknown dates."
           },
           {
             "name": "until",
@@ -38682,7 +38797,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Valid YYYY-MM-DD or UTC ISO timestamp. since requires sort=new; until includes the entire UTC day for a date-only input. Apply to fetched source rows, retaining unknown dates."
           },
           {
             "name": "Cache-Control",
@@ -38705,7 +38821,211 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read one public account-submission page, up to 25 posts. Supports new, hot and top sorting; timeframe applies only to top. Cursors bind the account, sorting and date filters. Source timestamps are corroborated against epoch values. since requires new sorting and stops only when an ordered non-pinned source window crosses the bound; until filters each fetched page. The live index can repeat records. Deleted/private history, structured media, author avatars and content language are unavailable. Reddit scores are not likes; shares remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "source_window_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "type": "null"
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "null"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": "string"
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          },
+                                          "likes": {
+                                            "type": "null"
+                                          },
+                                          "comments": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          },
+                                          "shares": {
+                                            "type": "null"
+                                          },
+                                          "saves": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "spoiler": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "pinned": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "deleted": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "subreddit": {
+                                            "type": "string"
+                                          },
+                                          "score": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ]
+                                          },
+                                          "upvote_ratio": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "selftext": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "flair": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "content_language": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "stopped_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -39005,7 +39325,7 @@
       "get": {
         "operationId": "get_reddit_subreddits_search",
         "summary": "Reddit Subreddits Search",
-        "description": "Find records through Reddit Subreddits Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Find communities by topic. Each request reads one 25-community source page; limit (1–25) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities. Initial upstream verification shares a fixed 200-provider-credit allowance; exhaustion blocks new provider calls.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -39013,9 +39333,11 @@
             "name": "query",
             "in": "query",
             "required": true,
-            "example": "machine learning",
+            "example": "python",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
             }
           },
           {
@@ -39024,7 +39346,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque source cursor; keep all request filters and limit unchanged. Maximum 100 source pages."
           },
           {
             "name": "include",
@@ -39035,7 +39358,8 @@
               "enum": [
                 "details"
               ]
-            }
+            },
+            "description": "Unsupported: omit this field. Details hydration requires additional sources and metered billing."
           },
           {
             "name": "limit",
@@ -39045,7 +39369,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 25
-            }
+            },
+            "description": "Return at most N rows from a full 25-row source page. The next cursor advances beyond that complete page."
           },
           {
             "name": "Cache-Control",
@@ -39068,7 +39393,137 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Find communities by topic. Each request reads one 25-community source page; limit (1–25) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "source_window_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "author": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "username": {
+                                        "type": "string"
+                                      },
+                                      "display_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "bio": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "joined_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "followers": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ]
+                                      },
+                                      "verified": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "reddit_id": {
+                                            "type": "string"
+                                          },
+                                          "nsfw": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "language": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "community_type": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "weekly_active_users": {
+                                            "type": "null"
+                                          },
+                                          "weekly_contributions": {
+                                            "type": "null"
+                                          },
+                                          "rules_text": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

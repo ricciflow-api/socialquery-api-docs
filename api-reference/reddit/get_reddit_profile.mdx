@@ -3,4 +3,6 @@ title: "Reddit Profile"
 openapi: "GET /reddit/profile"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read public Reddit account metadata by username, without the u/ prefix. Source account ID and karma scores are preserved. Karma is not likes or engagement. Follower counts, email verification, account relationships and private fields are unavailable.
+
+One uncached successful request costs **1 SocialQuery credits**. Cache hits and failed requests cost zero. Empty successful source windows currently use the same base price; SocialCrawl’s empty-result refund policy is not implemented as parity. Initial provider verification shares a fixed 200-credit allowance; no automatic refill is enabled.

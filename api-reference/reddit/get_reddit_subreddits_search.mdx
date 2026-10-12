@@ -1,6 +1,8 @@
 ---
-title: "Reddit Subreddits Search"
+title: "Search Reddit Communities"
 openapi: "GET /reddit/subreddits/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Find communities by topic. Each request reads one 25-community source page; limit (1–25) trims the returned rows while continuation advances past all source rows. Cursor identity binds query and limit. Source-provided creation dates and language may be present. include=details hydration, weekly activity metrics and rules are unsupported. Results follow Reddit relevance and may include loosely related communities.
+
+One uncached successful request costs **1 SocialQuery credits**. Cache hits and failed requests cost zero. Empty successful source windows currently use the same base price; SocialCrawl’s empty-result refund policy is not implemented as parity. Initial provider verification shares a fixed 200-credit allowance; no automatic refill is enabled.

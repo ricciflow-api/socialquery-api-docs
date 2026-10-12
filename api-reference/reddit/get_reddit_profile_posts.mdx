@@ -3,4 +3,6 @@ title: "Reddit Profile Posts"
 openapi: "GET /reddit/profile/posts"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read one public account-submission page, up to 25 posts. Supports new, hot and top sorting; timeframe applies only to top. Cursors bind the account, sorting and date filters. Source timestamps are corroborated against epoch values. since requires new sorting and stops only when an ordered non-pinned source window crosses the bound; until filters each fetched page. The live index can repeat records. Deleted/private history, structured media, author avatars and content language are unavailable. Reddit scores are not likes; shares remain null.
+
+One uncached successful request costs **1 SocialQuery credits**. Cache hits and failed requests cost zero. Empty successful source windows currently use the same base price; SocialCrawl’s empty-result refund policy is not implemented as parity. Initial provider verification shares a fixed 200-credit allowance; no automatic refill is enabled.
