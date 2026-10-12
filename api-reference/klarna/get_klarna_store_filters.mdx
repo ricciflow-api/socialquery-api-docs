@@ -3,4 +3,14 @@ title: "Klarna Store Filters"
 openapi: "GET /klarna/store/filters"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native facet metadata after verifying store identity. `items` contains source `OPTIONS`, `RANGE` or `INTERVAL` facets. Options retain keys, optional option IDs, labels, counts and separate ranked options. Range facets retain extrema, units and price buckets. Interval facets retain native discount intervals and counts.
+
+`returned_count` counts facets, not products. Facet counts can overlap and exceed the capped product-list total; merchant facets can describe comparison offers from other retailers. They are not a guarantee of current stock. Unknown stores return 404 before facet lookup. No extra filters or pagination parameters are accepted.
+
+A fresh nonempty response costs **1 credit** and uses two source requests.
+
+All 13 catalog regions are supported: `usa`, `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. Store IDs are regional UUIDs; obtain them from the corresponding store directory. An independent native identity lookup makes unknown store IDs return 404 instead of a misleading empty listing. Store links absent in the source remain null.
+
+Access is anonymous and does not create accounts, cards, financing agreements or purchases. Public one-time-card URLs are returned as metadata only; personal eligibility is not inferred and those links are never opened by the adapter. Cashback values are **basis points** (350 means 3.5%), with the original source label retained. Offers and prices can change.
+
+Calls share the Klarna 20-source-request/minute ceiling, with a 25-second total timeout and 2 MiB limit per source response. Failures, empty results, cache hits and successful idempotent replays have no net charge.

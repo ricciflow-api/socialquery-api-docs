@@ -3,4 +3,22 @@ title: "Klarna Store Products"
 openapi: "GET /klarna/store/products"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native product cards for a verified store UUID. Default page size is 25. Products preserve native IDs, titles, regional prices, ratings, category and safe image paths. Stock flags and prices are source snapshots; they are not merchant checkout quotes. UK, Swedish and Danish product links retain legacy source paths with null absolute URLs.
+
+All seven `sort_by` values map to native sorting: `popularity`, `price_low`, `price_high`, `trend`, `name`, `rating`, `price_drop`. Ranking-based sorts are not recomputed locally; displayed average ratings need not be monotonic.
+
+`price_range` accepts exact nonnegative decimal bounds, such as `50-100`, `50.25-100.75`, `50-` or `-100`, in regional currency. The source only applies whole-unit ranges and can include rounded boundary prices outside those bounds. SocialQuery requests a coarse enclosing range, validates the source filter echo, then excludes prices outside the exact requested bounds.
+
+Consequently, **a price-filtered page may be short or empty and still have a next cursor**. Follow `next_cursor` until null. `source_returned_count` counts consumed native candidates; `returned_count` counts exact matches on this page. `total_scope: source_price_candidates` makes clear that `total` is not an exact-match count. Cursor offsets and continuity anchors include excluded candidates, preventing duplicate or skipped source rows.
+
+A fresh nonempty page costs **5 credits**; an empty filtered page costs zero. Each call uses two source requests, or three for size-100 cursors.
+
+`size` is 1–100; `offset` is 0–10,000. Pagination uses native source offsets. A total at 10,000 is marked `total_is_lower_bound: true`, because the source may have more rows. `pagination_capped` explicitly marks the adapter ceiling, not source exhaustion.
+
+Send `next_cursor` verbatim for subsequent pages. Request settings are restored when omitted and must match if supplied. Product calls must still include `id`. Cursors expire after one hour and check the preceding source row, so changed source order can require restarting. Size-100 cursor calls verify that row in a separate one-row request; smaller pages include and remove the anchor. This is not a frozen snapshot or a promise of complete catalog retrieval.
+
+All 13 catalog regions are supported: `usa`, `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. Store IDs are regional UUIDs; obtain them from the corresponding store directory. An independent native identity lookup makes unknown store IDs return 404 instead of a misleading empty listing. Store links absent in the source remain null.
+
+Access is anonymous and does not create accounts, cards, financing agreements or purchases. Public one-time-card URLs are returned as metadata only; personal eligibility is not inferred and those links are never opened by the adapter. Cashback values are **basis points** (350 means 3.5%), with the original source label retained. Offers and prices can change.
+
+Calls share the Klarna 20-source-request/minute ceiling, with a 25-second total timeout and 2 MiB limit per source response. Failures, empty results, cache hits and successful idempotent replays have no net charge.

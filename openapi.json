@@ -74784,7 +74784,7 @@
       "get": {
         "operationId": "get_klarna_stores",
         "summary": "Klarna Stores",
-        "description": "Use Klarna Stores to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Regional store directory with native category/eligibility filters and bounded cursor pagination. Cashback amounts retain basis points and source labels. Totals at 10,000 are lower bounds, not exhaustive counts.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -74818,8 +74818,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
-            }
+              "maximum": 100,
+              "default": 24
+            },
+            "description": "Native candidate page size. Product price filtering can reduce returned_count; consult source_returned_count and next_cursor."
           },
           {
             "name": "offset",
@@ -74827,8 +74829,11 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 10000,
+              "default": 0
+            },
+            "description": "Native candidate-row offset, bounded at 10,000. Prefer the returned cursor for continuity checking."
           },
           {
             "name": "categories",
@@ -74836,31 +74841,38 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Comma-separated categories: travel, home_more, fashion, sports, health_beauty, marketplaces, electronics, luxury. Unknown values and duplicates are rejected."
           },
           {
             "name": "cashback",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean"
-            }
+              "type": "boolean",
+              "default": false
+            },
+            "description": "True applies the native directory filter; false means no restriction. Public availability does not establish personal financing or cashback eligibility."
           },
           {
             "name": "shop_in_app",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean"
-            }
+              "type": "boolean",
+              "default": false
+            },
+            "description": "True applies the native directory filter; false means no restriction. Public availability does not establish personal financing or cashback eligibility."
           },
           {
             "name": "klarna_at_checkout",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean"
-            }
+              "type": "boolean",
+              "default": false
+            },
+            "description": "True applies the native directory filter; false means no restriction. Public availability does not establish personal financing or cashback eligibility."
           },
           {
             "name": "cursor",
@@ -74868,7 +74880,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Return data.next_cursor verbatim. For products, also supply id. Omitted settings are restored; supplied settings must match. Expires after one hour and checks the preceding source row. Offset refers to native candidates, including price-excluded rows."
           },
           {
             "name": "Cache-Control",
@@ -74901,7 +74914,212 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Regional store directory with native category/eligibility filters and bounded cursor pagination. Cashback amounts retain basis points and source labels. Totals at 10,000 are lower bounds, not exhaustive counts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "krn": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "category": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "image_urls": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "klarna_at_checkout": {
+                                    "type": "boolean"
+                                  },
+                                  "one_time_card_url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "cashback": {
+                                    "anyOf": [
+                                      {
+                                        "type": "null"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "basis_points": {
+                                            "type": "number"
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          },
+                                          "up_to": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "basis_points",
+                                          "label",
+                                          "up_to"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "krn",
+                                  "url",
+                                  "category",
+                                  "image_urls",
+                                  "klarna_at_checkout",
+                                  "one_time_card_url",
+                                  "cashback"
+                                ]
+                              }
+                            },
+                            "source_returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total_scope": {
+                              "type": "string",
+                              "enum": [
+                                "directory_stores",
+                                "store_products",
+                                "source_price_candidates"
+                              ]
+                            },
+                            "total_is_lower_bound": {
+                              "type": "boolean"
+                            },
+                            "size": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "store": {
+                              "type": "null"
+                            },
+                            "applied_filters": {
+                              "type": "object",
+                              "properties": {
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "cashback": {
+                                  "type": "boolean"
+                                },
+                                "shop_in_app": {
+                                  "type": "boolean"
+                                },
+                                "klarna_at_checkout": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "categories",
+                                "cashback",
+                                "shop_in_app",
+                                "klarna_at_checkout"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "returned_count",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note",
+                            "items",
+                            "source_returned_count",
+                            "total",
+                            "total_scope",
+                            "total_is_lower_bound",
+                            "size",
+                            "offset",
+                            "next_cursor",
+                            "pagination_capped",
+                            "store",
+                            "applied_filters"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -74952,7 +75170,7 @@
       "get": {
         "operationId": "get_klarna_store_products",
         "summary": "Klarna Store Products",
-        "description": "Use Klarna Store Products to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Native store products after an independent regional store-identity check. Exact decimal price bounds filter coarse native candidate pages; a short or empty page can still have a cursor. Source candidate totals and consumed-row counts remain explicit.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -74962,8 +75180,10 @@
             "required": true,
             "example": "09f4d635-0452-4f63-9455-c45420d95669",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+            },
+            "description": "Store UUID from the regional store directory. The store must exist in this region."
           },
           {
             "name": "region",
@@ -74995,8 +75215,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
-            }
+              "maximum": 100,
+              "default": 25
+            },
+            "description": "Native candidate page size. Product price filtering can reduce returned_count; consult source_returned_count and next_cursor."
           },
           {
             "name": "offset",
@@ -75004,8 +75226,11 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 10000,
+              "default": 0
+            },
+            "description": "Native candidate-row offset, bounded at 10,000. Prefer the returned cursor for continuity checking."
           },
           {
             "name": "sort_by",
@@ -75030,7 +75255,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Exact regional price bounds, such as 50-100, 50.25-100.75, 50- or -100. The native service uses coarse whole-unit ranges; SocialQuery validates their application then filters each candidate page to the exact requested bounds. A page may be short/empty while next_cursor remains; total counts candidates."
           },
           {
             "name": "cursor",
@@ -75038,7 +75264,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Return data.next_cursor verbatim. For products, also supply id. Omitted settings are restored; supplied settings must match. Expires after one hour and checks the preceding source row. Offset refers to native candidates, including price-excluded rows."
           },
           {
             "name": "Cache-Control",
@@ -75071,7 +75298,355 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native store products after an independent regional store-identity check. Exact decimal price bounds filter coarse native candidate pages; a short or empty page can still have a cursor. Source candidate totals and consumed-row counts remain explicit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "source_path": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "category": {
+                                        "anyOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "source_path": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "url": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "name",
+                                              "source_path",
+                                              "url"
+                                            ]
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "currency"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "average",
+                                          "count"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "enum": [
+                                          "in_stock",
+                                          "out_of_stock",
+                                          null
+                                        ]
+                                      },
+                                      "condition": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "source_path",
+                                      "url",
+                                      "description",
+                                      "category",
+                                      "price",
+                                      "rating",
+                                      "image_urls",
+                                      "availability",
+                                      "condition"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              }
+                            },
+                            "source_returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total_scope": {
+                              "type": "string",
+                              "enum": [
+                                "directory_stores",
+                                "store_products",
+                                "source_price_candidates"
+                              ]
+                            },
+                            "total_is_lower_bound": {
+                              "type": "boolean"
+                            },
+                            "size": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "store": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "krn": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "category": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "image_urls": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "klarna_at_checkout": {
+                                  "type": "boolean"
+                                },
+                                "one_time_card_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "cashback": {
+                                  "anyOf": [
+                                    {
+                                      "type": "null"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "basis_points": {
+                                          "type": "number"
+                                        },
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "up_to": {
+                                          "type": [
+                                            "boolean",
+                                            "null"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "basis_points",
+                                        "label",
+                                        "up_to"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "krn",
+                                "url",
+                                "category",
+                                "image_urls",
+                                "klarna_at_checkout",
+                                "one_time_card_url",
+                                "cashback"
+                              ]
+                            },
+                            "applied_filters": {
+                              "type": "object",
+                              "properties": {
+                                "sort_by": {
+                                  "type": "string"
+                                },
+                                "price_range": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "sort_by",
+                                "price_range"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "returned_count",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note",
+                            "items",
+                            "source_returned_count",
+                            "total",
+                            "total_scope",
+                            "total_is_lower_bound",
+                            "size",
+                            "offset",
+                            "next_cursor",
+                            "pagination_capped",
+                            "store",
+                            "applied_filters"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -75122,7 +75697,7 @@
       "get": {
         "operationId": "get_klarna_store_filters",
         "summary": "Klarna Store Filters",
-        "description": "Use Klarna Store Filters to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public native store facet metadata, after independent store-identity validation. Options, ranked options, price buckets and discount intervals preserve source counts without claiming current merchant inventory.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -75132,8 +75707,10 @@
             "required": true,
             "example": "09f4d635-0452-4f63-9455-c45420d95669",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+            },
+            "description": "Store UUID from the regional store directory. The store must exist in this region."
           },
           {
             "name": "region",
@@ -75189,7 +75766,347 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public native store facet metadata, after independent store-identity validation. Options, ranked options, price buckets and discount intervals preserve source counts without claiming current merchant inventory.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "const": "OPTIONS",
+                                        "type": "string"
+                                      },
+                                      "unit": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "options": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "key": {
+                                              "type": "string"
+                                            },
+                                            "option_id": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "count": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "key",
+                                            "option_id",
+                                            "name",
+                                            "count"
+                                          ]
+                                        }
+                                      },
+                                      "ranked_options": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "key": {
+                                              "type": "string"
+                                            },
+                                            "option_id": {
+                                              "type": [
+                                                "string",
+                                                "null"
+                                              ]
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "count": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "key",
+                                            "option_id",
+                                            "name",
+                                            "count"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "type",
+                                      "unit",
+                                      "options",
+                                      "ranked_options"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "const": "RANGE",
+                                        "type": "string"
+                                      },
+                                      "unit": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "minimum": {
+                                        "type": "number"
+                                      },
+                                      "maximum": {
+                                        "type": "number"
+                                      },
+                                      "range_type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ranges": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "from": {
+                                              "type": "number"
+                                            },
+                                            "to": {
+                                              "type": "number"
+                                            },
+                                            "count": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "from",
+                                            "to",
+                                            "count"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "type",
+                                      "unit",
+                                      "minimum",
+                                      "maximum",
+                                      "range_type",
+                                      "ranges"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "const": "INTERVAL",
+                                        "type": "string"
+                                      },
+                                      "unit": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "intervals": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "interval": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
+                                            "count": {
+                                              "type": "integer",
+                                              "minimum": 0
+                                            }
+                                          },
+                                          "required": [
+                                            "interval",
+                                            "name",
+                                            "count"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "type",
+                                      "unit",
+                                      "intervals"
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            "store": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "krn": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "category": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "image_urls": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "klarna_at_checkout": {
+                                  "type": "boolean"
+                                },
+                                "one_time_card_url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "cashback": {
+                                  "anyOf": [
+                                    {
+                                      "type": "null"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "basis_points": {
+                                          "type": "number"
+                                        },
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "up_to": {
+                                          "type": [
+                                            "boolean",
+                                            "null"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "basis_points",
+                                        "label",
+                                        "up_to"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "krn",
+                                "url",
+                                "category",
+                                "image_urls",
+                                "klarna_at_checkout",
+                                "one_time_card_url",
+                                "cashback"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "returned_count",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note",
+                            "items",
+                            "store"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
