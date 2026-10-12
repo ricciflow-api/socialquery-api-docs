@@ -97954,7 +97954,7 @@
       "get": {
         "operationId": "get_apple_music_charts",
         "summary": "Apple Music Charts",
-        "description": "Use Apple Music Charts to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Return the current Apple Music songs, albums, music-videos or playlists chart as canonical post rows. Select the top 1–100 positions (default 50), then filter by release date while retaining original ranks and undated rows. Country codes are case-insensitive and uk aliases gb. Unsupported storefronts return an uncharged 400. Dates describe releases, not historical chart snapshots. Unknown engagement, verification badges and computed estimates remain null. Exact requests are cached for one hour. Costs one credit for nonempty fresh results; empty results, errors and cache/idempotency replays are free.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -97965,7 +97965,8 @@
             "example": "de",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Apple Music country code, case-insensitive; uk maps to gb. Unknown storefronts return free 400."
           },
           {
             "name": "type",
@@ -97990,8 +97991,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
-            }
+              "maximum": 100,
+              "default": 50
+            },
+            "description": "Top chart positions to select before release-date filtering; default 50."
           },
           {
             "name": "since",
@@ -98036,11 +98039,450 @@
               "type": "integer",
               "minimum": 0
             }
+          },
+          {
+            "name": "published_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "published_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "publish_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
+          },
+          {
+            "name": "max_age_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Release-date alias. Explicit aliases must agree. publish_time accepts rolling windows yesterday (1 day), this-week (7), this-month (30), last-3-months (90), last-6-months (180); max_age_days accepts 0–36500. Undated rows are retained."
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Return the current Apple Music songs, albums, music-videos or playlists chart as canonical post rows. Select the top 1–100 positions (default 50), then filter by release date while retaining original ranks and undated rows. Country codes are case-insensitive and uk aliases gb. Unsupported storefronts return an uncharged 400. Dates describe releases, not historical chart snapshots. Unknown engagement, verification badges and computed estimates remain null. Exact requests are cached for one hour. Costs one credit for nonempty fresh results; empty results, errors and cache/idempotency replays are free.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 100,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "media_urls": {
+                                            "type": "null"
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "string"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "text",
+                                          "media_urls",
+                                          "thumbnail_url",
+                                          "duration_seconds"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "username",
+                                          "display_name",
+                                          "avatar_url",
+                                          "verified"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": "null"
+                                          },
+                                          "likes": {
+                                            "type": "null"
+                                          },
+                                          "comments": {
+                                            "type": "null"
+                                          },
+                                          "shares": {
+                                            "type": "null"
+                                          },
+                                          "saves": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "views",
+                                          "likes",
+                                          "comments",
+                                          "shares",
+                                          "saves"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": "null"
+                                          },
+                                          "spoiler": {
+                                            "type": "null"
+                                          },
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "deleted": {
+                                            "const": false
+                                          }
+                                        },
+                                        "required": [
+                                          "nsfw",
+                                          "spoiler",
+                                          "pinned",
+                                          "deleted"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "format": "date-time"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "apple_music": {
+                                            "type": "object",
+                                            "properties": {
+                                              "kind": {
+                                                "type": "string"
+                                              },
+                                              "release_date": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "artist_id": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "artist_url": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "genres": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "properties": {
+                                                    "id": {
+                                                      "type": [
+                                                        "string",
+                                                        "null"
+                                                      ]
+                                                    },
+                                                    "name": {
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "required": [
+                                                    "id",
+                                                    "name"
+                                                  ],
+                                                  "additionalProperties": false
+                                                }
+                                              },
+                                              "content_advisory": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "kind",
+                                              "release_date",
+                                              "artist_id",
+                                              "artist_url",
+                                              "genres",
+                                              "content_advisory"
+                                            ],
+                                            "additionalProperties": false
+                                          },
+                                          "trend": {
+                                            "type": "object",
+                                            "properties": {
+                                              "rank": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "maximum": 100
+                                              },
+                                              "country_code": {
+                                                "type": "string"
+                                              },
+                                              "chart": {
+                                                "type": "string"
+                                              },
+                                              "chart_title": {
+                                                "type": "string"
+                                              },
+                                              "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                              }
+                                            },
+                                            "required": [
+                                              "rank",
+                                              "country_code",
+                                              "chart",
+                                              "chart_title",
+                                              "updated_at"
+                                            ],
+                                            "additionalProperties": false
+                                          }
+                                        },
+                                        "required": [
+                                          "apple_music",
+                                          "trend"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "content",
+                                      "author",
+                                      "engagement",
+                                      "flags",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "content_category": {
+                                        "const": "other"
+                                      },
+                                      "estimated_reach": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "engagement_rate",
+                                      "language",
+                                      "content_category",
+                                      "estimated_reach"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "post",
+                                  "computed"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "const": 0
+                            },
+                            "filtered_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "chart": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "chart_title": {
+                              "type": "string"
+                            },
+                            "chart_updated_at": {
+                              "type": "string"
+                            },
+                            "source_url": {
+                              "type": "string"
+                            },
+                            "source_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "positions_requested": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "copyright": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "dropped",
+                            "filtered_count",
+                            "next_cursor",
+                            "chart",
+                            "country_code",
+                            "chart_title",
+                            "chart_updated_at",
+                            "source_url",
+                            "source_count",
+                            "positions_requested",
+                            "copyright",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

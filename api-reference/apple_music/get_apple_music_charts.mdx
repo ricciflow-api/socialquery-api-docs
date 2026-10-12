@@ -1,6 +1,14 @@
 ---
-title: "Apple Music Charts"
+title: "Apple Music charts"
 openapi: "GET /apple_music/charts"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read the current **songs**, **albums**, **music-videos** or **playlists** chart from [Apple's official public RSS feeds](https://rss.marketingtools.apple.com/). `country` defaults to `us`, accepts any case and maps `uk` to `gb`. The adapter validates countries against Apple's 172-storefront music directory, captured October 12, 2026; countries outside that directory return a free **400 `UNSUPPORTED_COUNTRY`**. Upstream outages remain errors, never empty charts.
+
+`limit` selects the top 1–100 chart positions, default 50. Each item contains a canonical `post` and `computed` object. Titles, artwork, artist names, public Apple URLs and release dates come from the feed. `post.ext.trend.rank` preserves the original position, `country_code` uses uppercase ISO codes, and `updated_at` is Apple's chart update time. `post.ext.apple_music` retains kind, release date, artist ID/URL, genres and content advisory. The feed supplies metadata, not playable media or listening counts.
+
+`since` and `until` filter **release dates after the top positions are selected**, not historical chart positions. Calendar dates use UTC; `until` includes the entire day. Undated entries remain. Playlists have no artist or release date, so these fields stay null. Missing compilation-artist IDs and genre IDs also stay null. Date aliases must agree with explicit bounds. `publish_time` uses rolling windows of 1, 7, 30, 90 or 180 days; `max_age_days` accepts 0–36500.
+
+Fresh nonempty results cost **1 credit**. Empty filtered results, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1` to cap spending. Exact requests are cached for one hour; `Cache-Control: no-cache` requests a fresh chart.
+
+`total` and `returned_count` count returned rows. `source_count` is the size of the current feed (at most 100), and `filtered_count` counts selected positions excluded by dates. There is no continuation cursor. Unknown engagement, badges, language and reach estimates remain null; they are not fabricated from rank.
