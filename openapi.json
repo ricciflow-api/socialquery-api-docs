@@ -79921,35 +79921,41 @@
       "get": {
         "operationId": "get_gumtree_seller",
         "summary": "Gumtree Seller",
-        "description": "Use Gumtree Seller to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public Gumtree UK seller name, rating and membership/last-active captions. Requires seller_id and public_id together. Optional account_id is corroborated against active ads. Profiles without active ads cannot currently be independently matched to their numeric seller ID and return an unbilled error.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "seller_id",
             "in": "query",
-            "required": false,
-            "example": "17804454",
+            "required": true,
+            "example": "70432293",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Numeric Gumtree userId, paired with public_id; checked against active listing records."
           },
           {
             "name": "public_id",
             "in": "query",
-            "required": false,
-            "example": "13b4fddbbabbef26807a535511d79289",
+            "required": true,
+            "example": "c49de004a37dec992c74ef2ec81e5133",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-f0-9]{24,64}$"
+            },
+            "description": "Public profile identifier from its Gumtree profile URL, paired with seller_id."
           },
           {
             "name": "account_id",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Optional numeric accountId; if supplied, every returned active ad must corroborate it."
           },
           {
             "name": "Cache-Control",
@@ -79982,7 +79988,95 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public Gumtree UK seller name, rating and membership/last-active captions. Requires seller_id and public_id together. Optional account_id is corroborated against active ads. Profiles without active ads cannot currently be independently matched to their numeric seller ID and return an unbilled error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "domain": {
+                              "type": "string",
+                              "const": "gumtree.com"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "rating": {
+                              "type": "object",
+                              "properties": {
+                                "average": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0,
+                                  "maximum": 5
+                                },
+                                "count": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                }
+                              },
+                              "required": [
+                                "average",
+                                "count"
+                              ]
+                            },
+                            "membership_caption": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "last_active_caption": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "public_id": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "domain",
+                            "url",
+                            "rating",
+                            "membership_caption",
+                            "last_active_caption",
+                            "public_id",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -80024,11 +80118,6 @@
             "$ref": "#/components/responses/Error504"
           }
         },
-        "x-one-of-parameters": [
-          [
-            "seller_id"
-          ]
-        ],
         "tags": [
           "Gumtree"
         ]
@@ -80038,7 +80127,7 @@
       "get": {
         "operationId": "get_gumtree_seller_listings",
         "summary": "Gumtree Seller Listings",
-        "description": "Use Gumtree Seller Listings to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public Gumtree UK seller active ads with identity-bound pagination. Requires seller_id and public_id together. Optional account_id is corroborated against active ads. Profiles without active ads cannot currently be independently matched to their numeric seller ID and return an unbilled error.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -80046,27 +80135,33 @@
             "name": "seller_id",
             "in": "query",
             "required": false,
-            "example": "17804454",
+            "example": "70432293",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Numeric Gumtree userId, paired with public_id; checked against active listing records."
           },
           {
             "name": "public_id",
             "in": "query",
             "required": false,
-            "example": "13b4fddbbabbef26807a535511d79289",
+            "example": "c49de004a37dec992c74ef2ec81e5133",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-f0-9]{24,64}$"
+            },
+            "description": "Public profile identifier from its Gumtree profile URL, paired with seller_id."
           },
           {
             "name": "account_id",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,14}$"
+            },
+            "description": "Optional numeric accountId; if supplied, every returned active ad must corroborate it."
           },
           {
             "name": "page",
@@ -80076,7 +80171,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 1000
-            }
+            },
+            "description": "Page 1–1000, 20 ads per source page. Source-confirmed pages past the current end are empty and free."
           },
           {
             "name": "cursor",
@@ -80084,7 +80180,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque next_cursor, bound to seller/public/account IDs and valid for one hour. May be used alone; conflicting explicit values are rejected."
           },
           {
             "name": "Cache-Control",
@@ -80117,7 +80214,182 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public Gumtree UK seller active ads with identity-bound pagination. Requires seller_id and public_id together. Optional account_id is corroborated against active ads. Profiles without active ads cannot currently be independently matched to their numeric seller ID and return an unbilled error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "GBP"
+                                          },
+                                          "display": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "currency",
+                                          "display"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "location": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "category": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "gumtree": {
+                                            "type": "object",
+                                            "properties": {
+                                              "user_id": {
+                                                "type": "string"
+                                              },
+                                              "public_user_id": {
+                                                "type": "string"
+                                              },
+                                              "account_id": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "user_id",
+                                              "public_user_id",
+                                              "account_id"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "gumtree"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "url",
+                                      "price",
+                                      "image_urls",
+                                      "location",
+                                      "category",
+                                      "ext"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 20
+                            },
+                            "seller_id": {
+                              "type": "string"
+                            },
+                            "public_id": {
+                              "type": "string"
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 1000
+                            },
+                            "page_size": {
+                              "type": "integer",
+                              "const": 20
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "seller_id",
+                            "public_id",
+                            "page",
+                            "page_size",
+                            "has_more",
+                            "next_cursor",
+                            "pagination_capped",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -80161,7 +80433,12 @@
         },
         "x-one-of-parameters": [
           [
-            "seller_id"
+            "seller_id",
+            "cursor"
+          ],
+          [
+            "public_id",
+            "cursor"
           ]
         ],
         "tags": [

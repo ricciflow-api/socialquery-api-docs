@@ -3,4 +3,12 @@ title: "Gumtree Seller"
 openapi: "GET /gumtree/seller"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns the public seller name, rating average/count, membership caption and last-active caption. Missing captions remain null; membership is a source caption, not an inferred joining date.
+
+Both `seller_id` (numeric userId) and `public_id` (public profile identifier) are required together. Use identifiers from a public Gumtree listing/profile link; the numeric ID cannot be derived from the public hash. If supplied, `account_id` is also checked against active ads. The returned listing records expose these source identifiers in `product.ext.gumtree`.
+
+Gumtree's profile source can ignore a mismatched numeric userId. This adapter independently checks active ad records before returning any seller data. **Profiles with no active ads currently return an unbilled identity-verification error** because this source supplies no independent numeric ID for them. Wrong pairs and malformed/challenged pages never become successful empty results. A confirmed missing profile returns 404; an unverifiable upstream response returns 502.
+
+Uses the existing Firecrawl credential with basic transport and original HTML bytes. There is no new Gumtree account, credential or paid plan. Requests share a 20-source-read/minute ceiling, a 2 MiB source limit, 25 seconds per source read and 52 seconds total. Source page one is always checked; a later listing page uses at most one additional read. No login cookies, private contact details, analytics state or anonymous session identifiers are returned.
+
+Fresh nonempty responses cost **5 credits**. Source-confirmed empty listing pages, cache hits, errors and successful idempotent replays cost zero. Set `X-Max-Credits: 5`. Public-source availability and free upstream allowance are not a production SLA.
