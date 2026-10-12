@@ -1,6 +1,14 @@
 ---
-title: "Kohls Stores"
+title: "Kohl's Stores"
 openapi: "GET /kohls/stores"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search within `radius` miles of `location_coordinate=latitude,longitude`, or supply both `latitude` and `longitude`. The radius is 1–100 miles, default 25. If both input forms are supplied, their coordinates must agree.
+
+The adapter requests the exact anonymous Kohl's locator service and validates its echoed center, radius and result limit. Every returned store is cross-checked against the source map marker. `place.id` is the source location ID; `place.ext.store_number` is the retailer's separate store number. Both are retained as strings.
+
+Store records include the name, source store-page URL, full address, phone when available, latitude/longitude and individual address components. `ext.distance_miles` preserves the source's rounded distance; it is not driving distance. Opening hours, live inventory and current open/closed state are not inferred.
+
+`returned_count` and `total` both count this response. Requests are bounded to 1,000 stores. `truncated: true` means that ceiling was reached, so the response must not be treated as the entire radius. Invalid or inconsistent source data fails without a net SocialQuery charge.
+
+A confirmed empty source response returns an empty `items` array and uses **zero credits**. The normal maximum price is reserved before fetching and refunded when the verified result is empty. Each fresh request uses one basic Firecrawl fetch within the configured source allowance. Cache hits and successful idempotent replays are free.
