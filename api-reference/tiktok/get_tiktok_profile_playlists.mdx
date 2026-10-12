@@ -1,6 +1,14 @@
 ---
-title: "TikTok Profile Playlists"
+title: "TikTok profile playlists"
 openapi: "GET /tiktok/profile/playlists"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a `handle` (with or without `@`) or a numeric `user_id`. If both are supplied, both must match the resolved public profile. Costs **1 credit** on a successful nonempty response. Errors, empty directories, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1` to cap the charge.
+
+The response contains each playlist's native ID, name and `post.ext.video_count`, in source order. It resolves the profile first, verifies playlist ownership, then walks the available directory to its end. The request is bounded to three pages of 30 playlists and 45 seconds. A directory that exceeds this ceiling returns an uncharged **503 `LOOKUP_SCAN_LIMIT`**; it is never presented as a complete partial list. `total` counts the returned available directory, not private or deleted playlists.
+
+The source does not publish playlist timestamps or engagement totals. Those fields, verification badges and computed estimates remain null. `since` and `until` accept calendar dates or ISO timestamps with timezones; undated rows are retained. Date aliases `published_after`, `start_date`, `from_date`, `published_before`, `end_date` and `to_date` must agree with explicit bounds. Relative `publish_time` and `max_age_days` bounds are also accepted. Because playlist dates are unknown, these filters usually retain the whole directory.
+
+This endpoint supplies playlist metadata. Video playback through `/v1/tiktok/playlist/videos` remains unavailable: a tested source media URL returned 403. It is not advertised as a working download route.
+
+Source: [TikHub public API](https://api.tikhub.io/), using the existing free-trial allowance shared with comment lookup. Trial limits are finite. Successful directories may be cached for five minutes; `Cache-Control: no-cache` requests a fresh read.

@@ -29980,8 +29980,8 @@
     "/tiktok/profile/playlists": {
       "get": {
         "operationId": "get_tiktok_profile_playlists",
-        "summary": "TikTok Profile Playlists",
-        "description": "Use TikTok Profile Playlists to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "List a TikTok profile’s public playlists",
+        "description": "List the complete available public playlist directory for a corroborated TikTok handle or numeric user ID. Each playlist preserves its source ID, name and video count. Reads at most three 30-playlist pages after resolving the profile, within 45 seconds. An unfinished directory fails uncharged instead of returning a partial list. Dates and engagement are unavailable and remain null; undated playlists are kept under date filters. This endpoint does not return playable video files.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -30045,11 +30045,326 @@
               "type": "integer",
               "minimum": 0
             }
+          },
+          {
+            "name": "published_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "published_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "publish_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
+          },
+          {
+            "name": "max_age_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Date-filter alias. Undated playlist rows are kept. Explicit date aliases must agree. publish_time accepts yesterday, this-week, this-month, last-3-months or last-6-months; max_age_days accepts 0–36500."
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "List the complete available public playlist directory for a corroborated TikTok handle or numeric user ID. Each playlist preserves its source ID, name and video count. Reads at most three 30-playlist pages after resolving the profile, within 45 seconds. An unfinished directory fails uncharged instead of returning a partial list. Dates and engagement are unavailable and remain null; undated playlists are kept under date filters. This endpoint does not return playable video files.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 90,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "null"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "media_urls": {
+                                            "type": "null"
+                                          },
+                                          "thumbnail_url": {
+                                            "type": "null"
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "text",
+                                          "media_urls",
+                                          "thumbnail_url",
+                                          "duration_seconds"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": "null"
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "username",
+                                          "display_name",
+                                          "avatar_url",
+                                          "verified"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": "null"
+                                          },
+                                          "likes": {
+                                            "type": "null"
+                                          },
+                                          "comments": {
+                                            "type": "null"
+                                          },
+                                          "shares": {
+                                            "type": "null"
+                                          },
+                                          "saves": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "views",
+                                          "likes",
+                                          "comments",
+                                          "shares",
+                                          "saves"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": "null"
+                                          },
+                                          "spoiler": {
+                                            "type": "null"
+                                          },
+                                          "pinned": {
+                                            "type": "null"
+                                          },
+                                          "deleted": {
+                                            "const": false
+                                          }
+                                        },
+                                        "required": [
+                                          "nsfw",
+                                          "spoiler",
+                                          "pinned",
+                                          "deleted"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "published_at": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "video_count": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "video_count"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "content",
+                                      "author",
+                                      "engagement",
+                                      "flags",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": "null"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "content_category": {
+                                        "type": "null"
+                                      },
+                                      "estimated_reach": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "engagement_rate",
+                                      "language",
+                                      "content_category",
+                                      "estimated_reach"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "post",
+                                  "computed"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "dropped": {
+                              "const": 0
+                            },
+                            "user_id": {
+                              "type": "string"
+                            },
+                            "username": {
+                              "type": "string"
+                            },
+                            "pages_scanned": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 3
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "next_cursor",
+                            "dropped",
+                            "user_id",
+                            "username",
+                            "pages_scanned",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
