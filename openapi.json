@@ -113336,7 +113336,7 @@
       "get": {
         "operationId": "get_us_congress_trades_stats_party",
         "summary": "Us Congress Trades Stats Party",
-        "description": "Use Us Congress Trades Stats Party to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Native disclosed trade counts by democrat, republican and other, reconciled with the complete current Capitol Trades index. No query parameters. History is limited by the source to three years; counts are not extrapolated from sample rows.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -113371,7 +113371,86 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native disclosed trade counts by democrat, republican and other, reconciled with the complete current Capitol Trades index. No query parameters. History is limited by the source to three years; counts are not extrapolated from sample rows.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "minItems": 3,
+                              "maxItems": 3,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "party": {
+                                    "type": "string",
+                                    "enum": [
+                                      "democrat",
+                                      "republican",
+                                      "other"
+                                    ]
+                                  },
+                                  "trade_count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "share": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  }
+                                },
+                                "required": [
+                                  "party",
+                                  "trade_count",
+                                  "share"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "const": 3,
+                              "type": "integer"
+                            },
+                            "total_disclosures": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "retrieved_at": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total_disclosures",
+                            "source",
+                            "retrieved_at",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

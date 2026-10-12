@@ -1,6 +1,16 @@
 ---
-title: "Us Congress Trades Stats Party"
+title: "Congressional Trades by Party"
 openapi: "GET /us_congress_trades/stats/party"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns native disclosed trade counts for **democrat**, **republican** and **other**, using the [Capitol Trades index](https://www.capitoltrades.com/trades). No query parameters, filters or pagination are accepted.
+
+`trade_count` is the source's total disclosure count for each party. Counts come from native filtered totals, **not an estimate from sampled rows**. The three counts must sum to `total_disclosures`, independently read from the unfiltered index. `share` is the party count divided by the total, or zero for an empty index. Three groups are always returned, including zero-count groups.
+
+The adapter verifies source provenance, exact filter metadata, complete first pages, row parties and rendered disclosure IDs. Party pages must not overlap, and every first-page unfiltered disclosure must also appear in a party page. A mismatch fails without charging, rather than returning a partial breakdown. The four reads are independent; concurrent source changes can require a retry.
+
+The source limits its history to **three years**. These are its current indexed counts, not lifetime trading activity or complete government filings. `retrieved_at` is when collection began, **not the source's last-updated time**. This endpoint does not estimate trading value, profitability or transaction direction.
+
+One fresh aggregate uses four existing Firecrawl basic-transport reads with a shared 55-second deadline and a 4 MiB decoded HTML limit per page. A shared allowance of four aggregate requests per minute bounds source traffic. Scripts are parsed as data and never executed. No new provider key or account is required.
+
+A fresh response with at least one disclosure costs **1 credit**. An empty index, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. Existing approved Firecrawl free allowance only.
