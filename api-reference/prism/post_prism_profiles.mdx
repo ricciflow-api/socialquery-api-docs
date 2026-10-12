@@ -1,6 +1,16 @@
 ---
-title: "Prism Profiles"
+title: "Batch public profiles"
 openapi: "POST /prism/profiles"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass 1–50 objects in `items`, each with `platform`, `handle`, and optional `custom_id`. Results retain input order and caller IDs. Handles may be bare, begin with `@`, or be canonical HTTPS profile URLs. URLs must match the selected platform; redirects, credentials, query strings and fragments are rejected.
+
+**Supported now:** Instagram and TikTok through [ScrapeCreators](https://docs.scrapecreators.com/v1/instagram/profile/), YouTube through the [YouTube Data API](https://developers.google.com/youtube/v3/docs/channels/list), and Bluesky through its [public profile API](https://docs.bsky.app/docs/api/app-bsky-actor-get-profile). The other planned platforms return `unsupported`, with no final charge. Posts, `since`, per-item `stop_at_id`, and SSE are not implemented. Supplied enrichment options or SSE requests return 422 before spending.
+
+Every `ok` row contains a canonical Author in `data`. The returned identity must match the input. Unknown follower, verification or location fields remain null; hidden YouTube subscriber counts remain null. Provider errors are not treated as nonexistent accounts. A definitive source miss returns `not_found`.
+
+The request holds one credit per input, or five for a LinkedIn input, then refunds every `not_found`, `unsupported`, `error` and `deferred` row. Each successful supported profile costs one credit. LinkedIn is currently unsupported and its entire hold is refunded. Repeated input rows are separate lookups. Include the summed hold in `X-Max-Credits`.
+
+At most four source calls run concurrently, each with a twelve-second timeout. No new source work starts after twenty-eight seconds. Rows left unstarted return `deferred` and cost zero. A provider authentication or quota failure stops new calls to that provider while other providers continue. The response is never cached. Replay the same `Idempotency-Key` for zero-cost replay, or retry only failed/deferred rows with a new key.
+
+For MCP use `execute_endpoint`. The Python skill requires `--allow-mutation`, the batch budget and an idempotency key. Both clients calculate the complete hold before sending the batch.

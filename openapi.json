@@ -97684,8 +97684,8 @@
     "/prism/profiles": {
       "post": {
         "operationId": "post_prism_profiles",
-        "summary": "Prism Profiles",
-        "description": "Specification preview: Prism Profiles. Review the proposed inputs for this research recipe. Its composite execution service is still in development.",
+        "summary": "Batch public profiles",
+        "description": "Batch public profile lookup in input order, with caller custom_id values preserved. This release supports Instagram, TikTok, YouTube and Bluesky. Other platforms return unsupported with zero final charge; this is not full twelve-platform parity. Source identities are verified before returning a canonical Author. Unknown fields remain null. Reserve one credit per input (five for LinkedIn), then refund every unsuccessful row; successful supported profiles cost one each. Only JSON responses are implemented. Posts, since and per-item stop_at_id are unavailable and rejected. Work beyond the bounded execution budget is deferred, unbilled. No response caching; idempotency replays are free.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -97720,7 +97720,180 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Batch public profile lookup in input order, with caller custom_id values preserved. This release supports Instagram, TikTok, YouTube and Bluesky. Other platforms return unsupported with zero final charge; this is not full twelve-platform parity. Source identities are verified before returning a canonical Author. Unknown fields remain null. Reserve one credit per input (five for LinkedIn), then refund every unsuccessful row; successful supported profiles cost one each. Only JSON responses are implemented. Posts, since and per-item stop_at_id are unavailable and rejected. Work beyond the bounded execution budget is deferred, unbilled. No response caching; idempotency replays are free.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "succeeded",
+                            "next_cursor"
+                          ],
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "platform",
+                                  "handle",
+                                  "status",
+                                  "data",
+                                  "credits_used",
+                                  "ext"
+                                ],
+                                "properties": {
+                                  "platform": {
+                                    "type": "string"
+                                  },
+                                  "handle": {
+                                    "type": "string"
+                                  },
+                                  "custom_id": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "ok",
+                                      "not_found",
+                                      "unsupported",
+                                      "error",
+                                      "deferred"
+                                    ]
+                                  },
+                                  "data": {
+                                    "type": [
+                                      "object",
+                                      "null"
+                                    ],
+                                    "properties": {
+                                      "username": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "display_name": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "avatar_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "bio": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "location": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "external_url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "verified": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "followers": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "following": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "posts_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "likes_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "ext": {
+                                        "type": "object"
+                                      }
+                                    }
+                                  },
+                                  "credits_used": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "ext": {
+                                    "type": "object",
+                                    "properties": {
+                                      "reason": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "succeeded": {
+                              "type": "integer"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -97773,16 +97946,55 @@
                 ],
                 "properties": {
                   "items": {
-                    "type": "string"
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "platform",
+                        "handle"
+                      ],
+                      "additionalProperties": false,
+                      "properties": {
+                        "platform": {
+                          "type": "string",
+                          "pattern": "^[a-z_]{1,32}$"
+                        },
+                        "handle": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 2048
+                        },
+                        "custom_id": {
+                          "type": "string",
+                          "maxLength": 200
+                        }
+                      }
+                    },
+                    "example": [
+                      {
+                        "platform": "bluesky",
+                        "handle": "bsky.app",
+                        "custom_id": "account-1"
+                      },
+                      {
+                        "platform": "youtube",
+                        "handle": "@GoogleDevelopers",
+                        "custom_id": "account-2"
+                      }
+                    ]
                   },
                   "include": {
                     "type": "string",
                     "enum": [
                       "posts"
-                    ]
+                    ],
+                    "description": "Not implemented in this release; returns 422 before spending."
                   },
                   "since": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not implemented in this release; returns 422 before spending."
                   }
                 }
               }
@@ -97791,6 +98003,21 @@
         },
         "tags": [
           "Prism"
+        ],
+        "x-credit-cost-formula": "Reserve one credit per input (five for LinkedIn); charge one per successful supported profile and refund all other rows.",
+        "x-credit-pricing": {
+          "type": "profile_batch",
+          "maxItems": 50,
+          "defaultCredits": 1,
+          "platformCredits": {
+            "linkedin": 5
+          }
+        },
+        "x-supported-platforms": [
+          "instagram",
+          "tiktok",
+          "youtube",
+          "bluesky"
         ]
       }
     },
