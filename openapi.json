@@ -5724,7 +5724,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Signed opaque hint from a previous exact lookup or search match; valid for 10 minutes and bound to the same video, comment and parent. A stale location restarts at page one within the same page budget. Does not reduce the flat credit price."
+            "description": "Signed opaque hint from a previous exact lookup or search match; valid for 10 minutes and bound to the same source provider, video, comment and parent. A stale location restarts at page one within the same page budget. Does not reduce the flat credit price."
           },
           {
             "name": "max",
@@ -6282,7 +6282,10 @@
         ],
         "tags": [
           "TikTok"
-        ]
+        ],
+        "x-credit-cost-min": 2,
+        "x-credit-cost-max": 6,
+        "x-credit-cost-formula": "deep_scan ? 6 : 2"
       }
     },
     "/tiktok/search": {
