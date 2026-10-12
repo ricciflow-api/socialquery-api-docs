@@ -535,6 +535,39 @@
           "url",
           "categories"
         ]
+      },
+      "KlarnaCategoryNode": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_path": {
+            "type": "string"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KlarnaCategoryNode"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "source_path",
+          "url",
+          "children"
+        ]
       }
     },
     "responses": {
@@ -72648,7 +72681,7 @@
       "get": {
         "operationId": "get_klarna_categories",
         "summary": "Klarna Categories",
-        "description": "Use Klarna Categories to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns the complete current regional browse menu, including nested source categories and facets, in native order. Cross-listed categories can appear under multiple roots. Supports all 13 catalog regions. UK, Sweden and Denmark preserve legacy source paths with null absolute URLs. This navigation taxonomy does not promise inventory or all product filters.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -72706,7 +72739,79 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns the complete current regional browse menu, including nested source categories and facets, in native order. Cross-listed categories can appear under multiple roots. Supports all 13 catalog regions. UK, Sweden and Denmark preserve legacy source paths with null absolute URLs. This navigation taxonomy does not promise inventory or all product filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/KlarnaCategoryNode"
+                              }
+                            },
+                            "category": {
+                              "anyOf": [
+                                {
+                                  "$ref": "#/components/schemas/KlarnaCategoryNode"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "node_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "unique_node_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "category",
+                            "returned_count",
+                            "node_count",
+                            "unique_node_count",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -72757,7 +72862,7 @@
       "get": {
         "operationId": "get_klarna_categories_children",
         "summary": "Klarna Categories Children",
-        "description": "Use Klarna Categories Children to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns one native category and its children from Klarna’s dedicated regional hierarchy source. Explicit menu facets may be leaves. Unknown IDs return 404 with no net charge. Supports all 13 catalog regions. UK, Sweden and Denmark preserve legacy source paths with null absolute URLs. This navigation taxonomy does not promise inventory or all product filters.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -72824,7 +72929,79 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns one native category and its children from Klarna’s dedicated regional hierarchy source. Explicit menu facets may be leaves. Unknown IDs return 404 with no net charge. Supports all 13 catalog regions. UK, Sweden and Denmark preserve legacy source paths with null absolute URLs. This navigation taxonomy does not promise inventory or all product filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/KlarnaCategoryNode"
+                              }
+                            },
+                            "category": {
+                              "anyOf": [
+                                {
+                                  "$ref": "#/components/schemas/KlarnaCategoryNode"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "node_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "unique_node_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "category",
+                            "returned_count",
+                            "node_count",
+                            "unique_node_count",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

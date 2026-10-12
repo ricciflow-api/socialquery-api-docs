@@ -1,6 +1,16 @@
 ---
-title: "Klarna Categories Children"
+title: "Klarna Category Children"
 openapi: "GET /klarna/categories/children"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns one native category and its children from Klarna’s dedicated regional hierarchy source. Explicit menu facets may be leaves. Unknown IDs return 404 with no net charge. Supports all 13 catalog regions. UK, Sweden and Denmark preserve legacy source paths with null absolute URLs. This navigation taxonomy does not promise inventory or all product filters.
+
+Regions are `usa` (default), `uk`, `germany`, `sweden`, `france`, `italy`, `spain`, `netherlands`, `austria`, `ireland`, `norway`, `finland` and `denmark`. The adapter reads the same anonymous public navigation service used by Klarna's browse UI. It does not require an account or provider key.
+
+Every node preserves `id`, `name`, `source_path` and recursive `children`. Source IDs include tree IDs such as `t1`, category IDs such as `cl94`, and facet IDs with numeric hyphens. Cross-listed categories remain in their original branches; `node_count` counts occurrences, while `unique_node_count` counts distinct IDs. These counts include the selected parent for child lookups. `returned_count` is the top-level `items` count. The category directory sets `category` to null; the children operation returns the selected parent in `category` and its direct children in `items`.
+
+The UK, Swedish and Danish sources use legacy path and attribute-filter formats. Their absolute `url` is null; no working Klarna page is inferred from a relative source path. Other markets expose source-based Klarna browse URLs. Product retrieval and category-product filters remain separate operations.
+
+Use `category_id=t1` for TV & Audio or `category_id=cl94` for Headphones with the children endpoint. A facet missing from the dedicated hierarchy API is returned only when the regional menu explicitly identifies it as a leaf. Unknown IDs return 404 with no net charge. A valid leaf still returns its parent record with an empty `items` list and costs **1 credit** on a fresh request.
+
+Each successful fresh request costs **1 SocialQuery credit**. Cached results, successful idempotent replays and failures have no net charge. Source requests have a shared 20-per-minute ceiling, a 25-second total timeout, a 2 MiB response limit and bounded tree depth/size. The adapter rejects unsafe paths, cycles, inconsistent IDs and duplicate siblings; it does not silently truncate.
