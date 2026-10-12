@@ -5647,8 +5647,8 @@
     "/tiktok/comment": {
       "get": {
         "operationId": "get_tiktok_comment",
-        "summary": "TikTok Comment",
-        "description": "Use TikTok Comment to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "summary": "Look up or search public TikTok comments",
+        "description": "Look up a public TikTok root comment or reply, or search by case-insensitive author handle or text snippet. Canonical and m.tiktok.com video URLs accept numeric or base64 comment IDs; shortlinks are not yet resolved. Flat 2 credits, or 6 with deep_scan=true. Scans are bounded to 3/9 source pages of up to 30 rows, within 50 seconds. A provider-list end without a match returns an uncharged 404; an unfinished bounded scan returns uncharged 503 LOOKUP_SCAN_LIMIT. Source-list completion is not proof that every TikTok comment is exposed. Signed position hints expire after 10 minutes and probe fresh data.",
         "x-credit-cost": 2,
         "x-launch-status": "beta",
         "parameters": [
@@ -5656,10 +5656,11 @@
             "name": "comment_url",
             "in": "query",
             "required": false,
-            "example": "https://www.tiktok.com/@mrbeast/video/7654638524729216287?comment_id=7654640784985211670",
+            "example": "https://www.tiktok.com/@daviddobrik/video/7166718514751933739?comment_id=7166719450585531142",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical https://www.tiktok.com/@handle/video/id URL or https://m.tiktok.com/v/id.html URL, with comment_id, share_comment_id or cid. IDs may be numeric or base64 encoded. No other query fields, fragments or shortlinks. Mutually exclusive with post_url and comment_id."
           },
           {
             "name": "post_url",
@@ -5667,7 +5668,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Canonical TikTok video URL; combine with comment_id or an author/text search. One of comment_url or post_url is required."
           },
           {
             "name": "comment_id",
@@ -5675,7 +5677,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Numeric comment ID. Requires post_url. For a reply also supply parent_comment_id."
           },
           {
             "name": "parent_comment_id",
@@ -5683,7 +5686,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Numeric parent ID when looking up a reply. It must differ from the target comment ID."
           },
           {
             "name": "author_username",
@@ -5691,7 +5695,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Case-insensitive handle, optionally prefixed with @. Mutually exclusive with text_contains and any comment ID."
           },
           {
             "name": "text_contains",
@@ -5699,15 +5704,18 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Case-insensitive snippet of 1–500 characters. Mutually exclusive with author_username and any comment ID."
           },
           {
             "name": "deep_scan",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "boolean"
-            }
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Increase the scan ceiling from 3 to 9 pages. Successful calls cost 6 credits instead of 2; both modes use a 50-second deadline."
           },
           {
             "name": "position_hint",
@@ -5715,15 +5723,20 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Signed opaque hint from a previous exact lookup or search match; valid for 10 minutes and bound to the same video, comment and parent. A stale location restarts at page one within the same page budget. Does not reduce the flat credit price."
           },
           {
             "name": "max",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 5
+            },
+            "description": "Maximum search matches, 1–20, default 5. Not accepted for a comment-ID lookup."
           },
           {
             "name": "Cache-Control",
@@ -5756,7 +5769,470 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Look up a public TikTok root comment or reply, or search by case-insensitive author handle or text snippet. Canonical and m.tiktok.com video URLs accept numeric or base64 comment IDs; shortlinks are not yet resolved. Flat 2 credits, or 6 with deep_scan=true. Scans are bounded to 3/9 source pages of up to 30 rows, within 50 seconds. A provider-list end without a match returns an uncharged 404; an unfinished bounded scan returns uncharged 503 LOOKUP_SCAN_LIMIT. Source-list completion is not proof that every TikTok comment is exposed. Signed position hints expire after 10 minutes and probe fresh data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "lookup": {
+                                  "type": "object",
+                                  "properties": {
+                                    "post_id": {
+                                      "type": "string"
+                                    },
+                                    "parent_comment_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "position_hint": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "pages_scanned": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 9
+                                    },
+                                    "comments_scanned": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "scan_complete": {
+                                      "type": "boolean"
+                                    },
+                                    "page_limit": {
+                                      "type": "integer",
+                                      "enum": [
+                                        3,
+                                        9
+                                      ]
+                                    },
+                                    "post_comment_count": {
+                                      "type": "null"
+                                    }
+                                  },
+                                  "required": [
+                                    "post_id",
+                                    "parent_comment_id",
+                                    "position_hint",
+                                    "pages_scanned",
+                                    "comments_scanned",
+                                    "scan_complete",
+                                    "page_limit",
+                                    "post_comment_count"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "source": {
+                                  "type": "string"
+                                },
+                                "coverage_note": {
+                                  "type": "string"
+                                },
+                                "comment": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "post_id": {
+                                      "type": "string"
+                                    },
+                                    "parent_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "author": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "username": {
+                                          "type": "string"
+                                        },
+                                        "display_name": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "avatar_url": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "verified": {
+                                          "type": [
+                                            "boolean",
+                                            "null"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "username",
+                                        "display_name",
+                                        "avatar_url",
+                                        "verified"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "likes": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "reply_count": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "published_at": {
+                                      "type": "string",
+                                      "format": "date-time"
+                                    },
+                                    "flags": {
+                                      "type": "object",
+                                      "properties": {
+                                        "pinned": {
+                                          "type": [
+                                            "boolean",
+                                            "null"
+                                          ]
+                                        },
+                                        "liked_by_author": {
+                                          "type": [
+                                            "boolean",
+                                            "null"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "pinned",
+                                        "liked_by_author"
+                                      ],
+                                      "additionalProperties": false
+                                    },
+                                    "ext": {
+                                      "type": "object",
+                                      "properties": {
+                                        "language": {
+                                          "type": [
+                                            "string",
+                                            "null"
+                                          ]
+                                        },
+                                        "image_urls": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "maxItems": 30
+                                        }
+                                      },
+                                      "required": [
+                                        "language",
+                                        "image_urls"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "post_id",
+                                    "parent_id",
+                                    "url",
+                                    "text",
+                                    "author",
+                                    "likes",
+                                    "reply_count",
+                                    "published_at",
+                                    "flags",
+                                    "ext"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "lookup",
+                                "source",
+                                "coverage_note",
+                                "comment"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "lookup": {
+                                  "type": "object",
+                                  "properties": {
+                                    "post_id": {
+                                      "type": "string"
+                                    },
+                                    "parent_comment_id": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "position_hint": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "pages_scanned": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 9
+                                    },
+                                    "comments_scanned": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "scan_complete": {
+                                      "type": "boolean"
+                                    },
+                                    "page_limit": {
+                                      "type": "integer",
+                                      "enum": [
+                                        3,
+                                        9
+                                      ]
+                                    },
+                                    "post_comment_count": {
+                                      "type": "null"
+                                    }
+                                  },
+                                  "required": [
+                                    "post_id",
+                                    "parent_comment_id",
+                                    "position_hint",
+                                    "pages_scanned",
+                                    "comments_scanned",
+                                    "scan_complete",
+                                    "page_limit",
+                                    "post_comment_count"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "source": {
+                                  "type": "string"
+                                },
+                                "coverage_note": {
+                                  "type": "string"
+                                },
+                                "matches": {
+                                  "type": "array",
+                                  "minItems": 1,
+                                  "maxItems": 20,
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "comment": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "post_id": {
+                                            "type": "string"
+                                          },
+                                          "parent_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "url": {
+                                            "type": "string"
+                                          },
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "author": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "username": {
+                                                "type": "string"
+                                              },
+                                              "display_name": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "avatar_url": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "verified": {
+                                                "type": [
+                                                  "boolean",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "username",
+                                              "display_name",
+                                              "avatar_url",
+                                              "verified"
+                                            ],
+                                            "additionalProperties": false
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "reply_count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "published_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                          },
+                                          "flags": {
+                                            "type": "object",
+                                            "properties": {
+                                              "pinned": {
+                                                "type": [
+                                                  "boolean",
+                                                  "null"
+                                                ]
+                                              },
+                                              "liked_by_author": {
+                                                "type": [
+                                                  "boolean",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "pinned",
+                                              "liked_by_author"
+                                            ],
+                                            "additionalProperties": false
+                                          },
+                                          "ext": {
+                                            "type": "object",
+                                            "properties": {
+                                              "language": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "image_urls": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": [
+                                                    "string",
+                                                    "null"
+                                                  ]
+                                                },
+                                                "maxItems": 30
+                                              }
+                                            },
+                                            "required": [
+                                              "language",
+                                              "image_urls"
+                                            ],
+                                            "additionalProperties": false
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "post_id",
+                                          "parent_id",
+                                          "url",
+                                          "text",
+                                          "author",
+                                          "likes",
+                                          "reply_count",
+                                          "published_at",
+                                          "flags",
+                                          "ext"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "position_hint": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "comment",
+                                      "position_hint"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                }
+                              },
+                              "required": [
+                                "lookup",
+                                "source",
+                                "coverage_note",
+                                "matches"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

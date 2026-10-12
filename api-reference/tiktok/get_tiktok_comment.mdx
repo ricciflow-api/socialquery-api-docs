@@ -1,6 +1,18 @@
 ---
-title: "TikTok Comment"
+title: "TikTok comment lookup"
 openapi: "GET /tiktok/comment"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Costs **2 credits** per successful lookup, or **6 credits** with `deep_scan=true`. Errors, cache hits, and successful idempotent replays cost zero. Use `X-Max-Credits: 2` (or `6` for a deep scan) to cap the charge. A position hint reduces source work, not the flat price.
+
+Pass a `comment_url`, or `post_url` with `comment_id`. For a reply, also provide `parent_comment_id`. Canonical video links and `m.tiktok.com/v/{id}.html` links accept numeric or base64-encoded `comment_id`, `share_comment_id`, or `cid` values. Other URL query parameters and `vm.tiktok.com` / `/t/` shortlinks are not yet supported and return an uncharged 422.
+
+Alternatively, use `post_url` with **either** `author_username` **or** `text_contains`. Both searches are case-insensitive. Search returns `data.matches` with up to `max` comments (1–20, default 5). Exact lookups return `data.comment`. Each comment preserves the source identity, author, text, current like/reply counts, timestamp, pinned/liked flags and image URLs; unavailable optional values remain null. The video ID is checked against every returned comment. The profile handle supplied in the video URL is not proof of the video's author.
+
+Standard scans inspect at most 3 pages; deep scans inspect at most 9. Each page contains up to 30 source comments, and both modes have a 50-second deadline. `lookup.scan_complete` means the provider ended its available list. It does **not** certify that every TikTok comment or reply was exposed. Search may return fewer than `max` matches with `scan_complete=false`.
+
+An available list ending without a match returns **404 `RESOURCE_NOT_FOUND`**. A scan that reaches its limit without finding a match returns **503 `LOOKUP_SCAN_LIMIT`**, never a false not-found claim. Provider errors, malformed identity, and budget exhaustion fail without charging.
+
+Exact lookups return `lookup.position_hint`; search matches each include their own hint. Hints are signed, bound to the same video/comment/parent, and expire after 10 minutes. Passing one probes its saved source cursor and reads the current comment. A stale hint restarts at page one within the same scan budget. It is not a stored comment snapshot. Successful responses may be cached for five minutes; use `Cache-Control: no-cache` when you need a new source read.
+
+Source: [ScrapeBadger TikTok comments](https://docs.scrapebadger.com/api-reference/endpoint/tiktok/get-comments) and [replies](https://docs.scrapebadger.com/api-reference/endpoint/tiktok/get-comment-replies), using the US region. Coverage and availability depend on that source. Shortlink resolution remains a parity gap.
