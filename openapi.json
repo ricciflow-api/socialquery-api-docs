@@ -73807,7 +73807,7 @@
       "get": {
         "operationId": "get_klarna_product_compare",
         "summary": "Klarna Product Compare",
-        "description": "Use Klarna Product Compare to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Compares exactly two independently verified regional products using native specification tables. Product cards follow the requested order; category groups retain source ordering, units and per-product values, including empty and missing values without inference.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -73817,8 +73817,10 @@
             "required": true,
             "example": "3331931731",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "A native positive product ID in the requested region. The two product IDs must be distinct and must both exist."
           },
           {
             "name": "product_id_2",
@@ -73826,8 +73828,10 @@
             "required": true,
             "example": "3216399795",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$"
+            },
+            "description": "A native positive product ID in the requested region. The two product IDs must be distinct and must both exist."
           },
           {
             "name": "region",
@@ -73883,7 +73887,318 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Compares exactly two independently verified regional products using native specification tables. Product cards follow the requested order; category groups retain source ordering, units and per-product values, including empty and missing values without inference.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "source_path": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "category": {
+                                        "anyOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "source_path": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "url": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "name",
+                                              "source_path",
+                                              "url"
+                                            ]
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "currency"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "average",
+                                          "count"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "enum": [
+                                          "in_stock",
+                                          "out_of_stock",
+                                          null
+                                        ]
+                                      },
+                                      "condition": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "source_path",
+                                      "url",
+                                      "description",
+                                      "category",
+                                      "price",
+                                      "rating",
+                                      "image_urls",
+                                      "availability",
+                                      "condition"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              },
+                              "minItems": 2,
+                              "maxItems": 2
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "const": 2
+                            },
+                            "product_ids": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "source_product_order": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "categories": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "product_ids": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "groups": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "attributes": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "properties": {
+                                              "id": {
+                                                "type": "string"
+                                              },
+                                              "name": {
+                                                "type": "string"
+                                              },
+                                              "description": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "unit": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "values": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                  "type": "array",
+                                                  "items": {
+                                                    "type": "string"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "required": [
+                                              "id",
+                                              "name",
+                                              "description",
+                                              "unit",
+                                              "values"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name",
+                                        "attributes"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "product_ids",
+                                  "groups"
+                                ]
+                              }
+                            },
+                            "attribute_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "country_code": {
+                              "type": "string"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "product_ids",
+                            "source_product_order",
+                            "categories",
+                            "attribute_count",
+                            "region",
+                            "country_code",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

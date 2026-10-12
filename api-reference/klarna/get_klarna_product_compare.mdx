@@ -1,6 +1,16 @@
 ---
-title: "Klarna Product Compare"
+title: "Klarna Product Comparison"
 openapi: "GET /klarna/product/compare"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Compares exactly two distinct regional products. Supply `product_id` and `product_id_2`; both must exist in the requested region. A native product-information lookup independently verifies both identities before requesting the comparison. A source-confirmed missing product returns 404 rather than a partial one-product success.
+
+`items` contains the two normalized product cards in **your requested order**, including native prices, ratings, categories and images when available. `source_product_order` separately records Klarna's returned order. Prices and ratings are source snapshots, not merchant checkout guarantees. UK, Swedish and Danish cards retain legacy source paths with null absolute URLs.
+
+`categories` holds native category-specific specification tables. Each category lists its member `product_ids`, source-ordered `groups`, and `attributes`. Attribute `values` remain keyed by native product ID, with string arrays exactly as supplied. Empty arrays mean that the source supplied no values; absent keys stay absent. Units and descriptions remain native, and no unit conversion, missing-value inference or best-product recommendation is added. `attribute_count` counts returned attribute rows.
+
+Cross-category comparisons retain separate tables. For example, headphones and a console have different category-specific attributes; a value for one category is not copied onto the other product. Duplicate identities, unexpected product-value keys, mismatched category IDs and invalid fields fail explicitly.
+
+All 13 catalog regions are supported. Source access is anonymous and does not use customer accounts or follow advertising or checkout links. Each call uses two native source requests, shares the Klarna 20-request/minute ceiling, and has a 25-second total timeout and 2 MiB limit per response. Tables are bounded to 2,000 attribute rows; oversized results fail rather than silently truncate.
+
+A fresh successful comparison costs **5 credits**. Failures, cached responses and successful idempotent replays have no net charge. Use `X-Max-Credits: 5` to cap the hold.
