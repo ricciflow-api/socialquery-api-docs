@@ -3,4 +3,14 @@ title: "Naver Blog Search"
 openapi: "GET /naver/blog/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Searches the **native Naver Blog relevance index** using the already configured ScrapeBadger account. Naver Cloud credentials are not required for this operation. The official Naver paid-account setup remains on hold.
+
+Each row contains a canonical `post` plus compatibility fields `title`, `link`, `description`, `bloggername`, `bloggerlink` and `postdate`. Korean text is preserved; highlight tags are stripped and entities decoded. The provider supplies calendar days or relative labels, so `post.published_at` remains null. Exact calendar days appear in `post.ext.published_date` with `published_at_precision: "day"`; relative/unknown dates remain null. Views, likes, comments and author verification are unknown, not zero.
+
+Use `display` or `limit` (1–100; default 10), with `start` (1–1000), or return `next_cursor` alone. Matching aliases must agree. A cursor binds the query, requested size and inclusive `since`/`until` calendar-day filters for one hour. Conflicting explicit values are rejected. Date filtering excludes rows without a known date, and pagination advances over scanned source rows even when every row is filtered out.
+
+Each source page contains up to 30 rows; a requested window uses at most five bounded parallel source reads. Within a response, duplicate post IDs are removed and counted in `dropped`. Rankings can change across requests: the two live source pages overlapped on 13 of 30 IDs. **Deduplicate by `post.id` across pages.** The source does not supply a reliable total, so `total` is null. Full source pages may lead to an empty terminal page. Traversal stops at source position 1,000; cursors are not snapshots or an exhaustive collection guarantee.
+
+Only `sort=sim` and `judgments=off` are supported. Date sorting, AI relevance/fit/labeling, dry runs and synthesis are rejected with an unbilled 422. These remain feature-parity gaps.
+
+A fresh nonempty result costs **1 credit**. Errors, empty/fully filtered windows, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. All source reads are reserved against the shared **500-credit ScrapeBadger verification ceiling** before any request starts; up to five pages use up to 25 provider credits. Missing/exhausted budget state fails closed. Requests have a 45-second shared timeout and a 2 MiB per-page bound. This approved verification allowance is not a permanent production capacity commitment; no purchase or top-up is enabled.

@@ -90133,18 +90133,19 @@
       "get": {
         "operationId": "get_naver_blog_search",
         "summary": "Naver Blog Search",
-        "description": "Find records through Naver Blog Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Native Naver Blog relevance results through the existing ScrapeBadger provider. Up to 100 source rows from at most five source pages, start 1–1000, with query-bound cursor continuation. Preserves Korean, source calendar days and unknown dates; does not invent exact publish timestamps. Date sorting and AI enrichment are unsupported. Empty or fully filtered windows are free.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "query",
             "in": "query",
-            "required": true,
-            "example": "소셜크롤",
+            "required": false,
+            "example": "에어프라이어 추천",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Korean or other search text, up to 500 characters; alternatively supply a returned cursor."
           },
           {
             "name": "display",
@@ -90152,16 +90153,22 @@
             "required": false,
             "example": 10,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Requested source rows, 1–100 (default 10). Both aliases must agree. Duplicate/date filtering can reduce returned_count."
           },
           {
             "name": "start",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
-            }
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "description": "One-based source offset, 1–1000. Cursors preserve remaining source positions."
           },
           {
             "name": "sort",
@@ -90170,10 +90177,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "sim",
-                "date"
+                "sim"
               ]
-            }
+            },
+            "description": "Only sim (native relevance order) is supported by this provider; date is rejected."
           },
           {
             "name": "relevance",
@@ -90185,7 +90192,8 @@
                 "score",
                 "filter"
               ]
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "relevance_threshold",
@@ -90193,7 +90201,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "relevant_to",
@@ -90201,7 +90210,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "judgments",
@@ -90210,10 +90220,10 @@
             "schema": {
               "type": "string",
               "enum": [
-                "on",
                 "off"
               ]
-            }
+            },
+            "description": "Only off is supported; no AI synthesis or scoring is performed."
           },
           {
             "name": "dry_run",
@@ -90224,7 +90234,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "fit",
@@ -90235,7 +90246,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "goal",
@@ -90243,7 +90255,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "fit_tokens",
@@ -90251,7 +90264,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "label",
@@ -90259,7 +90273,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "exclude",
@@ -90267,7 +90282,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "brand",
@@ -90275,7 +90291,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "brand_description",
@@ -90283,7 +90300,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "offer",
@@ -90291,7 +90309,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "label_evidence",
@@ -90302,23 +90321,28 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unsupported by the current native-blog adapter; supplying this parameter returns an unbilled 422."
           },
           {
             "name": "since",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive YYYY-MM-DD calendar-day filter within the scanned window. Rows with unknown dates are excluded when either bound is supplied."
           },
           {
             "name": "until",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive YYYY-MM-DD calendar-day filter within the scanned window. Rows with unknown dates are excluded when either bound is supplied."
           },
           {
             "name": "cursor",
@@ -90326,7 +90350,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque one-hour next_cursor; can be used alone. Binds query, requested size and date filters; explicit conflicts are rejected."
           },
           {
             "name": "limit",
@@ -90334,8 +90359,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Requested source rows, 1–100 (default 10). Both aliases must agree. Duplicate/date filtering can reduce returned_count."
           },
           {
             "name": "Cache-Control",
@@ -90368,7 +90395,284 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native Naver Blog relevance results through the existing ScrapeBadger provider. Up to 100 source rows from at most five source pages, start 1–1000, with query-bound cursor continuation. Preserves Korean, source calendar days and unknown dates; does not invent exact publish timestamps. Date sorting and AI enrichment are unsupported. Empty or fully filtered windows are free.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "thumbnail_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "duration_seconds": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "text",
+                                          "media_urls",
+                                          "thumbnail_url",
+                                          "duration_seconds"
+                                        ]
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "url": {
+                                            "type": "string"
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "verified": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "username",
+                                          "display_name",
+                                          "url",
+                                          "avatar_url",
+                                          "verified"
+                                        ]
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": "null"
+                                          },
+                                          "likes": {
+                                            "type": "null"
+                                          },
+                                          "comments": {
+                                            "type": "null"
+                                          },
+                                          "shares": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "views",
+                                          "likes",
+                                          "comments",
+                                          "shares"
+                                        ]
+                                      },
+                                      "published_at": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": "string"
+                                          },
+                                          "published_date": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "published_label": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "published_at_precision": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ],
+                                            "enum": [
+                                              "day",
+                                              null
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "title",
+                                          "published_date",
+                                          "published_label",
+                                          "published_at_precision"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "content",
+                                      "author",
+                                      "engagement",
+                                      "published_at",
+                                      "ext"
+                                    ]
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "link": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "bloggername": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "bloggerlink": {
+                                    "type": "string"
+                                  },
+                                  "postdate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "post",
+                                  "title",
+                                  "link",
+                                  "description",
+                                  "bloggername",
+                                  "bloggerlink",
+                                  "postdate"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "display": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "start": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 1000
+                            },
+                            "source_rows_scanned": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "date_filtered": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_pages": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 34
+                              }
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string",
+                              "const": "scrapebadger"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "display",
+                            "start",
+                            "source_rows_scanned",
+                            "dropped",
+                            "date_filtered",
+                            "source_pages",
+                            "has_more",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -90412,6 +90716,12 @@
         },
         "tags": [
           "Naver"
+        ],
+        "x-one-of-parameters": [
+          [
+            "query",
+            "cursor"
+          ]
         ]
       }
     },
