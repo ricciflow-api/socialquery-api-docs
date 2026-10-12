@@ -1,0 +1,10 @@
+---
+title: "Credit transactions"
+openapi: "GET /credits/transactions"
+---
+
+Requires your SocialQuery API key. Costs **0 credits** and makes no upstream requests.
+
+Receipts are private to your account. Use `request_id` to reconcile a single request, or pass the returned `next_cursor` for another page. A debit reserves credits; its refund releases the unused amount. Sum the signed amounts for the settled charge. Refunds can receive later settlement updates, and unrecorded credit tiers stay null.
+
+Hosted and stdio MCP expose `get_credit_transactions`. The Python skill supports `transactions --limit 20`, `--cursor`, and `--request-id`. Neither client automatically paginates.

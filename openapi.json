@@ -118970,6 +118970,404 @@
         ],
         "x-credit-cost-formula": "20 credits per successful company response, independent of shipment limit. Source-confirmed no records, failures, 24-hour cache hits and idempotent replays cost zero."
       }
+    },
+    "/credits/balance": {
+      "get": {
+        "summary": "Read your credit balance",
+        "description": "Free authenticated account read. balance and credits_balance report the current available balance, which can include pending request reservations. recent_deductions counts debit ledger entries in the preceding 24 hours, including reservations later refunded. No upstream requests. Responses are private and never cached.",
+        "tags": [
+          "meta"
+        ],
+        "operationId": "meta_credits_balance",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "x-credit-cost": 0,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Private account data. Cache-Control: private, no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "const": true
+                    },
+                    "platform": {
+                      "type": "string",
+                      "const": "meta"
+                    },
+                    "endpoint": {
+                      "type": "string",
+                      "const": "/v1/credits/balance"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "balance": {
+                          "type": "integer"
+                        },
+                        "recent_deductions": {
+                          "type": "integer"
+                        },
+                        "credits_balance": {
+                          "type": "integer",
+                          "description": "Backward-compatible alias for balance."
+                        },
+                        "user_id": {
+                          "type": "string",
+                          "format": "uuid"
+                        }
+                      },
+                      "required": [
+                        "balance",
+                        "recent_deductions",
+                        "credits_balance",
+                        "user_id"
+                      ]
+                    },
+                    "credits_used": {
+                      "type": "integer",
+                      "const": 0
+                    },
+                    "credits_remaining": {
+                      "type": "integer"
+                    },
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "cached": {
+                      "type": "boolean",
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "platform",
+                    "endpoint",
+                    "data",
+                    "credits_used",
+                    "credits_remaining",
+                    "request_id",
+                    "cached"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid, expired or revoked key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key does not grant this endpoint scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Use GET.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "API key rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Account storage temporarily unavailable. No credit charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/credits/transactions": {
+      "get": {
+        "summary": "List your credit receipts",
+        "description": "Free authenticated ledger read, newest first by creation time and ID. Only the authenticated account is visible. Deductions include initial reservations; refunds release unused or failed-request credits. Sum entries for a request_id to find its net charge. A stored refund can be updated by a later settlement, so pages are not an immutable historical snapshot. Refund balance_after reflects the latest settlement; ordering remains its original creation time. Administrative adjustments retain type adjustment. Pending log joins and historical credit tiers can be null. No provider requests or charges. Responses are private and never cached.",
+        "tags": [
+          "meta"
+        ],
+        "operationId": "meta_credits_transactions",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "x-credit-cost": 0,
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Positive integer, default 50. Values greater than 100 are capped at 100.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "description": "Opaque next_cursor. Malformed cursors or cursors from a different request_id filter restart at the newest entry.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "request_id",
+            "in": "query",
+            "required": false,
+            "description": "Exact request ID, 1–200 printable characters.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Private account data. Cache-Control: private, no-store.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "const": true
+                    },
+                    "platform": {
+                      "type": "string",
+                      "const": "meta"
+                    },
+                    "endpoint": {
+                      "type": "string",
+                      "const": "/v1/credits/transactions"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "purchase",
+                                  "deduction",
+                                  "refund",
+                                  "bonus",
+                                  "adjustment"
+                                ]
+                              },
+                              "amount": {
+                                "type": "integer"
+                              },
+                              "balance_after": {
+                                "type": "integer"
+                              },
+                              "description": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "endpoint": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "platform": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "credit_tier": {
+                                "type": "null",
+                                "description": "No historical tier is recorded; this field remains null."
+                              },
+                              "request_id": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "type",
+                              "amount",
+                              "balance_after",
+                              "description",
+                              "endpoint",
+                              "platform",
+                              "credit_tier",
+                              "request_id",
+                              "created_at"
+                            ]
+                          }
+                        },
+                        "next_cursor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "next_cursor"
+                      ]
+                    },
+                    "credits_used": {
+                      "type": "integer",
+                      "const": 0
+                    },
+                    "credits_remaining": {
+                      "type": "integer"
+                    },
+                    "request_id": {
+                      "type": "string"
+                    },
+                    "cached": {
+                      "type": "boolean",
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "platform",
+                    "endpoint",
+                    "data",
+                    "credits_used",
+                    "credits_remaining",
+                    "request_id",
+                    "cached"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid, expired or revoked key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The key does not grant this endpoint scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Use GET.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "API key rate limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Account storage temporarily unavailable. No credit charge.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

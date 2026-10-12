@@ -83,6 +83,13 @@
         "icon": "code",
         "groups": [
           {
+            "group": "Account credits",
+            "pages": [
+              "api-reference/credits/meta_credits_balance",
+              "api-reference/credits/meta_credits_transactions"
+            ]
+          },
+          {
             "group": "LinkedIn",
             "pages": [
               "api-reference/linkedin/get_linkedin_profile",
