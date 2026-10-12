@@ -3,4 +3,10 @@ title: "G2 Categories"
 openapi: "GET /g2/categories"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+The public G2 directory lists software and services categories. This operation takes no parameters and returns the full available directory page in its source order.
+
+Each `items` entry contains G2's numeric `id` as a string, URL `slug`, source `name`, displayed `label`, `parent_label` and `url`. The parent label is source text, not an inferred parent ID or a guarantee of a unique parent. Source URL casing and trailing hyphens are preserved. `total` counts returned category entries; it does not count products. `next_cursor` is null.
+
+The directory can change. This endpoint does not return products, rankings, filter counts or historical category snapshots.
+
+The adapter uses one fresh basic Firecrawl fetch of the exact public G2 page. Redirected, failed or inconsistent pages are rejected rather than treated as empty successes. A successful fresh request uses the documented SocialQuery price; cached responses and successful idempotent replays are free.

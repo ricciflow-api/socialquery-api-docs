@@ -3,4 +3,12 @@ title: "G2 Product"
 openapi: "GET /g2/product"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a G2 product `id` such as `postman`, or its public product `url`. If both are supplied they must identify the same product. A source response must match the canonical product URL, heading, seller metadata and structured product ratings.
+
+`product` contains the source numeric ID, slug, name, description when available, category labels, operating system, aggregate rating and review count, and seller identity. These are public page fields. The description is a source-published claim. A review count does not mean the endpoint retrieved all written reviews.
+
+`listed_offers` preserves the names, amounts and currencies published in G2's structured metadata. Billing intervals are unavailable and remain null; these amounts are not checkout quotes. No paid vendor destination or advertiser redirect is followed.
+
+`website_contacts_crawl_mode` supports `off` only. Homepage and deep contact crawling return 422 without a net charge. `website_contacts` is null. Private analytics, buyer intent and a complete feature inventory are not included.
+
+The adapter uses one fresh basic Firecrawl fetch of the exact public G2 page. Redirected, failed or inconsistent pages are rejected rather than treated as empty successes. A successful fresh request uses the documented SocialQuery price; cached responses and successful idempotent replays are free.

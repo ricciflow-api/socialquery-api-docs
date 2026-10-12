@@ -51926,7 +51926,7 @@
       "get": {
         "operationId": "get_g2_product",
         "summary": "G2 Product",
-        "description": "Use G2 Product to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read one public G2 software product page, corroborating product identity and structured ratings. Returns source description, categories, seller and listed offer amounts. Billing intervals are unknown, and offer amounts are not checkout quotes. Website contact crawling, private analytics and full feature inventories are unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -51954,11 +51954,11 @@
             "schema": {
               "type": "string",
               "enum": [
-                "off",
-                "homepage",
-                "deep"
-              ]
-            }
+                "off"
+              ],
+              "default": "off"
+            },
+            "description": "Only off is supported by this source. Homepage and deep contact crawls return 422 without a net credit charge."
           },
           {
             "name": "Cache-Control",
@@ -51991,7 +51991,166 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read one public G2 software product page, corroborating product identity and structured ratings. Returns source description, categories, seller and listed offer amounts. Billing intervals are unknown, and offer amounts are not checkout quotes. Website contact crawling, private analytics and full feature inventories are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "product": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "slug": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "operating_system": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "rating": {
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 5
+                                    },
+                                    "review_count": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "best": {
+                                      "type": "integer",
+                                      "const": 5
+                                    },
+                                    "worst": {
+                                      "type": [
+                                        "number",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "value",
+                                    "review_count",
+                                    "best",
+                                    "worst"
+                                  ]
+                                },
+                                "seller": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "url"
+                                  ]
+                                },
+                                "listed_offers": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "amount": {
+                                        "type": "number",
+                                        "minimum": 0
+                                      },
+                                      "currency": {
+                                        "type": "string"
+                                      },
+                                      "billing_interval": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "name",
+                                      "amount",
+                                      "currency",
+                                      "billing_interval"
+                                    ]
+                                  }
+                                },
+                                "website_contacts": {
+                                  "type": "null"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "slug",
+                                "name",
+                                "url",
+                                "description",
+                                "categories",
+                                "operating_system",
+                                "rating",
+                                "seller",
+                                "listed_offers",
+                                "website_contacts"
+                              ]
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "product",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -52682,7 +52841,7 @@
       "get": {
         "operationId": "get_g2_categories",
         "summary": "G2 Categories",
-        "description": "Use G2 Categories to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read the current public G2 category directory in source order, including source IDs, slugs, names, displayed labels and parent labels. Includes software and services categories; parent labels are not inferred parent IDs. No query filters, counts of products, or pagination.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -52717,7 +52876,82 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read the current public G2 category directory in source order, including source IDs, slugs, names, displayed labels and parent labels. Includes software and services categories; parent labels are not inferred parent IDs. No query filters, counts of products, or pagination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "slug": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "label": {
+                                    "type": "string"
+                                  },
+                                  "parent_label": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "slug",
+                                  "name",
+                                  "label",
+                                  "parent_label",
+                                  "url"
+                                ]
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
