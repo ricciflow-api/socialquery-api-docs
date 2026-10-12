@@ -3,4 +3,8 @@ title: "Gumtree Product"
 openapi: "GET /gumtree/product"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read one public Gumtree UK listing by numeric product_id or listing URL. Returns the observed title, description, GBP price, photos, location text, condition, category and available seller name. Seller IDs, exact coordinates, stock status and ratings are unavailable. Source publication timestamps are exposed only when supplied; relative ages are never converted to timestamps.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Failed or empty source output is not counted as successful data retrieval.
+
+Pagination re-fetches a bounded source prefix, so new reviews or listings can shift rows. Only observed look-ahead rows produce a next cursor. A null cursor does not prove the complete archive was retrieved. Unknown fields remain null. Source runs use a pinned Actor build, limited permissions and a hard cost ceiling.

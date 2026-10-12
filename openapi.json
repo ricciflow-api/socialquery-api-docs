@@ -44958,7 +44958,7 @@
       "get": {
         "operationId": "get_g2_reviews",
         "summary": "G2 Reviews",
-        "description": "Use G2 Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read public written G2 product reviews by product slug or URL, ten per page, up to three pages. Preserves half-star ratings, dates, likes/dislikes, verified-user and incentive flags. Supports most-recent (also used for default), highest-rated and lowest-rated sorting, comma-separated stars, keywords, and since. until filters each returned window locally. Totals are unknown; helpfulness ranking, industry/region/role/segment filters and review analysis/enrichment are unavailable.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -44986,8 +44986,9 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 10
-            }
+              "maximum": 3
+            },
+            "description": "Bounded source window, page 1\u20133; do not combine with cursor."
           },
           {
             "name": "industry",
@@ -44995,7 +44996,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "keywords",
@@ -45011,7 +45013,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "role",
@@ -45019,7 +45022,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "segment",
@@ -45032,7 +45036,8 @@
                 "mid-market",
                 "enterprise"
               ]
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "sort",
@@ -45047,7 +45052,8 @@
                 "highest-rated",
                 "lowest-rated"
               ]
-            }
+            },
+            "description": "default uses most-recent; highest-rated and lowest-rated also supported. most-helpful returns 422."
           },
           {
             "name": "stars",
@@ -45063,7 +45069,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "reports",
@@ -45071,7 +45078,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "judgments",
@@ -45083,7 +45091,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "dry_run",
@@ -45094,7 +45103,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "label_evidence",
@@ -45105,7 +45115,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "fit",
@@ -45116,7 +45127,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "goal",
@@ -45124,7 +45136,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "fit_tokens",
@@ -45132,7 +45145,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unavailable with this public written-review source; returns 422."
           },
           {
             "name": "since",
@@ -45148,7 +45162,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "YYYY-MM-DD; filters the current bounded source window and can yield an empty page with continuation."
           },
           {
             "name": "cursor",
@@ -45156,7 +45171,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque cursor bound to identical product/query/filter parameters; do not combine with page."
           },
           {
             "name": "Cache-Control",
@@ -45179,7 +45195,211 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read public written G2 product reviews by product slug or URL, ten per page, up to three pages. Preserves half-star ratings, dates, likes/dislikes, verified-user and incentive flags. Supports most-recent (also used for default), highest-rated and lowest-rated sorting, comma-separated stars, keywords, and since. until filters each returned window locally. Totals are unknown; helpfulness ranking, industry/region/role/segment filters and review analysis/enrichment are unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "entity_id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "max": {
+                                            "type": "number",
+                                            "const": 5
+                                          }
+                                        }
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "url": {
+                                            "type": "null"
+                                          },
+                                          "location": {
+                                            "type": "null"
+                                          },
+                                          "reviews_count": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "helpful_votes": {
+                                        "type": "null"
+                                      },
+                                      "verified": {
+                                        "type": [
+                                          "boolean",
+                                          "null"
+                                        ]
+                                      },
+                                      "source": {
+                                        "type": "string",
+                                        "const": "g2"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "original_language": {
+                                        "type": "null"
+                                      },
+                                      "translated": {
+                                        "type": "boolean",
+                                        "const": false
+                                      },
+                                      "images": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "responses": {
+                                        "type": "null"
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "updated_at": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "dislikes": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "recommendations": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "problems_solved": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "review_source": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified_current_user": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "incentivized": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -45229,7 +45449,8 @@
         ],
         "tags": [
           "G2"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/g2/category": {
@@ -61281,7 +61502,7 @@
       "get": {
         "operationId": "get_gumtree_search",
         "summary": "Gumtree Search",
-        "description": "Find records through Gumtree Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search public Gumtree UK listing cards, 22 per page, up to three pages. Use query with optional UK place name in location_id and a supported section slug in category_id, or a Gumtree category/search URL by itself. Supports relevance and newest sorting. Numeric category/location IDs, distance/price/seller/attribute filters and price sorting are unavailable. GBP prices and source age labels are retained. Full descriptions require product lookup.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -61309,8 +61530,9 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 1000
-            }
+              "maximum": 3
+            },
+            "description": "Bounded source window, page 1\u20133; do not combine with cursor."
           },
           {
             "name": "sort_by",
@@ -61324,7 +61546,8 @@
                 "price_low",
                 "price_high"
               ]
-            }
+            },
+            "description": "relevance or newest. price_low/price_high return 422."
           },
           {
             "name": "category_id",
@@ -61332,7 +61555,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Section slug: for-sale, cars, vans, motorbikes, property-for-sale, property-to-rent or jobs. Numeric IDs return 422."
           },
           {
             "name": "location_id",
@@ -61340,7 +61564,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "UK place name, for example london or manchester. Numeric IDs return 422."
           },
           {
             "name": "distance",
@@ -61364,7 +61589,8 @@
                 "500",
                 "nationwide"
               ]
-            }
+            },
+            "description": "Unavailable with this public listing source; returns 422."
           },
           {
             "name": "min_price",
@@ -61372,7 +61598,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public listing source; returns 422."
           },
           {
             "name": "max_price",
@@ -61380,7 +61607,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public listing source; returns 422."
           },
           {
             "name": "seller_type",
@@ -61392,7 +61620,8 @@
                 "private",
                 "trade"
               ]
-            }
+            },
+            "description": "Unavailable with this public listing source; returns 422."
           },
           {
             "name": "attributes",
@@ -61400,7 +61629,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable with this public listing source; returns 422."
           },
           {
             "name": "cursor",
@@ -61408,7 +61638,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Opaque cursor bound to identical product/query/filter parameters; do not combine with page."
           },
           {
             "name": "Cache-Control",
@@ -61431,7 +61662,208 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search public Gumtree UK listing cards, 22 per page, up to three pages. Use query with optional UK place name in location_id and a supported section slug in category_id, or a Gumtree category/search URL by itself. Supports relevance and newest sorting. Numeric category/location IDs, distance/price/seller/attribute filters and price sorting are unavailable. GBP prices and source age labels are retained. Full descriptions require product lookup.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "seller": {
+                                        "type": [
+                                          "object",
+                                          "null"
+                                        ],
+                                        "properties": {
+                                          "name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "id": {
+                                            "type": "null"
+                                          },
+                                          "url": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "brand": {
+                                        "type": "null"
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": "null"
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "GBP"
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": "null"
+                                          },
+                                          "count": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      },
+                                      "reviews_count": {
+                                        "type": "null"
+                                      },
+                                      "features": {
+                                        "type": "null"
+                                      },
+                                      "specifications": {
+                                        "type": "null"
+                                      },
+                                      "variations": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "location": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "condition": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "category": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "seller_type": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "posted_age": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "source_posted_at": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "delivery_available": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "promotions": {
+                                            "type": [
+                                              "array",
+                                              "null"
+                                            ],
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "window_truncated": {
+                              "type": "boolean"
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "const": 0
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -61481,14 +61913,15 @@
         ],
         "tags": [
           "Gumtree"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/gumtree/product": {
       "get": {
         "operationId": "get_gumtree_product",
         "summary": "Gumtree Product",
-        "description": "Use Gumtree Product to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Read one public Gumtree UK listing by numeric product_id or listing URL. Returns the observed title, description, GBP price, photos, location text, condition, category and available seller name. Seller IDs, exact coordinates, stock status and ratings are unavailable. Source publication timestamps are exposed only when supplied; relative ages are never converted to timestamps.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -61530,7 +61963,173 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Read one public Gumtree UK listing by numeric product_id or listing URL. Returns the observed title, description, GBP price, photos, location text, condition, category and available seller name. Seller IDs, exact coordinates, stock status and ratings are unavailable. Source publication timestamps are exposed only when supplied; relative ages are never converted to timestamps.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "url": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "seller": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "id": {
+                                  "type": "null"
+                                },
+                                "url": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "brand": {
+                              "type": "null"
+                            },
+                            "price": {
+                              "type": "object",
+                              "properties": {
+                                "current": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "original": {
+                                  "type": "null"
+                                },
+                                "currency": {
+                                  "type": "string",
+                                  "const": "GBP"
+                                }
+                              }
+                            },
+                            "rating": {
+                              "type": "object",
+                              "properties": {
+                                "average": {
+                                  "type": "null"
+                                },
+                                "count": {
+                                  "type": "null"
+                                }
+                              }
+                            },
+                            "image_urls": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "availability": {
+                              "type": "null"
+                            },
+                            "reviews_count": {
+                              "type": "null"
+                            },
+                            "features": {
+                              "type": "null"
+                            },
+                            "specifications": {
+                              "type": "null"
+                            },
+                            "variations": {
+                              "type": "null"
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "location": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "condition": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "category": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "seller_type": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "posted_age": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "source_posted_at": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "delivery_available": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ]
+                                },
+                                "promotions": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -61580,7 +62179,8 @@
         ],
         "tags": [
           "Gumtree"
-        ]
+        ],
+        "x-credit-cost-formula": "Flat 5 credits per successful uncached call or page. Failed requests and cache hits cost zero."
       }
     },
     "/gumtree/product/similar": {

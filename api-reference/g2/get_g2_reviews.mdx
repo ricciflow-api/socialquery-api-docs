@@ -3,4 +3,8 @@ title: "G2 Reviews"
 openapi: "GET /g2/reviews"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read public written G2 product reviews by product slug or URL, ten per page, up to three pages. Preserves half-star ratings, dates, likes/dislikes, verified-user and incentive flags. Supports most-recent (also used for default), highest-rated and lowest-rated sorting, comma-separated stars, keywords, and since. until filters each returned window locally. Totals are unknown; helpfulness ranking, industry/region/role/segment filters and review analysis/enrichment are unavailable.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Failed or empty source output is not counted as successful data retrieval.
+
+Pagination re-fetches a bounded source prefix, so new reviews or listings can shift rows. Only observed look-ahead rows produce a next cursor. A null cursor does not prove the complete archive was retrieved. Unknown fields remain null. Source runs use a pinned Actor build, limited permissions and a hard cost ceiling.

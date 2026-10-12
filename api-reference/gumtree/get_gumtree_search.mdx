@@ -3,4 +3,8 @@ title: "Gumtree Search"
 openapi: "GET /gumtree/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search public Gumtree UK listing cards, 22 per page, up to three pages. Use query with optional UK place name in location_id and a supported section slug in category_id, or a Gumtree category/search URL by itself. Supports relevance and newest sorting. Numeric category/location IDs, distance/price/seller/attribute filters and price sorting are unavailable. GBP prices and source age labels are retained. Full descriptions require product lookup.
+
+A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Failed or empty source output is not counted as successful data retrieval.
+
+Pagination re-fetches a bounded source prefix, so new reviews or listings can shift rows. Only observed look-ahead rows produce a next cursor. A null cursor does not prove the complete archive was retrieved. Unknown fields remain null. Source runs use a pinned Actor build, limited permissions and a hard cost ceiling.
