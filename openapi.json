@@ -97470,8 +97470,8 @@
     "/prism/post-stats": {
       "post": {
         "operationId": "post_prism_post_stats",
-        "summary": "Prism Post Stats",
-        "description": "Specification preview: Prism Post Stats. Review the proposed inputs for this research recipe. Its composite execution service is still in development.",
+        "summary": "Batch public post statistics",
+        "description": "Refresh public engagement counts for 1–100 post URLs, in input order. Supported platforms: YouTube, Bluesky, Instagram, TikTok and LinkedIn. Reserve one credit per URL, two for Instagram or five for LinkedIn; charge only successful rows and refund all not_found, error, unsupported and deferred rows. Unknown counts remain null. Reads current provider responses with no SocialQuery response cache. JSON only; include and SSE are unavailable. Four source workers, twelve-second source deadlines, and no new work after twenty-eight seconds. The serialized urls array must fit the 16,000-character parameter limit.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -97506,7 +97506,143 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Refresh public engagement counts for 1–100 post URLs, in input order. Supported platforms: YouTube, Bluesky, Instagram, TikTok and LinkedIn. Reserve one credit per URL, two for Instagram or five for LinkedIn; charge only successful rows and refund all not_found, error, unsupported and deferred rows. Unknown counts remain null. Reads current provider responses with no SocialQuery response cache. JSON only; include and SSE are unavailable. Four source workers, twelve-second source deadlines, and no new work after twenty-eight seconds. The serialized urls array must fit the 16,000-character parameter limit.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "succeeded",
+                            "next_cursor"
+                          ],
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": [
+                                  "url",
+                                  "platform",
+                                  "status",
+                                  "engagement",
+                                  "fetched_at",
+                                  "credits_used",
+                                  "ext"
+                                ],
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "platform": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "ok",
+                                      "not_found",
+                                      "error",
+                                      "unsupported",
+                                      "deferred"
+                                    ]
+                                  },
+                                  "engagement": {
+                                    "type": [
+                                      "object",
+                                      "null"
+                                    ],
+                                    "properties": {
+                                      "views": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "likes": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "comments": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "shares": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "saves": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "reposts": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      }
+                                    }
+                                  },
+                                  "fetched_at": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "format": "date-time"
+                                  },
+                                  "credits_used": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "ext": {
+                                    "type": "object"
+                                  }
+                                }
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer"
+                            },
+                            "succeeded": {
+                              "type": "integer"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -97560,12 +97696,20 @@
                 "properties": {
                   "urls": {
                     "type": "array",
+                    "minItems": 1,
+                    "maxItems": 100,
                     "items": {
-                      "type": "string"
-                    }
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    "example": [
+                      "https://www.youtube.com/watch?v=jNQXAC9IVRw"
+                    ]
                   },
                   "include": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Not implemented; returns 422 before spending."
                   }
                 }
               }
@@ -97574,6 +97718,23 @@
         },
         "tags": [
           "Prism"
+        ],
+        "x-credit-pricing": {
+          "type": "post_stats_batch",
+          "maxItems": 100,
+          "defaultCredits": 1,
+          "platformCredits": {
+            "instagram": 2,
+            "linkedin": 5
+          }
+        },
+        "x-credit-cost-formula": "Reserve 1 credit per URL, 2 on Instagram and 5 on LinkedIn. Charge only successful rows; refund all others.",
+        "x-supported-platforms": [
+          "youtube",
+          "bluesky",
+          "instagram",
+          "tiktok",
+          "linkedin"
         ]
       }
     },

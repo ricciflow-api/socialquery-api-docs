@@ -1,6 +1,14 @@
 ---
-title: "Prism Post Stats"
+title: "Batch public post statistics"
 openapi: "POST /prism/post-stats"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass 1–100 post links in `urls`. Rows retain the original URL and input order. Supported platforms are YouTube, Bluesky, Instagram, TikTok and LinkedIn. Other hosts return an unbilled `unsupported` row. A recognized platform with an invalid post path returns an unbilled `error`. The serialized array must fit 16,000 characters.
+
+Each successful row contains `engagement` with nullable `views`, `likes`, `comments`, `shares`, `saves` and `reposts`, plus a server `fetched_at` timestamp. Missing metrics remain null. Bluesky reposts are not relabeled as shares. Instagram save/repost counts appear only if the source returns them; `include=saves` is not implemented. Counts are public provider observations, not complete private analytics. LinkedIn accepts canonical `/posts/...-activity-...` links; feed URNs and shortened redirects are not supported. Instagram accepts both `/p/code/` and `/<handle>/p/code/` permalinks, as well as reels.
+
+The hold is one credit per URL, two for Instagram and five for LinkedIn. Every successful row costs that tier; `not_found`, `error`, `unsupported` and `deferred` rows cost zero. No result is charged unless the source identity matches and at least one valid engagement count is available. Only a definitive empty YouTube or Bluesky post result becomes `not_found`; other source failures stay `error`.
+
+Four workers run at most twelve seconds per source lookup, with no new work started after twenty-eight seconds. Unstarted rows are deferred and refunded. A provider quota/authentication failure stops new requests to that provider. There is no SocialQuery response caching. Source freshness is provider-dependent. Use an `Idempotency-Key` for free replay; retry failed/deferred rows with a new key. SSE and `include` options return 422 before spending.
+
+Sources: [YouTube Data API](https://developers.google.com/youtube/v3/docs/videos/list), [Bluesky](https://docs.bsky.app/docs/api/app-bsky-feed-get-posts), [ScrapeCreators](https://docs.scrapecreators.com/), and [ScrapeBadger](https://docs.scrapebadger.com/). Their available allowance determines live availability. MCP `execute_endpoint` and the Python skill calculate the full URL-based hold before calling; the Python skill also requires `--allow-mutation` and an idempotency key.
