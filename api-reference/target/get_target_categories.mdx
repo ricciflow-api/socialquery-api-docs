@@ -3,4 +3,8 @@ title: "Target Categories"
 openapi: "GET /target/categories"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+This endpoint takes no query parameters. It returns Target's top navigation taxonomy in source order: `id`, `name`, `parent_id`, `type`, canonical `url` and navigation `image` for every node. The source includes ordinary categories and seasonal or promotional tags.
+
+The adapter reads the public all-categories page's structured global navigation data and validates its page identity and URLs. It retains parent IDs exactly. A parent may lie outside this navigation window; the response is not a complete nested tree and does not imply product inventory or successful category-product retrieval.
+
+`returned_count` and `total` count the current navigation records. Invalid, empty or mismatched source data fails without a net charge. Each fresh request costs **1 SocialQuery credit** and uses one basic Firecrawl request within its configured allowance. Cache hits and successful idempotent replays are free.

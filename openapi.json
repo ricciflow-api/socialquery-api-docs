@@ -60260,7 +60260,7 @@
       "get": {
         "operationId": "get_target_categories",
         "summary": "Target Categories",
-        "description": "Use Target Categories to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Returns Target's current top navigation taxonomy in native order, with source IDs, names, parent IDs, canonical URLs and navigation images. Includes seasonal and promotional tags. Some parent IDs are outside this navigation window; this is not the entire nested category tree or an inventory listing.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -60295,7 +60295,87 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Returns Target's current top navigation taxonomy in native order, with source IDs, names, parent IDs, canonical URLs and navigation images. Includes seasonal and promotional tags. Some parent IDs are outside this navigation window; this is not the entire nested category tree or an inventory listing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "parent_id": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "Category",
+                                      "Tag"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "image": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "parent_id",
+                                  "type",
+                                  "url",
+                                  "image"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
