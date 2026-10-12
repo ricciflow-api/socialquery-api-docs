@@ -61502,7 +61502,7 @@
       "get": {
         "operationId": "get_gumtree_search",
         "summary": "Gumtree Search",
-        "description": "Search public Gumtree UK listing cards, 22 per page, up to three pages. Use query with optional UK place name in location_id and a supported section slug in category_id, or a Gumtree category/search URL by itself. Supports relevance and newest sorting. Numeric category/location IDs, distance/price/seller/attribute filters and price sorting are unavailable. GBP prices and source age labels are retained. Full descriptions require product lookup.",
+        "description": "Search public Gumtree UK listing cards, 22 per page, up to three pages. Use query with optional UK place name in location_id and a supported section slug in category_id, or a Gumtree category/search URL by itself. Supports relevance and newest sorting. Numeric category/location IDs, distance/price/seller/attribute filters and price sorting are unavailable. GBP prices and source age labels are retained. Full descriptions require product lookup. Returned cursors exclude previously returned IDs when live rankings shift; direct page requests have no history.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -61639,7 +61639,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Opaque cursor bound to identical product/query/filter parameters; do not combine with page."
+            "description": "Opaque agt1_ cursor bound to identical filters and previously returned listing IDs. Excludes repeats. Do not combine with page."
           },
           {
             "name": "Cache-Control",

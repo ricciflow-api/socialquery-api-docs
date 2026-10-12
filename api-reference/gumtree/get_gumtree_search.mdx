@@ -8,3 +8,5 @@ Search public Gumtree UK listing cards, 22 per page, up to three pages. Use quer
 A successful uncached call costs **5 credits**. Failed requests and cache hits cost zero. Failed or empty source output is not counted as successful data retrieval.
 
 Pagination re-fetches a bounded source prefix, so new reviews or listings can shift rows. Only observed look-ahead rows produce a next cursor. A null cursor does not prove the complete archive was retrieved. Unknown fields remain null. Source runs use a pinned Actor build, limited permissions and a hard cost ceiling.
+
+Returned cursors retain the listing IDs already sent and exclude repeats when ranking changes. Direct numeric page requests do not have that history. Inserts/removals can still change the window, so continuation is not a frozen catalog snapshot.
