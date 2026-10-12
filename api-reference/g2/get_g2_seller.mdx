@@ -3,4 +3,14 @@ title: "G2 Seller"
 openapi: "GET /g2/seller"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a seller slug such as `hubspot`, or its HTTPS G2 seller URL, in `id`, `url` or `handle`. Multiple supplied identifiers must agree. Each fresh request retrieves one exact public seller page through the existing basic Firecrawl transport.
+
+Company fields include public name, description, headquarters, founding year, ownership and website when displayed. `rating` and `review_count` come from explicit seller-header text, not rounded star graphics. Missing fields remain null; a displayed zero review count remains zero. Website links are returned without visiting the company website.
+
+`products.items` contains the main portfolio's cards, excluding the featured block. Product descriptions are excerpts; displayed review counts are retained and unavailable exact ratings remain null. Use `products_page` 1–100 with `products.next_page`. The full product total is unknown.
+
+`reviews.items` contains cross-product review teasers in the public page's native most-recent order: source ID, title, excerpt, date, displayed reviewer name and product identity. These are not full review bodies. Exact individual review ratings remain null. Use `reviews_page` 1–10 with `reviews.next_page`. Product and review pages are independent and can be supplied together.
+
+`source_has_more` reports whether that list exposes a Next link. `truncated` marks the configured product-page ceiling, or the ten-page review-preview limit when the aggregate count exceeds the visible preview window. The aggregate count does not establish that every review can be retrieved publicly. A seller with zero displayed reviews and an explicit empty-state message returns an empty review array.
+
+The adapter validates source/canonical URL, seller IDs, selected pages, review IDs and both streams' continuation links. Mismatched IDs, unsupported parameters or page ranges return 422. Source failures leave no net SocialQuery charge; cache hits and successful idempotent replays are free.
