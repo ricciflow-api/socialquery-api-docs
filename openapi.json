@@ -97685,7 +97685,7 @@
       "post": {
         "operationId": "post_prism_profiles",
         "summary": "Batch public profiles",
-        "description": "Batch public profile lookup in input order, with caller custom_id values preserved. This release supports Instagram, TikTok, YouTube and Bluesky. Other platforms return unsupported with zero final charge; this is not full twelve-platform parity. Source identities are verified before returning a canonical Author. Unknown fields remain null. Reserve one credit per input (five for LinkedIn), then refund every unsuccessful row; successful supported profiles cost one each. Only JSON responses are implemented. Posts, since and per-item stop_at_id are unavailable and rejected. Work beyond the bounded execution budget is deferred, unbilled. No response caching; idempotency replays are free.",
+        "description": "Batch public profile lookup in input order, preserving custom_id. Supported platforms: instagram, tiktok, youtube, bluesky, threads, truthsocial, twitch, snapchat, kwai, facebook, twitter, linkedin. Source identities are checked before returning canonical Author objects. Missing fields remain null. Reserve one credit per input (five for LinkedIn), then charge only successful profiles at that rate and refund all other rows. Public source access and provider allowances apply; Truth Social is limited to prominent publicly accessible accounts. Unsupported platforms return an unbilled row. JSON only: posts, since, stop_at_id and SSE are not implemented. Four bounded source workers; unstarted rows are deferred and unbilled. No response cache; idempotent replay is free. The serialized items array must fit the 16,000-character parameter limit.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -97720,7 +97720,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Batch public profile lookup in input order, with caller custom_id values preserved. This release supports Instagram, TikTok, YouTube and Bluesky. Other platforms return unsupported with zero final charge; this is not full twelve-platform parity. Source identities are verified before returning a canonical Author. Unknown fields remain null. Reserve one credit per input (five for LinkedIn), then refund every unsuccessful row; successful supported profiles cost one each. Only JSON responses are implemented. Posts, since and per-item stop_at_id are unavailable and rejected. Work beyond the bounded execution budget is deferred, unbilled. No response caching; idempotency replays are free.",
+            "description": "Batch public profile lookup in input order, preserving custom_id. Supported platforms: instagram, tiktok, youtube, bluesky, threads, truthsocial, twitch, snapchat, kwai, facebook, twitter, linkedin. Source identities are checked before returning canonical Author objects. Missing fields remain null. Reserve one credit per input (five for LinkedIn), then charge only successful profiles at that rate and refund all other rows. Public source access and provider allowances apply; Truth Social is limited to prominent publicly accessible accounts. Unsupported platforms return an unbilled row. JSON only: posts, since, stop_at_id and SSE are not implemented. Four bounded source workers; unstarted rows are deferred and unbilled. No response cache; idempotent replay is free. The serialized items array must fit the 16,000-character parameter limit.",
             "content": {
               "application/json": {
                 "schema": {
@@ -98004,7 +98004,7 @@
         "tags": [
           "Prism"
         ],
-        "x-credit-cost-formula": "Reserve one credit per input (five for LinkedIn); charge one per successful supported profile and refund all other rows.",
+        "x-credit-cost-formula": "One credit per successful profile, five for LinkedIn. Hold the sum up front and refund unsuccessful rows.",
         "x-credit-pricing": {
           "type": "profile_batch",
           "maxItems": 50,
@@ -98017,7 +98017,15 @@
           "instagram",
           "tiktok",
           "youtube",
-          "bluesky"
+          "bluesky",
+          "threads",
+          "truthsocial",
+          "twitch",
+          "snapchat",
+          "kwai",
+          "facebook",
+          "twitter",
+          "linkedin"
         ]
       }
     },
