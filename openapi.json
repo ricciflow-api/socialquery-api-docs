@@ -60180,18 +60180,20 @@
       "get": {
         "operationId": "get_target_category",
         "summary": "Target Category",
-        "description": "Use Target Category to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Browse anonymous US Target category products, 24 per page. Native traversal stops at 50 pages/1,200 rows even when the total is larger. Category identity, page offset and default pricing-store context are source-corroborated. Rankings may shift between calls; deduplicate by TCIN. Unknown ratings and hidden prices remain null.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "category_id",
             "in": "query",
-            "required": true,
+            "required": false,
             "example": "hz89j",
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "pattern": "^[a-z0-9]{5,20}$"
+            },
+            "description": "Native category node ID from Target categories, or omit when supplying a returned cursor. Compound facet expressions are not category IDs."
           },
           {
             "name": "page",
@@ -60200,8 +60202,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100
-            }
+              "maximum": 50,
+              "default": 1
+            },
+            "description": "One-based page, 1–50. Target rejects offsets above 1199; the last supported page starts at 1176. This is narrower than the planned 100-page input. Must agree with a cursor."
           },
           {
             "name": "cursor",
@@ -60209,7 +60213,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour category/page-bound token from data.next_cursor, accepted alone. Rankings are live and may repeat products across pages."
           },
           {
             "name": "Cache-Control",
@@ -60242,7 +60247,235 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Browse anonymous US Target category products, 24 per page. Native traversal stops at 50 pages/1,200 rows even when the total is larger. Category identity, page offset and default pricing-store context are source-corroborated. Rankings may shift between calls; deduplicate by TCIN. Unknown ratings and hidden prices remain null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "brand": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string",
+                                            "const": "USD"
+                                          },
+                                          "hidden": {
+                                            "type": "boolean"
+                                          },
+                                          "pricing_store_id": {
+                                            "type": "string",
+                                            "const": "3991"
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "original",
+                                          "currency",
+                                          "hidden",
+                                          "pricing_store_id"
+                                        ]
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "average",
+                                          "count"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "highlights": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "attributes": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "title",
+                                      "brand",
+                                      "price",
+                                      "rating",
+                                      "image_urls",
+                                      "highlights",
+                                      "attributes",
+                                      "availability"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "category": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "url"
+                              ]
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "page_size": {
+                              "type": "integer",
+                              "const": 24
+                            },
+                            "total_pages": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 50
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "pagination_capped": {
+                              "type": "boolean"
+                            },
+                            "pricing_store_id": {
+                              "type": "string",
+                              "const": "3991"
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "category",
+                            "page",
+                            "page_size",
+                            "total_pages",
+                            "offset",
+                            "has_more",
+                            "next_cursor",
+                            "pagination_capped",
+                            "pricing_store_id",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -60286,6 +60519,12 @@
         },
         "tags": [
           "Target"
+        ],
+        "x-one-of-parameters": [
+          [
+            "category_id",
+            "cursor"
+          ]
         ]
       }
     },

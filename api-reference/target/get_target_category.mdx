@@ -3,4 +3,16 @@ title: "Target Category"
 openapi: "GET /target/category"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Browse a public US category using a native `category_id`, for example `hz89j` (Kitchen & Dining). Category IDs come from Target’s category directory and native `/c/.../-/N-<id>` URLs. This endpoint does not perform keyword search, apply compound facets or personalize a visitor session.
+
+Each page returns up to **24 products** in Target’s featured order, with TCIN, canonical URL, brand, source image gallery, highlight bullets, specification text and native prices. HTML entities are decoded only after parsing the original JSON bytes, preserving inch marks and other quoted text. Missing ratings remain null. “See price in cart” and other supported hidden-price states return null amounts; no cart/account flow is followed. Customer tracking and fulfillment assertions are excluded.
+
+Prices use Target’s published anonymous default **pricing store 3991**, exposed as `pricing_store_id`. They are not a national price guarantee and can differ at another location. Coupon/member promotions, taxes and shipping are not included. `availability` stays null.
+
+Start with page 1, then send `data.next_cursor` alone. Cursors bind category and page for one hour. Native ranking changes can repeat products between pages; deduplicate by `product.id`. The cursor is not a frozen snapshot. Explicit `page` must agree with a supplied cursor.
+
+Target’s native service rejects offsets above 1,199, so this adapter permits **pages 1–50**, covering at most 1,200 products. This is narrower than the original 100-page input plan. `total` remains the full source count; `total_pages` is the traversable page count. `pagination_capped` is true whenever the total exceeds 1,200, and `has_more` becomes false with a null cursor after page 50 even if additional products exist.
+
+Fresh nonempty pages cost **5 credits**; source-confirmed empty pages, cache hits, errors and successful idempotent replays cost zero. Use `X-Max-Credits: 5`. Failed or malformed upstream responses never become empty success. Native HTTP 400 failures that do not distinguish nonexistent categories remain upstream errors.
+
+The adapter uses the existing Firecrawl account to retrieve the exact public category JSON in its original byte format: basic transport only, one provider credit, a 40-second total timeout, a 2 MiB decoded-source limit and a shared 20-request/minute ceiling. The native display parameter is already published in Target’s public storefront; no Target user credential or account is created. This source and the existing trial allowance do not establish sustained production capacity.
