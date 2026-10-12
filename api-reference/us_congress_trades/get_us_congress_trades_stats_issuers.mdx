@@ -1,6 +1,14 @@
 ---
-title: "Us Congress Trades Stats Issuers"
+title: "Congressional Issuers Ranking"
 openapi: "GET /us_congress_trades/stats/issuers"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns the requested top issuers by disclosed trade count from the [native Capitol Trades ranking](https://www.capitoltrades.com/issuers). `limit` is 1–50, default 20. The source's complete first page of up to 100 entries is checked before slicing. No offset, cursor or additional filters are accepted.
+
+Each entry preserves the native issuer ID, name, nullable ticker/sector, disclosure count, count of trading politicians and source-estimated disclosed value. **Treasuries and private issuers without tickers are included.** Empty tickers stay null. Values are estimates, not exact transaction amounts.
+
+Ranks are positions in descending source disclosure-count order. Ties retain source order and may move between requests. `total_indexed` counts indexed issuers, not trades. The source limits history to the past **three years**; these are current public-index counts, not lifetime trading activity or complete government filings. The ranking is read from native aggregates, not estimated from a partial sample of disclosures.
+
+The adapter verifies the native count-sort option, page size/total, unique IDs, rendered identities and nonincreasing disclosure counts. It uses one existing Firecrawl basic-transport request, with a 42-second deadline, a 4 MiB decoded HTML limit and 20 shared ranking reads/minute. Streamed server HTML is parsed as data without executing scripts. No new provider account or key is required.
+
+A fresh nonempty response costs **1 credit**. Empty results, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. Existing approved Firecrawl free allowance only.
