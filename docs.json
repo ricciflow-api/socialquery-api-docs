@@ -90,6 +90,12 @@
             ]
           },
           {
+            "group": "Service status",
+            "pages": [
+              "api-reference/status/meta_status"
+            ]
+          },
+          {
             "group": "LinkedIn",
             "pages": [
               "api-reference/linkedin/get_linkedin_profile",

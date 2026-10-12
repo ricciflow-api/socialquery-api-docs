@@ -1,0 +1,27 @@
+---
+title: "Public service status"
+openapi: "GET /status"
+---
+
+Read service status without an API key or credits. This makes **no provider calls**. The response is bare JSON; `/v1/meta/status` wraps the same snapshot in the regular SocialQuery envelope for MCP and skill clients.
+
+```bash
+curl https://socialquery.dev/v1/status
+```
+
+Every platform is included. Its `endpoints` list contains non-operational operations and a reason:
+
+| Reason | Meaning |
+| --- | --- |
+| `route_unavailable` | No implemented, credentialed and policy-allowed route is configured. |
+| `insufficient_recent_evidence` | Fewer than three uncached relevant requests occurred within 30 minutes. This is not proof of an outage. |
+| `recent_failure_rate` | At least three observations exist and server failures reached 50% (degraded) or 90% (down). |
+| `method_evidence_unavailable` | Logs aggregate a shared path without distinguishing HTTP methods. A successful GET cannot certify POST. |
+
+A configured path can be operational only with enough recent evidence and less than 50% server failures. Cache hits, caller validation/authentication errors and not-found responses are excluded. An entirely operational platform is operational; an entirely unavailable platform is down; mixed states are degraded. Overall status is operational only when all platforms are operational.
+
+This deliberately conservative snapshot is **not active monitoring or an uptime guarantee**. Trial exhaustion and upstream changes can still affect the next request. `upstreamVersions` is empty and `circuit_breaker_observed` is false because those observations are unavailable. `updated_at` records snapshot generation, not a provider update time. Shared storage and CDN caching can retain the response for 30 seconds.
+
+No account IDs, request IDs, input queries, credentials or request counts are published. Origin reads are limited to 60 per minute per IP. Invalid query parameters return 422; non-GET requests return 405; unavailable status storage returns 503 without claiming health.
+
+MCP: use `get_service_status` without credentials. Python skill: run `socialquery_api.py status`.

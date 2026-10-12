@@ -119440,6 +119440,177 @@
           }
         }
       }
+    },
+    "/status": {
+      "get": {
+        "summary": "Public service status",
+        "description": "Free passive status for every catalogued platform and non-operational operation. No API key, provider call or credit use. Missing adapters/credentials/routes are unavailable. Configured paths need at least three uncached successful or server-failed requests in the previous 30 minutes before operational status; 50%/90% failure shares yield degraded/down. Insufficient evidence is explicitly degraded, not evidence of an outage. Shared-method paths cannot be independently certified. Upstream API versions and circuit states are unknown. Responses can be cached for 30 seconds. GET only; no query parameters. The /v1/meta/status alias wraps the same data in the usual SocialQuery envelope.",
+        "tags": [
+          "meta"
+        ],
+        "operationId": "meta_status",
+        "security": [],
+        "x-credit-cost": 0,
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Passive status snapshot; bare JSON rather than a charged-data envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "operational",
+                        "degraded"
+                      ]
+                    },
+                    "platforms": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "operational",
+                              "degraded",
+                              "down"
+                            ]
+                          },
+                          "endpoints": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "method": {
+                                  "type": "string"
+                                },
+                                "path": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "type": "string",
+                                  "enum": [
+                                    "degraded",
+                                    "down"
+                                  ]
+                                },
+                                "reason": {
+                                  "type": "string",
+                                  "enum": [
+                                    "route_unavailable",
+                                    "recent_failure_rate",
+                                    "method_evidence_unavailable",
+                                    "insufficient_recent_evidence"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "method",
+                                "path",
+                                "status",
+                                "reason"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "status",
+                          "endpoints"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "upstreamVersions": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "description": "Empty: actual upstream version distribution is not recorded."
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "route_version": {
+                      "type": "string"
+                    },
+                    "observation_window_minutes": {
+                      "type": "integer",
+                      "const": 30
+                    },
+                    "minimum_observations": {
+                      "type": "integer",
+                      "const": 3
+                    },
+                    "circuit_breaker_observed": {
+                      "type": "boolean",
+                      "const": false
+                    },
+                    "coverage_note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "platforms",
+                    "upstreamVersions",
+                    "updated_at",
+                    "route_version",
+                    "observation_window_minutes",
+                    "minimum_observations",
+                    "circuit_breaker_observed",
+                    "coverage_note"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Use GET.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialQueryError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Query parameters are not accepted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialQueryError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Public status rate limit; retry after 60 seconds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialQueryError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Storage or rate limiter unavailable; no status claim.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialQueryError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
