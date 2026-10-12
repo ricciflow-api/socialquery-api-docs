@@ -1,6 +1,16 @@
 ---
-title: "Us Congress Trades Ticker Trades"
+title: "Congressional Trades by Ticker"
 openapi: "GET /us_congress_trades/ticker/trades"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Returns public STOCK Act disclosures from the [Capitol Trades index](https://www.capitoltrades.com/trades) for an exactly resolved issuer. Supply `keyword=AAPL` or `keyword=AAPL:US`; bare tickers default to `:US`. The anonymous public issuer directory must return a complete, unambiguous exact match. An unindexed ticker returns an empty result with `issuer: null`; an incomplete or ambiguous lookup fails without charging.
+
+Optional filters are `party` (democrat/republican), `chamber` (house/senate), `tx_type` (buy/sell/exchange), and inclusive `start_date`/`end_date` in YYYY-MM-DD format. Dates filter **publication dates**, not transaction dates. Results use descending publication order. Omitted start/end bounds use 1900-01-01/the request's UTC date when a date filter is present.
+
+Use `limit` (1–100; default 20) and `offset` (0–1,000,000), or a returned `next_cursor` alone. Cursors bind the resolved issuer, all filters, window size and offset for one hour and recheck the preceding trade ID. Source edits or added filings can require restarting. Totals describe the current indexed matching disclosures, not lifetime trading activity or complete government coverage.
+
+Rows preserve native IDs, politician name/party/state/chamber, issuer/ticker/sector, publication timestamp, trade date, transaction type, owner label, reporting gap, estimated value and nullable price. **Disclosed values are source estimates, not exact transaction amounts.** Birth dates and gender are omitted. Every row must agree with the requested filters and rendered trade links.
+
+The adapter makes one anonymous issuer lookup and at most two native 100-row page reads through the existing Firecrawl basic transport. It has a shared 55-second timeout, a 1 MiB issuer-response limit, a 4 MiB decoded HTML limit per page and 20 source reads/minute. Original page scripts are parsed as data without execution. No new account or key is required.
+
+A fresh nonempty response costs **1 credit**. Empty results, errors, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. Provider requests stay within the existing approved Firecrawl free allowance; no paid plan or replenishment is enabled.

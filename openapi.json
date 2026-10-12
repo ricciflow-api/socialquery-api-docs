@@ -111979,18 +111979,19 @@
       "get": {
         "operationId": "get_us_congress_trades_ticker_trades",
         "summary": "Us Congress Trades Ticker Trades",
-        "description": "Use Us Congress Trades Ticker Trades to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Public Capitol Trades indexed disclosures for an exact ticker. Bare symbols default to :US. Supports party/chamber/type and publication-date filters, 1–100-row windows, offset up to 1000000 and a one-hour bound cursor. Totals describe the current index, not lifetime coverage. Incomplete or ambiguous issuer lookups fail closed; unindexed tickers and empty pages are free.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
           {
             "name": "keyword",
             "in": "query",
-            "required": true,
-            "example": "NVDA",
+            "required": false,
+            "example": "AAPL",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Bare ticker or source ticker with two-letter market suffix; bare symbols default to :US. Alternatively supply a returned cursor."
           },
           {
             "name": "chamber",
@@ -112035,16 +112036,20 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive disclosure publication date, YYYY-MM-DD; this is not the transaction date."
           },
           {
             "name": "end_date",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
-            }
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Inclusive disclosure publication date, YYYY-MM-DD; this is not the transaction date."
           },
           {
             "name": "limit",
@@ -112054,7 +112059,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 100
-            }
+            },
+            "description": "1–100 rows, default 20."
           },
           {
             "name": "offset",
@@ -112062,8 +112068,10 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0
-            }
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "description": "Rows to skip, 0–1000000. Prefer next_cursor."
           },
           {
             "name": "cursor",
@@ -112071,7 +112079,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One-hour next_cursor, usable alone. Binds resolved ticker, filters and size and verifies the preceding disclosure. Source changes require restarting."
           },
           {
             "name": "Cache-Control",
@@ -112104,7 +112113,240 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Public Capitol Trades indexed disclosures for an exact ticker. Bare symbols default to :US. Supports party/chamber/type and publication-date filters, 1–100-row windows, offset up to 1000000 and a one-hour bound cursor. Totals describe the current index, not lifetime coverage. Incomplete or ambiguous issuer lookups fail closed; unindexed tickers and empty pages are free.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "issuer": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "ticker": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "sector": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "ticker",
+                                      "sector"
+                                    ]
+                                  },
+                                  "politician": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "first_name": {
+                                        "type": "string"
+                                      },
+                                      "last_name": {
+                                        "type": "string"
+                                      },
+                                      "display_name": {
+                                        "type": "string"
+                                      },
+                                      "party": {
+                                        "type": "string"
+                                      },
+                                      "state": {
+                                        "type": "string"
+                                      },
+                                      "chamber": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "first_name",
+                                      "last_name",
+                                      "display_name",
+                                      "party",
+                                      "state",
+                                      "chamber"
+                                    ]
+                                  },
+                                  "pub_date": {
+                                    "type": "string"
+                                  },
+                                  "tx_date": {
+                                    "type": "string"
+                                  },
+                                  "tx_type": {
+                                    "type": "string"
+                                  },
+                                  "owner": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "reporting_gap_days": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "value_estimate_usd": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "price_usd": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "url",
+                                  "issuer",
+                                  "politician",
+                                  "pub_date",
+                                  "tx_date",
+                                  "tx_type",
+                                  "owner",
+                                  "reporting_gap_days",
+                                  "value_estimate_usd",
+                                  "price_usd"
+                                ]
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "keyword": {
+                              "type": "string"
+                            },
+                            "issuer": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "ticker": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "ticker"
+                              ]
+                            },
+                            "filters": {
+                              "type": "object",
+                              "properties": {
+                                "party": {
+                                  "type": "string"
+                                },
+                                "chamber": {
+                                  "type": "string"
+                                },
+                                "tx_type": {
+                                  "type": "string"
+                                },
+                                "start_date": {
+                                  "type": "string"
+                                },
+                                "end_date": {
+                                  "type": "string"
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "offset": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "has_more": {
+                              "type": "boolean"
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "source": {
+                              "type": "string"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "keyword",
+                            "issuer",
+                            "filters",
+                            "limit",
+                            "offset",
+                            "has_more",
+                            "next_cursor",
+                            "source",
+                            "coverage_note"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -112148,6 +112390,12 @@
         },
         "tags": [
           "Us Congress Trades"
+        ],
+        "x-one-of-parameters": [
+          [
+            "keyword",
+            "cursor"
+          ]
         ]
       }
     },
