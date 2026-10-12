@@ -1,6 +1,14 @@
 ---
-title: "Us Congress Trades Politician"
+title: "Politician Trading Summary"
 openapi: "GET /us_congress_trades/politician"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+`handle` accepts a case-insensitive surname, exact source display name or native Bioguide member ID. A surname matching several members is rejected; supply the full name or ID. `first_name`, `last_name`, `party` and lowercase `state` describe the source identity attached to the latest indexed filing, whose publication time is `identity_as_of`; these are not a separately verified current office roster. `avg_reporting_gap` averages source reporting-gap days across every collected filing. `top_tickers` and `top_sectors` contain up to ten groups ranked by disclosure count with stable alphabetical ties. Untickered assets and unclassified sectors remain counted separately, not assigned guessed labels.
+
+Every successful aggregate reads **all currently indexed disclosures for the resolved identity**, up to **1,000 disclosures** in pages of 100. It never reports a sampled page as a full summary. A larger history, incomplete page, duplicate trade, conflicting identity, changed page total or malformed row fails without charging. Multiple pages use at most three concurrent reads, and the first page is fetched again to detect movement during collection. The source does not offer an atomic historical snapshot; edits away from that checked page can still occur.
+
+`total_trades` includes buys, sells, exchanges and received assets. `buy_count` and `sell_count` cover those exact transaction types; `other_count` retains the rest. `total_value` sums the source's estimated values, and `avg_value` is the mean estimate. These are not exact disclosed dollar amounts. `earliest_trade_date` and `latest_trade_date` use **publication timestamps**, matching the disclosure index, rather than transaction-day fields. A historical filing retains the chamber on that filing even if the member's current source profile lists a different chamber.
+
+Coverage is the public Capitol Trades index, approximately the past three years, not lifetime history or a complete government filing archive. The adapter has a **55-second overall deadline**, bounded source payloads and a shared **30-source-read/minute** ceiling. Failed or oversized histories are never silently truncated. The public issuer lookup receives no private credential; Firecrawl receives only its existing configured key.
+
+An identity absent from a complete corroborated lookup returns `matched: false`, zero counts, null identity/average/date fields and empty top lists. This costs zero credits. Source errors do not become unmatched results. A fresh nonempty complete summary costs the catalog price above, irrespective of its page count. Cached responses, successful idempotent replays and errors cost zero. Set `X-Max-Credits` before calling to enforce a request cap.
