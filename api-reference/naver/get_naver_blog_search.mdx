@@ -11,6 +11,8 @@ Use `display` or `limit` (1–100; default 10), with `start` (1–1000), or retu
 
 Each source page contains up to 30 rows; a requested window uses at most five bounded parallel source reads. Within a response, duplicate post IDs are removed and counted in `dropped`. Rankings can change across requests: the two live source pages overlapped on 13 of 30 IDs. **Deduplicate by `post.id` across pages.** The source does not supply a reliable total, so `total` is null. Full source pages may lead to an empty terminal page. Traversal stops at source position 1,000; cursors are not snapshots or an exhaustive collection guarantee.
 
+**Known production limitation:** both audited 100-row requests failed because the provider repeated an entire later page. These requests were rejected with HTTP 502 and refunded. Smaller windows and first/second-page continuation passed. Large-window and deeper-pagination reliability are not certified; do not assume that the accepted 100-row/1,000-offset bounds establish working coverage.
+
 Only `sort=sim` and `judgments=off` are supported. Date sorting, AI relevance/fit/labeling, dry runs and synthesis are rejected with an unbilled 422. These remain feature-parity gaps.
 
 A fresh nonempty result costs **1 credit**. Errors, empty/fully filtered windows, cache hits and successful idempotent replays cost zero. Use `X-Max-Credits: 1`. All source reads are reserved against the shared **500-credit ScrapeBadger verification ceiling** before any request starts; up to five pages use up to 25 provider credits. Missing/exhausted budget state fails closed. Requests have a 45-second shared timeout and a 2 MiB per-page bound. This approved verification allowance is not a permanent production capacity commitment; no purchase or top-up is enabled.
