@@ -102753,7 +102753,7 @@
       "get": {
         "operationId": "get_search_news",
         "summary": "Search News",
-        "description": "Find records through Search News using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Google News and Bing News search through SerpApi. Runs one original-query leg per country per engine (up to max_legs per engine), merges canonical article URLs and preserves all source provenance. No LLM angle expansion, translation, AI reranking or SSE. query_source=fallback_original is explicit. Google ISO publish timestamps are exact; Bing relative timestamps are approximate. Undated and out-of-window rows are omitted. Story judgments return null with stories_unavailable unless disabled. Google supports 35 configured editions; Bing supports 33. A country parameter selects the edition, not a geographic article filter. Results are bounded windows, not an exhaustive feed. A persistent shared 30-search allowance protects the existing free provider tier; paid capacity is not configured.",
         "x-credit-cost": 2,
         "x-launch-status": "beta",
         "parameters": [
@@ -102773,7 +102773,8 @@
             "example": "KR,US,JP",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "CSV of 1–12 unique configured editions (default US): US, GB, AU, CA, NZ, ZA, IN, IE, SG, AR, CL, MX, ES, BR, AT, DE, BE, NL, FR, CH, IT, DK, FI, NO, SE, PL, RU, TR, JP, KR, HK, TW, ID, MY, PH. Duplicates collapse. Bing does not support IE or SG."
           },
           {
             "name": "engines",
@@ -102782,7 +102783,8 @@
             "example": "google,bing",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "CSV google (default), bing, or both. Each selected country runs one original-query leg per engine. publisher and from/to require Google only."
           },
           {
             "name": "sort",
@@ -102795,7 +102797,8 @@
                 "relevance",
                 "date"
               ]
-            }
+            },
+            "description": "relevance interleaves the source-ranked windows; date sorts their returned articles by newest timestamp. This does not request an exhaustive newest-first crawl."
           },
           {
             "name": "time_range",
@@ -102810,7 +102813,8 @@
                 "month",
                 "year"
               ]
-            }
+            },
+            "description": "day, week, month or year; default day. Local rolling bounds are 1/7/30/365 days. Ignored when from/to is supplied. Bing year uses a source-ranked window with local date filtering."
           },
           {
             "name": "from",
@@ -102819,7 +102823,8 @@
             "example": "2026-07-01",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Inclusive publication bound, YYYY-MM-DD or Unix seconds. Whole UTC day for a date-only to. Google only. Local exact timestamp filtering follows the source date query; undated rows are excluded."
           },
           {
             "name": "to",
@@ -102828,7 +102833,8 @@
             "example": "2026-07-31",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Inclusive publication bound, YYYY-MM-DD or Unix seconds. Whole UTC day for a date-only to. Google only. Local exact timestamp filtering follows the source date query; undated rows are excluded."
           },
           {
             "name": "publisher",
@@ -102848,7 +102854,8 @@
               "type": "integer",
               "minimum": 10,
               "maximum": 100
-            }
+            },
+            "description": "Maximum articles returned per leg, 10–100 in steps of ten; default ten. Bing caps at twenty. Source windows can contain fewer results. No hidden pagination."
           },
           {
             "name": "max_legs",
@@ -102859,7 +102866,8 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 12
-            }
+            },
+            "description": "Cap of 1–12 country legs per engine, default twelve. Countries beyond the cap are returned in skipped_countries; no angle expansion occurs."
           },
           {
             "name": "group",
@@ -102870,7 +102878,8 @@
               "enum": [
                 "stories"
               ]
-            }
+            },
+            "description": "stories requests grouping, currently unavailable. stories and story_grouping remain null with a stories_unavailable warning."
           },
           {
             "name": "judgments",
@@ -102882,7 +102891,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "on (default) returns null story judgment fields and an unavailable warning. off omits them, unless group=stories is explicit."
           },
           {
             "name": "Cache-Control",
@@ -102915,7 +102925,304 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Google News and Bing News search through SerpApi. Runs one original-query leg per country per engine (up to max_legs per engine), merges canonical article URLs and preserves all source provenance. No LLM angle expansion, translation, AI reranking or SSE. query_source=fallback_original is explicit. Google ISO publish timestamps are exact; Bing relative timestamps are approximate. Undated and out-of-window rows are omitted. Story judgments return null with stories_unavailable unless disabled. Google supports 35 configured editions; Bing supports 33. A country parameter selects the edition, not a geographic article filter. Results are bounded windows, not an exhaustive feed. A persistent shared 30-search allowance protects the existing free provider tier; paid capacity is not configured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 1440,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "canonical_url": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "snippet": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "publisher": {
+                                    "type": "string"
+                                  },
+                                  "domain": {
+                                    "type": "string"
+                                  },
+                                  "image_url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "published_at": {
+                                    "type": "string"
+                                  },
+                                  "published_at_precision": {
+                                    "enum": [
+                                      "exact",
+                                      "approximate"
+                                    ]
+                                  },
+                                  "engine": {
+                                    "enum": [
+                                      "google",
+                                      "bing"
+                                    ]
+                                  },
+                                  "country": {
+                                    "type": "string"
+                                  },
+                                  "language": {
+                                    "type": "string"
+                                  },
+                                  "source_rank": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "provenance": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "engine": {
+                                          "enum": [
+                                            "google",
+                                            "bing"
+                                          ]
+                                        },
+                                        "country": {
+                                          "type": "string"
+                                        },
+                                        "language": {
+                                          "type": "string"
+                                        },
+                                        "rank": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        }
+                                      },
+                                      "required": [
+                                        "engine",
+                                        "country",
+                                        "language",
+                                        "rank"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "url",
+                                  "canonical_url",
+                                  "title",
+                                  "snippet",
+                                  "publisher",
+                                  "domain",
+                                  "image_url",
+                                  "published_at",
+                                  "published_at_precision",
+                                  "engine",
+                                  "country",
+                                  "language",
+                                  "source_rank",
+                                  "provenance"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "complete": {
+                              "const": false
+                            },
+                            "legs": {
+                              "type": "array",
+                              "maxItems": 24,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "engine": {
+                                    "enum": [
+                                      "google",
+                                      "bing"
+                                    ]
+                                  },
+                                  "country": {
+                                    "type": "string"
+                                  },
+                                  "language": {
+                                    "type": "string"
+                                  },
+                                  "keyword": {
+                                    "type": "string"
+                                  },
+                                  "query_source": {
+                                    "const": "fallback_original"
+                                  },
+                                  "depth": {
+                                    "type": "integer",
+                                    "minimum": 10,
+                                    "maximum": 100
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "ok",
+                                      "empty",
+                                      "failed"
+                                    ]
+                                  },
+                                  "error_code": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "returned_count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "source_count": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "dropped": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "deduplicated": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "truncated": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "credits": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 4
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "engine",
+                                  "country",
+                                  "language",
+                                  "keyword",
+                                  "query_source",
+                                  "depth",
+                                  "status",
+                                  "error_code",
+                                  "returned_count",
+                                  "source_count",
+                                  "dropped",
+                                  "deduplicated",
+                                  "truncated",
+                                  "credits"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "planned_legs": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "skipped_countries": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "deduplicated": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "planner": {
+                              "const": "original_query_only"
+                            },
+                            "_warnings": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "stories": {
+                              "type": "null"
+                            },
+                            "story_grouping": {
+                              "type": "null"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "complete",
+                            "legs",
+                            "planned_legs",
+                            "skipped_countries",
+                            "deduplicated",
+                            "dropped",
+                            "query",
+                            "planner",
+                            "_warnings",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -102959,7 +103266,8 @@
         },
         "tags": [
           "Search"
-        ]
+        ],
+        "x-credit-cost-formula": "If any leg returns articles: 2 base credits + 1 per nonempty Google leg + ceil(returned Bing articles / 5) per nonempty Bing leg; otherwise zero. Hold: 2 + min(unique countries, max_legs) × (Google enabled ? 1 : 0) + min(unique countries, max_legs) × (Bing enabled ? ceil(min(depth,20)/5) : 0). One original-query leg per selected country per engine. Failed and empty legs cost zero. Maximum 62 credits."
       }
     },
     "/prism/lookup": {

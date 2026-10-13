@@ -1,6 +1,22 @@
 ---
-title: "Search News"
+title: "News search"
 openapi: "GET /search/news"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search Google News and Bing News using one original query per selected country and engine. For example, `query=artificial intelligence&engines=google,bing&countries=US&depth=20` reserves at most **7 credits**: two base, one Google leg, and at most four for twenty Bing articles. The final charge settles to actual returned work. Empty/failed legs cost zero; an entirely empty result costs zero. Cached responses, idempotent replays and failures are free.
+
+The provider configuration contains **35 Google editions and 33 Bing markets**. Both engines support: US, GB, AU, CA, NZ, ZA, IN, AR, CL, MX, ES, BR, AT, DE, BE, NL, FR, CH, IT, DK, FI, NO, SE, PL, RU, TR, JP, KR, HK, TW, ID, MY, PH. Google also supports IE and SG. The country/language describes the searched edition, not detected article language or where an event happened. Only US and GB are included in this release's live acceptance fixtures; the other configured markets are not individually certified.
+
+Each `items[]` row has a headline, canonical URL, publisher, optional snippet/image, publication date and engine/country provenance. Duplicate URLs are merged without losing their source records. Google ISO dates are tagged `exact`; Bing relative dates are tagged `approximate`. Undated articles are omitted rather than assigned invented dates. Google typically has fewer snippets.
+
+- `depth`: 10–100 in steps of ten, default ten; Bing caps at twenty.
+- `max_legs`: 1–12 per engine, default twelve; skipped countries are disclosed. No hidden pages or retries.
+- `sort=date`: newest first among the retrieved windows. `relevance` interleaves source ranks.
+- `time_range`: 1, 7, 30 or 365 rolling days. Explicit `from`/`to` overrides it.
+- `publisher` and exact date bounds: Google only. Publisher must be a bare domain, and subdomains match. Bounds are inclusive; date-only `to` includes the UTC day. Filtering is checked locally as well as in the source query.
+
+`legs[]` shows every selected search's count, status, cost and any failure. Partial success returns `partial_results`; all-failed requests return an uncharged error. `total` and `next_cursor` are null and `complete` is false because these are bounded source windows.
+
+<Warning>Query expansion, translation, AI ranking, story judgments and news SSE are not implemented. Each leg truthfully uses `query_source=fallback_original`; JSON includes `localization_unavailable`. Default story fields are null with `stories_unavailable`. `judgments=off` omits them unless `group=stories` is explicit. Use JSON, not an event stream.</Warning>
+
+<Note>Uses the existing SerpApi key and free account. A persistent shared 30-search verification ceiling fails closed without automatically resetting or buying capacity. Trials are not a sustained availability guarantee.</Note>
