@@ -111150,7 +111150,7 @@
       "get": {
         "operationId": "get_prism_apps_lookup",
         "summary": "Prism Apps Lookup",
-        "description": "Resolve public Apple/Google Play listings by title or explicit IDs. Deterministic title/developer matching is the disclosed fallback: multilingual AI identity judgments are not enabled. Different publishers within two native source positions and 0.05 title similarity remain ambiguous; native rank breaks more distant ties. Both string guards must pass before optional cross-store merging; confidence is an uncalibrated string score. One source failure yields explicit partial data if another listing resolves. A clean no-match remains a valid 30-credit result; neither listing resolving returns an uncharged 404, and required source failure with no listing returns an uncharged 503. Uses existing DataForSEO/Apple adapters within a shared 47-second deadline and finite source budgets.",
+        "description": "Resolve public Apple/Google Play listings by title or explicit IDs. Resolved complete listings use a bounded Groq multilingual identity judgment plus an independent developer string guard; a model cannot override publisher mismatch. Model confidence is uncalibrated and requires at least 0.8 to merge. Explicit match_threshold opts into deterministic title/developer matching. Missing, expired, exhausted or failed inference uses that same fallback and reports fallback_code. Title search resolution is still deterministic; supply explicit IDs for differently named localized listings. Partial source results retain known fields. A clean no-match costs 30 credits; unresolved listings or all-source failure are uncharged. Shared deadline 47 seconds; finite store and inference allowances apply.",
         "x-credit-cost": 30,
         "x-launch-status": "beta",
         "parameters": [
@@ -111251,7 +111251,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Resolve public Apple/Google Play listings by title or explicit IDs. Deterministic title/developer matching is the disclosed fallback: multilingual AI identity judgments are not enabled. Different publishers within two native source positions and 0.05 title similarity remain ambiguous; native rank breaks more distant ties. Both string guards must pass before optional cross-store merging; confidence is an uncalibrated string score. One source failure yields explicit partial data if another listing resolves. A clean no-match remains a valid 30-credit result; neither listing resolving returns an uncharged 404, and required source failure with no listing returns an uncharged 503. Uses existing DataForSEO/Apple adapters within a shared 47-second deadline and finite source budgets.",
+            "description": "Resolve public Apple/Google Play listings by title or explicit IDs. Resolved complete listings use a bounded Groq multilingual identity judgment plus an independent developer string guard; a model cannot override publisher mismatch. Model confidence is uncalibrated and requires at least 0.8 to merge. Explicit match_threshold opts into deterministic title/developer matching. Missing, expired, exhausted or failed inference uses that same fallback and reports fallback_code. Title search resolution is still deterministic; supply explicit IDs for differently named localized listings. Partial source results retain known fields. A clean no-match costs 30 credits; unresolved listings or all-source failure are uncharged. Shared deadline 47 seconds; finite store and inference allowances apply.",
             "content": {
               "application/json": {
                 "schema": {
@@ -112838,16 +112838,48 @@
                                       "type": "number"
                                     },
                                     "method": {
-                                      "const": "title_developer_fallback"
+                                      "type": "string",
+                                      "enum": [
+                                        "llm_identity",
+                                        "title_developer_fallback"
+                                      ]
                                     },
                                     "confidence_kind": {
-                                      "const": "uncalibrated_string_similarity"
+                                      "type": "string",
+                                      "enum": [
+                                        "uncalibrated_model_assessment",
+                                        "uncalibrated_string_similarity"
+                                      ]
                                     },
                                     "threshold": {
                                       "type": "number"
                                     },
                                     "reason": {
                                       "type": "string"
+                                    },
+                                    "model": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "title_relation": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "enum": [
+                                        "equivalent",
+                                        "different",
+                                        "uncertain",
+                                        null
+                                      ]
+                                    },
+                                    "fallback_code": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
                                     }
                                   },
                                   "required": [
@@ -112858,7 +112890,10 @@
                                     "method",
                                     "confidence_kind",
                                     "threshold",
-                                    "reason"
+                                    "reason",
+                                    "model",
+                                    "title_relation",
+                                    "fallback_code"
                                   ],
                                   "additionalProperties": false
                                 },
