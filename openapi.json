@@ -47729,7 +47729,7 @@
       "get": {
         "operationId": "get_pinterest_trends",
         "summary": "Pinterest Trends",
-        "description": "Use Pinterest Trends to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Native Pinterest Trends rankings for 23 supported countries. Choose growing, seasonal, top_monthly or top_yearly; native include/exclude filters apply before the requested depth of 1–50. Ireland reads GB+IE, Australia/New Zealand read AU+NZ, and GB reads its own market. Each row preserves rank, relative 0–100 search index, fractional weekly/monthly/yearly changes, seasonality and the source data date. 100.01 is Pinterest’s capped near-zero-baseline change signal. Nonempty uncached results cost 10 credits; a confirmed empty ranking is uncharged 404, and errors/cache hits/idempotent replays are free. Exact repeats are cached six hours. Anonymous public source, without account credentials or an upstream availability guarantee.",
         "x-credit-cost": 10,
         "x-launch-status": "beta",
         "parameters": [
@@ -47739,33 +47739,9 @@
             "required": false,
             "example": "DE",
             "schema": {
-              "type": "string",
-              "enum": [
-                "AR",
-                "AU",
-                "BR",
-                "CA",
-                "CO",
-                "DE",
-                "EG",
-                "ES",
-                "FR",
-                "GB",
-                "ID",
-                "IE",
-                "IN",
-                "IT",
-                "KR",
-                "MX",
-                "MY",
-                "NZ",
-                "PH",
-                "SA",
-                "TH",
-                "TR",
-                "US"
-              ]
-            }
+              "type": "string"
+            },
+            "description": "Case-insensitive ISO country. Default US. IE maps to GB+IE; AU and NZ map to AU+NZ. GB remains separate."
           },
           {
             "name": "type",
@@ -47790,7 +47766,8 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 50,
+              "default": 25
             }
           },
           {
@@ -47799,7 +47776,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One to ten comma-separated keywords, each at most 100 characters. Native matching occurs before the requested depth."
           },
           {
             "name": "exclude",
@@ -47807,7 +47785,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One to ten comma-separated keywords, each at most 100 characters. Native matching occurs before the requested depth."
           },
           {
             "name": "Cache-Control",
@@ -47840,7 +47819,154 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Native Pinterest Trends rankings for 23 supported countries. Choose growing, seasonal, top_monthly or top_yearly; native include/exclude filters apply before the requested depth of 1–50. Ireland reads GB+IE, Australia/New Zealand read AU+NZ, and GB reads its own market. Each row preserves rank, relative 0–100 search index, fractional weekly/monthly/yearly changes, seasonality and the source data date. 100.01 is Pinterest’s capped near-zero-baseline change signal. Nonempty uncached results cost 10 credits; a confirmed empty ranking is uncharged 404, and errors/cache hits/idempotent replays are free. Exact repeats are cached six hours. Anonymous public source, without account credentials or an upstream availability guarantee.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "minItems": 1,
+                              "maxItems": 50,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "rank": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 50
+                                  },
+                                  "term": {
+                                    "type": "string"
+                                  },
+                                  "country": {
+                                    "type": "string"
+                                  },
+                                  "market": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "growing",
+                                      "seasonal",
+                                      "top_monthly",
+                                      "top_yearly"
+                                    ]
+                                  },
+                                  "search_index": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  "weekly_change": {
+                                    "type": "number",
+                                    "minimum": -1,
+                                    "maximum": 100.01
+                                  },
+                                  "monthly_change": {
+                                    "type": "number",
+                                    "minimum": -1,
+                                    "maximum": 100.01
+                                  },
+                                  "yearly_change": {
+                                    "type": "number",
+                                    "minimum": -1,
+                                    "maximum": 100.01
+                                  },
+                                  "seasonality": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "url": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  },
+                                  "as_of": {
+                                    "type": "string",
+                                    "format": "date"
+                                  }
+                                },
+                                "required": [
+                                  "rank",
+                                  "term",
+                                  "country",
+                                  "market",
+                                  "type",
+                                  "search_index",
+                                  "weekly_change",
+                                  "monthly_change",
+                                  "yearly_change",
+                                  "seasonality",
+                                  "url",
+                                  "as_of"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            },
+                            "country": {
+                              "type": "string"
+                            },
+                            "market": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "growing",
+                                "seasonal",
+                                "top_monthly",
+                                "top_yearly"
+                              ]
+                            },
+                            "as_of": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "source": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "country",
+                            "market",
+                            "type",
+                            "as_of",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -47884,7 +48010,8 @@
         },
         "tags": [
           "Pinterest"
-        ]
+        ],
+        "x-cache-ttl-seconds": 21600
       }
     },
     "/google/search": {

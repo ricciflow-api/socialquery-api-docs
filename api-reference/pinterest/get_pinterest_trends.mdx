@@ -1,6 +1,14 @@
 ---
-title: "Pinterest Trends"
+title: "Pinterest trends by country"
 openapi: "GET /pinterest/trends"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Get the native **growing, seasonal, top monthly or top yearly** Pinterest ranking. The default is US, growing, 25 terms; `limit` accepts 1–50. `include` keeps terms containing a listed keyword, and `exclude` removes matching terms. Each accepts up to ten comma-separated keywords. These are native source filters applied before depth, not a filter over a previously truncated top-N page.
+
+Supported countries: AR, AU, BR, CA, CO, DE, EG, ES, FR, GB, ID, IE, IN, IT, KR, MX, MY, NZ, PH, SA, TH, TR and US. Codes are case-insensitive. Ireland uses the combined **GB+IE** market; Australia and New Zealand use **AU+NZ**. Great Britain uses **GB**. `country` identifies the requested country and `market` identifies the actual source list.
+
+Each term has its native rank, a relative `search_index` from 0–100, `weekly_change`, `monthly_change`, `yearly_change`, `seasonality`, a Trends link and `as_of`. A change of `0.3` means +30%; `100.01` is the source's capped signal for a near-zero prior baseline, not an exact growth measurement. The index is normalized within this response and is not an absolute search count. The source's weekly `as_of` date is preserved; it is not replaced with request time.
+
+A nonempty uncached request costs **10 credits**, independent of depth. Use `X-Max-Credits: 10`. Confirmed empty lists return uncharged **404**; upstream failures also consume no customer credits. Exact repeats use a **six-hour cache** at zero credits, and successful idempotent replay is free. `Cache-Control: no-cache` requests a fresh source read.
+
+The adapter uses Pinterest's anonymous public Trends source, without Pinterest cookies or account credentials. Its shared request limit is ten source reads per minute. Source throttling or invalid responses fail without charging; this is not a Pinterest partner API or a guarantee of uninterrupted upstream availability.
