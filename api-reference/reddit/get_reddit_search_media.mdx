@@ -1,6 +1,18 @@
 ---
-title: "Reddit Search Media"
+title: "Reddit media search"
 openapi: "GET /reddit/search/media"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Search public image, gallery and video posts with `query`. Each request examines **up to 25 native candidates**, filters to media and then applies `since` / `until`. Related results may appear because query semantics belong to Reddit's live index. NSFW content is excluded by the upstream search option.
+
+`sort` accepts `relevance` (default), `new`, `top`, or `comment_count`. `timeframe` accepts `all` (default), `day`, `week`, `month`, or `year`; it has no effect with `sort=new`. Dates accept `YYYY-MM-DD` or ISO timestamps with a timezone. Date-only bounds are inclusive UTC days. Unknown publication dates are excluded when a bound is set.
+
+Follow `next_cursor` with the same query and filters. A filtered page can be empty and still have a cursor. Date filtering never stops the search walk because relevance results are not chronological. The adapter stops after **40 pages**, exposes `stopped_at=page_limit`, and does not claim a complete Reddit archive. A null cursor with `listing_status=unknown` also does not certify exhaustive coverage. `total` is the returned page count, not an estimated global match count.
+
+Each item contains `{post, computed}`. Gallery `media_urls` contain actual image URLs; a gallery landing page is never reported as an image. Native videos expose a direct fallback file and, when available, `ext.video_hls_url` / `video_dash_url`. The fallback file may omit a separate audio track. Signed media URLs may expire.
+
+Post and author enrichment supplies avatars, upvote ratio and flair, and can be cached for **one hour**. Missing or failed enrichment sets `ext.enrichment_status=partial`, adds warning codes, and leaves unavailable fields null. Partial responses are not cached as complete API results. Reddit's net score is `ext.score`; `engagement.likes` stays null. Unknown verification, shares, deletion state and computed metrics are not inferred.
+
+A fresh **nonempty** response costs **1 credit**, including disclosed partial enrichment. Empty filtered pages, cached responses and idempotent replays cost zero. Invalid inputs and failed search requests are also uncharged. Use `X-Max-Credits: 1` and a 60-second client timeout; the shared upstream deadline is 47 seconds.
+
+<Note>This adapter combines Redditapis public media search and ScrapeBadger public enrichment. It is constrained by approved trial/existing-credit verification allowances. A successful query does not establish sustained production capacity or exhaustive search coverage.</Note>

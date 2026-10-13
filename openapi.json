@@ -48555,7 +48555,7 @@
       "get": {
         "operationId": "get_reddit_search_media",
         "summary": "Reddit Search Media",
-        "description": "Find records through Reddit Search Media using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search one public non-NSFW Reddit media window, with up to 25 source candidates per page. Native query matching may include related results. sort=new ignores timeframe. Date bounds filter each window without stopping unordered pagination; query-bound opaque cursors stop at 40 pages. Gallery URLs are actual images, while video files and optional audio playlists come from validated post enrichment. Failed post/avatar enrichment yields explicit partial status and null unknown fields, never an invented media URL. Reddit net score stays ext.score, not likes. Source enrichment can be cached for one hour. A nonempty fresh result costs one credit; empty filtered windows, cache hits and replays are free. Finite Redditapis and ScrapeBadger allowances do not establish sustained production capacity.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -48652,7 +48652,403 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search one public non-NSFW Reddit media window, with up to 25 source candidates per page. Native query matching may include related results. sort=new ignores timeframe. Date bounds filter each window without stopping unordered pagination; query-bound opaque cursors stop at 40 pages. Gallery URLs are actual images, while video files and optional audio playlists come from validated post enrichment. Failed post/avatar enrichment yields explicit partial status and null unknown fields, never an invented media URL. Reddit net score stays ext.score, not likes. Source enrichment can be cached for one hour. A nonempty fresh result costs one credit; empty filtered windows, cache hits and replays are free. Finite Redditapis and ScrapeBadger allowances do not establish sustained production capacity.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "type": "string"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "post": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "text": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_urls": {
+                                            "anyOf": [
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "thumbnail_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "duration_seconds": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "text",
+                                          "media_urls",
+                                          "thumbnail_url",
+                                          "duration_seconds"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "username": {
+                                            "type": "string"
+                                          },
+                                          "display_name": {
+                                            "type": "string"
+                                          },
+                                          "avatar_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "verified": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "username",
+                                          "display_name",
+                                          "avatar_url",
+                                          "verified"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "engagement": {
+                                        "type": "object",
+                                        "properties": {
+                                          "views": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "likes": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "comments": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "shares": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "saves": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "views",
+                                          "likes",
+                                          "comments",
+                                          "shares",
+                                          "saves"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "flags": {
+                                        "type": "object",
+                                        "properties": {
+                                          "nsfw": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "spoiler": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "pinned": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          },
+                                          "deleted": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "nsfw",
+                                          "spoiler",
+                                          "pinned",
+                                          "deleted"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "title": {
+                                            "type": "string"
+                                          },
+                                          "subreddit": {
+                                            "type": "string"
+                                          },
+                                          "score": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "upvote_ratio": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ]
+                                          },
+                                          "flair": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "media_kind": {
+                                            "enum": [
+                                              "image",
+                                              "gallery",
+                                              "video"
+                                            ]
+                                          },
+                                          "video_hls_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "video_dash_url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "content_language": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "enrichment_status": {
+                                            "enum": [
+                                              "ok",
+                                              "partial"
+                                            ]
+                                          },
+                                          "warnings": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "required": [
+                                          "title",
+                                          "subreddit",
+                                          "score",
+                                          "upvote_ratio",
+                                          "flair",
+                                          "media_kind",
+                                          "video_hls_url",
+                                          "video_dash_url",
+                                          "content_language",
+                                          "enrichment_status",
+                                          "warnings"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "content",
+                                      "author",
+                                      "engagement",
+                                      "flags",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  "computed": {
+                                    "type": "object",
+                                    "properties": {
+                                      "engagement_rate": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      },
+                                      "language": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "content_category": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "estimated_reach": {
+                                        "type": [
+                                          "number",
+                                          "null"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "engagement_rate",
+                                      "language",
+                                      "content_category",
+                                      "estimated_reach"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "post",
+                                  "computed"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "source_window_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "stopped_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "listing_status": {
+                              "enum": [
+                                "continuing",
+                                "complete",
+                                "truncated",
+                                "unknown"
+                              ]
+                            },
+                            "partial": {
+                              "type": "boolean"
+                            },
+                            "source": {
+                              "const": "redditapis+scrapebadger"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "query",
+                            "items",
+                            "returned_count",
+                            "total",
+                            "source_count",
+                            "source_window_count",
+                            "next_cursor",
+                            "stopped_at",
+                            "listing_status",
+                            "partial",
+                            "source",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -127672,7 +128068,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127682,7 +128078,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127692,7 +128088,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127702,7 +128098,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127712,7 +128108,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127722,7 +128118,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127918,7 +128314,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127928,7 +128324,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127938,7 +128334,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127948,7 +128344,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127958,7 +128354,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
@@ -127968,7 +128364,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
+                  "$ref": "#/components/schemas/SocialQueryError"
                 }
               }
             }
