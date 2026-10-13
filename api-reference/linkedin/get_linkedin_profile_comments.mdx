@@ -1,6 +1,16 @@
 ---
-title: "LinkedIn Profile Comments"
+title: "LinkedIn profile comments"
 openapi: "GET /linkedin/profile/comments"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a canonical public profile URL, for example `https://www.linkedin.com/in/satyanadella/`. The response contains at most **20 source-ranked activities**, not the member's full history. The source does not expose continuation, an exhaustive total or guaranteed date ordering; `complete` is false and `next_cursor` / `total` are null.
+
+Each item contains both `comment` and its associated `post`, plus the member activity. Their text, IDs, publication dates and counters remain separate. Nested replies are omitted. The comment parent is unknown and stays null.
+
+Post activity IDs can differ from the public UGC URL ID. The adapter checks the source relationship and preserves both identifiers under `post.ext`. Hidden or missing counters remain null. A source identity mismatch rejects the entire response.
+
+An optional `urn` accepts an opaque `ACo...` member identifier or the `urn:li:fsd_profile:` / `urn:li:fs_miniProfile:` prefix. It must match the returned member. It does not skip a source lookup or reduce provider cost. Other filters, pages, universal cursors and AI enrichments are unsupported and return an uncharged error.
+
+Nonempty uncached responses cost **5 credits**. Cache, replay and all failures are free. An empty upstream dataset is not proof that a member has no activities and is rejected uncharged. Use a 60-second client timeout and `X-Max-Credits: 5`.
+
+<Note>These pinned Apify Actors run with limited permissions and a $0.04 maximum each. They share a non-resetting ten-run verification ceiling within the existing free allowance. No subscription or top-up is enabled, and sustained funded availability remains unconfigured.</Note>
