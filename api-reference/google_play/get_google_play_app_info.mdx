@@ -1,6 +1,14 @@
 ---
-title: "Google Play App Info"
+title: "Google Play app details"
 openapi: "GET /google_play/app-info"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass a package name such as `com.spotify.music` as `app_id`. The response `data` is one canonical App record. It includes description, public developer email/address/website, price, rating, install display/count, screenshot/player URLs, genres, chart tags and related apps where available. Dates normalize to UTC. An absent app is an uncharged 404.
+
+Missing version, size or other fields stay null. Install counts come from the provider and are not independently verified. Video URLs identify source players; they are not guaranteed downloadable files. Apple-only language/advisory fields are null. URLs and returned package IDs must agree with the requested app.
+
+Country accepts one of 211 DataForSEO country locations by ISO code, country name or numeric location code (`US`, `United Kingdom`, `2840`). `UK` aliases `GB`. Language accepts one of 127 source locale codes and defaults to `en`. US and GB English are the live acceptance fixtures; other configured locales are not individually certified. Unsupported inputs fail before task submission.
+
+Nonempty uncached responses cost **5 credits**. Empty search results, errors, cache and replay are free. Use `X-Max-Credits: 5` and allow a 60-second client timeout. A task that remains pending returns an uncharged `UPSTREAM_TASK_PENDING`; retrying the same parameters reuses durable task state for one hour instead of submitting another task.
+
+<Note>The existing DataForSEO key and free balance are reused. New Google Play tasks share a non-resetting 140-unit verification ceiling: one unit per detail or per 30 requested search rows (at most seven for a search). Missing or exhausted budget state fails closed. No top-up or paid plan is enabled; sustained capacity remains unconfigured.</Note>

@@ -58118,7 +58118,7 @@
       "get": {
         "operationId": "get_google_play_app_search",
         "summary": "Google Play App Search",
-        "description": "Find records through Google Play App Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Canonical Google Play search rows wrapped as {app}. Requested depth defaults to 30, rounds up by 30, and caps at 200 (source maximum, lower than the reference 300). Google Play often supplies only 30 ranked rows. Detail-only fields are null. Country accepts one of 211 source country codes, full names or numeric location codes; language accepts 127 source codes. Nonempty fresh responses cost five credits. Empty search, failures, cache and replay cost zero. New tasks share a finite persistent trial allowance; pending tasks are reused on retry for one hour. Only US/GB English were live-tested.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -58138,7 +58138,8 @@
             "example": "United States",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One of 211 source countries by ISO code, full country name or numeric location code. UK aliases GB. Default US; only US and GB live-tested."
           },
           {
             "name": "language",
@@ -58146,7 +58147,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One of 127 source language codes. Default en; only English live-tested."
           },
           {
             "name": "depth",
@@ -58155,7 +58157,8 @@
             "example": 30,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Positive requested depth, default 30; rounds upward by 30 and caps at 200, the documented source maximum. Organic keyword search usually returns only about 30 rows. No continuation cursor."
           },
           {
             "name": "Cache-Control",
@@ -58188,7 +58191,395 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Canonical Google Play search rows wrapped as {app}. Requested depth defaults to 30, rounds up by 30, and caps at 200 (source maximum, lower than the reference 300). Google Play often supplies only 30 ranked rows. Detail-only fields are null. Country accepts one of 211 source country codes, full names or numeric location codes; language accepts 127 source codes. Nonempty fresh responses cost five credits. Empty search, failures, cache and replay cost zero. New tasks share a finite persistent trial allowance; pending tasks are reused on retry for one hour. Only US/GB English were live-tested.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 200,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "app": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string",
+                                        "description": "Store app ID (Google Play package name / App Store numeric id)"
+                                      },
+                                      "store": {
+                                        "const": "google_play"
+                                      },
+                                      "url": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "description": "String at app.url"
+                                      },
+                                      "title": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "description": "App title"
+                                      },
+                                      "subtitle": {
+                                        "type": "null"
+                                      },
+                                      "icon": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "description": "String at app.icon"
+                                      },
+                                      "description": {
+                                        "type": "null"
+                                      },
+                                      "developer": {
+                                        "type": "object",
+                                        "description": "Developer block (name, id, url; email/address for Google)",
+                                        "properties": {
+                                          "id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ],
+                                            "description": "String at app.developer.id"
+                                          },
+                                          "name": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ],
+                                            "description": "String at app.developer.name"
+                                          },
+                                          "url": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ],
+                                            "description": "String at app.developer.url"
+                                          },
+                                          "email": {
+                                            "type": "null"
+                                          },
+                                          "address": {
+                                            "type": "null"
+                                          },
+                                          "website": {
+                                            "type": "null"
+                                          }
+                                        }
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "description": "Aggregate rating (value, max, number of ratings)",
+                                        "properties": {
+                                          "value": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0,
+                                            "maximum": 5
+                                          },
+                                          "max": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "enum": [
+                                              5,
+                                              null
+                                            ]
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        }
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "description": "Price block (current, original, currency, is_free, displayed)",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ],
+                                            "description": "String at app.price.currency"
+                                          },
+                                          "is_free": {
+                                            "type": [
+                                              "boolean",
+                                              "null"
+                                            ],
+                                            "description": "Boolean at app.price.is_free"
+                                          },
+                                          "displayed": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ],
+                                            "description": "String at app.price.displayed"
+                                          }
+                                        }
+                                      },
+                                      "reviews_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "description": "Numeric at app.reviews_count"
+                                      },
+                                      "category": {
+                                        "type": "null"
+                                      },
+                                      "categories": {
+                                        "type": "null"
+                                      },
+                                      "installs": {
+                                        "type": "null"
+                                      },
+                                      "version": {
+                                        "type": "null"
+                                      },
+                                      "minimum_os_version": {
+                                        "type": "null"
+                                      },
+                                      "size": {
+                                        "type": "null"
+                                      },
+                                      "released_at": {
+                                        "type": "null"
+                                      },
+                                      "updated_at": {
+                                        "type": "null"
+                                      },
+                                      "update_notes": {
+                                        "type": "null"
+                                      },
+                                      "image_urls": {
+                                        "type": "null"
+                                      },
+                                      "video_urls": {
+                                        "type": "null"
+                                      },
+                                      "languages": {
+                                        "type": "null"
+                                      },
+                                      "advisories": {
+                                        "type": "null"
+                                      },
+                                      "genres": {
+                                        "type": "null"
+                                      },
+                                      "tags": {
+                                        "type": "null"
+                                      },
+                                      "similar_apps": {
+                                        "type": "null"
+                                      },
+                                      "more_by_developer": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "appdata": {
+                                            "type": "object",
+                                            "properties": {
+                                              "country": {
+                                                "type": "string"
+                                              },
+                                              "requested_language": {
+                                                "type": "string"
+                                              },
+                                              "source": {
+                                                "const": "dataforseo"
+                                              },
+                                              "source_rank": {
+                                                "type": [
+                                                  "integer",
+                                                  "null"
+                                                ],
+                                                "minimum": 0
+                                              },
+                                              "coverage_note": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "country",
+                                              "requested_language",
+                                              "source",
+                                              "source_rank",
+                                              "coverage_note"
+                                            ],
+                                            "additionalProperties": false
+                                          }
+                                        },
+                                        "required": [
+                                          "appdata"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "store",
+                                      "url",
+                                      "title",
+                                      "subtitle",
+                                      "icon",
+                                      "description",
+                                      "developer",
+                                      "rating",
+                                      "price",
+                                      "reviews_count",
+                                      "category",
+                                      "categories",
+                                      "installs",
+                                      "version",
+                                      "minimum_os_version",
+                                      "size",
+                                      "released_at",
+                                      "updated_at",
+                                      "update_notes",
+                                      "image_urls",
+                                      "video_urls",
+                                      "languages",
+                                      "advisories",
+                                      "genres",
+                                      "tags",
+                                      "similar_apps",
+                                      "more_by_developer",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "app"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "requested_depth": {
+                              "type": "integer",
+                              "minimum": 1
+                            },
+                            "effective_depth": {
+                              "type": "integer",
+                              "enum": [
+                                30,
+                                60,
+                                90,
+                                120,
+                                150,
+                                180,
+                                200
+                              ]
+                            },
+                            "country": {
+                              "type": "string"
+                            },
+                            "language": {
+                              "type": "string"
+                            },
+                            "source_reported_results": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "minimum": 0
+                            },
+                            "source_items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "deduplicated": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "collected_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "next_cursor",
+                            "requested_depth",
+                            "effective_depth",
+                            "country",
+                            "language",
+                            "source_reported_results",
+                            "source_items",
+                            "deduplicated",
+                            "collected_at",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -58407,7 +58798,7 @@
       "get": {
         "operationId": "get_google_play_app_info",
         "summary": "Google Play App Info",
-        "description": "Use Google Play App Info to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "One canonical Google Play App with description, public developer contact/website, ratings, prices, source-reported install counts, screenshots, related apps and update metadata when supplied. Missing fields remain null. Country accepts one of 211 source country codes, full names or numeric location codes; language accepts 127 source codes. Nonempty fresh responses cost five credits. Empty search, failures, cache and replay cost zero. New tasks share a finite persistent trial allowance; pending tasks are reused on retry for one hour. Only US/GB English were live-tested.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -58427,7 +58818,8 @@
             "example": "United States",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One of 211 source countries by ISO code, full country name or numeric location code. UK aliases GB. Default US; only US and GB live-tested."
           },
           {
             "name": "language",
@@ -58435,7 +58827,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One of 127 source language codes. Default en; only English live-tested."
           },
           {
             "name": "Cache-Control",
@@ -58468,7 +58861,460 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "One canonical Google Play App with description, public developer contact/website, ratings, prices, source-reported install counts, screenshots, related apps and update metadata when supplied. Missing fields remain null. Country accepts one of 211 source country codes, full names or numeric location codes; language accepts 127 source codes. Nonempty fresh responses cost five credits. Empty search, failures, cache and replay cost zero. New tasks share a finite persistent trial allowance; pending tasks are reused on retry for one hour. Only US/GB English were live-tested.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Store app ID (Google Play package name / App Store numeric id)"
+                            },
+                            "store": {
+                              "const": "google_play"
+                            },
+                            "url": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.url"
+                            },
+                            "title": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "App title"
+                            },
+                            "subtitle": {
+                              "type": "null"
+                            },
+                            "icon": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.icon"
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.description"
+                            },
+                            "developer": {
+                              "type": "object",
+                              "description": "Developer block (name, id, url; email/address for Google)",
+                              "properties": {
+                                "id": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.developer.id"
+                                },
+                                "name": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.developer.name"
+                                },
+                                "url": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.developer.url"
+                                },
+                                "email": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.developer.email"
+                                },
+                                "address": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.developer.address"
+                                },
+                                "website": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.developer.website"
+                                }
+                              }
+                            },
+                            "rating": {
+                              "type": "object",
+                              "description": "Aggregate rating (value, max, number of ratings)",
+                              "properties": {
+                                "value": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0,
+                                  "maximum": 5
+                                },
+                                "max": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "enum": [
+                                    5,
+                                    null
+                                  ]
+                                },
+                                "count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                }
+                              }
+                            },
+                            "price": {
+                              "type": "object",
+                              "description": "Price block (current, original, currency, is_free, displayed)",
+                              "properties": {
+                                "current": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "original": {
+                                  "type": [
+                                    "number",
+                                    "null"
+                                  ],
+                                  "minimum": 0
+                                },
+                                "currency": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.price.currency"
+                                },
+                                "is_free": {
+                                  "type": [
+                                    "boolean",
+                                    "null"
+                                  ],
+                                  "description": "Boolean at app.price.is_free"
+                                },
+                                "displayed": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.price.displayed"
+                                }
+                              }
+                            },
+                            "reviews_count": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ],
+                              "description": "Numeric at app.reviews_count"
+                            },
+                            "category": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.category"
+                            },
+                            "categories": {
+                              "type": "null"
+                            },
+                            "installs": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "description": "Install signal (Google only): { display \"1,000,000,000+\", count }; null on Apple",
+                              "properties": {
+                                "display": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "String at app.installs.display"
+                                },
+                                "count": {
+                                  "type": [
+                                    "integer",
+                                    "null"
+                                  ],
+                                  "description": "Numeric at app.installs.count"
+                                }
+                              }
+                            },
+                            "version": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.version"
+                            },
+                            "minimum_os_version": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.minimum_os_version"
+                            },
+                            "size": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.size"
+                            },
+                            "released_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "updated_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "update_notes": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "description": "String at app.update_notes"
+                            },
+                            "image_urls": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "description": "Screenshot URLs",
+                              "items": {
+                                "type": "string",
+                                "description": "Screenshot URLs"
+                              }
+                            },
+                            "video_urls": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "description": "Array at app.video_urls",
+                              "items": {
+                                "type": "string",
+                                "description": "String at app.video_urls"
+                              }
+                            },
+                            "languages": {
+                              "type": "null"
+                            },
+                            "advisories": {
+                              "type": "null"
+                            },
+                            "genres": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "description": "Google Play genres (null on Apple)",
+                              "items": {
+                                "type": "string",
+                                "description": "Google Play genres (null on Apple)"
+                              }
+                            },
+                            "tags": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "description": "Array at app.tags",
+                              "items": {
+                                "type": "string",
+                                "description": "String at app.tags"
+                              }
+                            },
+                            "similar_apps": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "description": "Array at app.similar_apps",
+                              "items": {
+                                "type": "object",
+                                "description": "Nested object: app.similar_apps",
+                                "properties": {
+                                  "id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "description": "String at app.similar_apps.id"
+                                  },
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "description": "String at app.similar_apps.title"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "description": "String at app.similar_apps.url"
+                                  }
+                                }
+                              }
+                            },
+                            "more_by_developer": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "description": "Array at app.more_by_developer",
+                              "items": {
+                                "type": "object",
+                                "description": "Nested object: app.more_by_developer",
+                                "properties": {
+                                  "id": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "description": "String at app.more_by_developer.id"
+                                  },
+                                  "title": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "description": "String at app.more_by_developer.title"
+                                  },
+                                  "url": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "description": "String at app.more_by_developer.url"
+                                  }
+                                }
+                              }
+                            },
+                            "ext": {
+                              "type": "object",
+                              "properties": {
+                                "appdata": {
+                                  "type": "object",
+                                  "properties": {
+                                    "country": {
+                                      "type": "string"
+                                    },
+                                    "requested_language": {
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "const": "dataforseo"
+                                    },
+                                    "source_rank": {
+                                      "type": [
+                                        "integer",
+                                        "null"
+                                      ],
+                                      "minimum": 0
+                                    },
+                                    "coverage_note": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "country",
+                                    "requested_language",
+                                    "source",
+                                    "source_rank",
+                                    "coverage_note"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "appdata"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "store",
+                            "url",
+                            "title",
+                            "subtitle",
+                            "icon",
+                            "description",
+                            "developer",
+                            "rating",
+                            "price",
+                            "reviews_count",
+                            "category",
+                            "categories",
+                            "installs",
+                            "version",
+                            "minimum_os_version",
+                            "size",
+                            "released_at",
+                            "updated_at",
+                            "update_notes",
+                            "image_urls",
+                            "video_urls",
+                            "languages",
+                            "advisories",
+                            "genres",
+                            "tags",
+                            "similar_apps",
+                            "more_by_developer",
+                            "ext"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
