@@ -58174,7 +58174,7 @@
       "get": {
         "operationId": "get_app_store_app_reviews",
         "summary": "App Store App Reviews",
-        "description": "Use App Store App Reviews to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Canonical Apple storefront reviews with app identity, rating, full text, reviewer and UTC publish date. Reads native 50-row pages without dropping the first review. Depth defaults to 50, rounds upward by 50 and clamps at 500. Country accepts an Apple ISO storefront, UK alias, or a name/numeric location code from the published metadata. Most-recent and most-helpful orders are native. Date windows retain undated reviews; since stops at older rows and requires recent order. Nonempty uncached results cost 5 credits independent of depth; confirmed empty lists/windows, errors, cache and successful replays are free. Original reviewer language is not translated or filtered. Enrichment and fit remain unavailable; default judgments explicitly report skipped, and label=none or judgments=off omits that block. Native public source is rate-limited to 20 reads/minute; no upstream availability guarantee.",
         "x-credit-cost": 5,
         "x-launch-status": "beta",
         "parameters": [
@@ -58185,7 +58185,8 @@
             "example": "324684580",
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "One numeric Apple App Store app ID."
           },
           {
             "name": "country",
@@ -58193,7 +58194,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Apple storefront ISO code, UK alias, or a country name/numeric code in the metadata directory. Examples: US, United Kingdom, 2840. Default US."
           },
           {
             "name": "language",
@@ -58201,7 +58203,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Records the requested locale. Native reviews remain in their original text; this does not translate or filter review language."
           },
           {
             "name": "depth",
@@ -58210,7 +58213,8 @@
             "example": 50,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Positive requested depth. Defaults to 50, rounds up to a 50-row page and clamps to 500. Date filtering can return fewer rows."
           },
           {
             "name": "sort_by",
@@ -58231,7 +58235,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Unsupported by the native feed. Returns free 400; filter review.rating.value locally."
           },
           {
             "name": "label",
@@ -58239,7 +58244,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Only none is supported. Other labels return free 422."
           },
           {
             "name": "reports",
@@ -58247,7 +58253,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Not implemented by this adapter; returns free 422 before source calls."
           },
           {
             "name": "judgments",
@@ -58259,7 +58266,8 @@
                 "on",
                 "off"
               ]
-            }
+            },
+            "description": "Default/on reports skipped with review_judgments_unavailable. Off omits labels. No background judgment jobs are queued."
           },
           {
             "name": "dry_run",
@@ -58281,7 +58289,8 @@
               "enum": [
                 "1"
               ]
-            }
+            },
+            "description": "Not implemented by this adapter; returns free 422 before source calls."
           },
           {
             "name": "fit",
@@ -58292,7 +58301,8 @@
               "enum": [
                 "goal"
               ]
-            }
+            },
+            "description": "Not implemented by this adapter; returns free 422 before source calls."
           },
           {
             "name": "goal",
@@ -58300,7 +58310,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Not implemented by this adapter; returns free 422 before source calls."
           },
           {
             "name": "fit_tokens",
@@ -58308,7 +58319,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "Not implemented by this adapter; returns free 422 before source calls."
           },
           {
             "name": "since",
@@ -58316,7 +58328,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Inclusive ISO timestamp or UTC calendar date. Requires most_recent; older rows stop the walk. Undated rows are kept."
           },
           {
             "name": "until",
@@ -58324,7 +58337,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Inclusive upper timestamp or whole UTC calendar day. Requires most_recent; newer rows are skipped while the walk continues."
           },
           {
             "name": "Cache-Control",
@@ -58353,11 +58367,377 @@
               "type": "integer",
               "minimum": 0
             }
+          },
+          {
+            "name": "published_after",
+            "in": "query",
+            "required": false,
+            "description": "Alias for since. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "description": "Alias for since. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "required": false,
+            "description": "Alias for since. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "published_before",
+            "in": "query",
+            "required": false,
+            "description": "Alias for until. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "description": "Alias for until. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "required": false,
+            "description": "Alias for until. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "publish_time",
+            "in": "query",
+            "required": false,
+            "description": "Alias for relative lower bound (yesterday, this-week, this-month, last-3-months, last-6-months). Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "max_age_days",
+            "in": "query",
+            "required": false,
+            "description": "Alias for relative lower bound, 0–36500 days. Conflicting absolute aliases are rejected; relative lower bounds combine by taking the latest.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Canonical Apple storefront reviews with app identity, rating, full text, reviewer and UTC publish date. Reads native 50-row pages without dropping the first review. Depth defaults to 50, rounds upward by 50 and clamps at 500. Country accepts an Apple ISO storefront, UK alias, or a name/numeric location code from the published metadata. Most-recent and most-helpful orders are native. Date windows retain undated reviews; since stops at older rows and requires recent order. Nonempty uncached results cost 5 credits independent of depth; confirmed empty lists/windows, errors, cache and successful replays are free. Original reviewer language is not translated or filtered. Enrichment and fit remain unavailable; default judgments explicitly report skipped, and label=none or judgments=off omits that block. Native public source is rate-limited to 20 reads/minute; no upstream availability guarantee.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 500,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "review": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "entity_id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "null"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "maximum": 5
+                                          },
+                                          "max": {
+                                            "const": 5
+                                          }
+                                        },
+                                        "required": [
+                                          "value",
+                                          "max"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "author": {
+                                        "type": "object",
+                                        "properties": {
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "avatar_url": {
+                                            "type": "null"
+                                          },
+                                          "url": {
+                                            "type": "string",
+                                            "format": "uri"
+                                          },
+                                          "location": {
+                                            "type": "null"
+                                          },
+                                          "reviews_count": {
+                                            "type": "null"
+                                          }
+                                        },
+                                        "required": [
+                                          "name",
+                                          "avatar_url",
+                                          "url",
+                                          "location",
+                                          "reviews_count"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "helpful_votes": {
+                                        "type": "null"
+                                      },
+                                      "verified": {
+                                        "type": "null"
+                                      },
+                                      "source": {
+                                        "const": "app_store"
+                                      },
+                                      "language": {
+                                        "type": "null"
+                                      },
+                                      "original_language": {
+                                        "type": "null"
+                                      },
+                                      "translated": {
+                                        "const": false
+                                      },
+                                      "images": {
+                                        "type": "null"
+                                      },
+                                      "responses": {
+                                        "type": "null"
+                                      },
+                                      "published_at": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "version": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "version"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "entity_id",
+                                      "url",
+                                      "title",
+                                      "text",
+                                      "rating",
+                                      "author",
+                                      "helpful_votes",
+                                      "verified",
+                                      "source",
+                                      "language",
+                                      "original_language",
+                                      "translated",
+                                      "images",
+                                      "responses",
+                                      "published_at",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "review"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "total": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "dropped": {
+                              "const": 0
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "app_id": {
+                              "type": "string"
+                            },
+                            "country": {
+                              "type": "string"
+                            },
+                            "requested_language": {
+                              "type": "string"
+                            },
+                            "sort_by": {
+                              "type": "string",
+                              "enum": [
+                                "most_recent",
+                                "most_helpful"
+                              ]
+                            },
+                            "pagination": {
+                              "type": "object",
+                              "properties": {
+                                "pages_fetched": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 10
+                                },
+                                "scanned": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                },
+                                "requested_depth": {
+                                  "type": "integer",
+                                  "minimum": 1
+                                },
+                                "effective_depth": {
+                                  "type": "integer",
+                                  "minimum": 50,
+                                  "maximum": 500
+                                },
+                                "stopped_at": {
+                                  "type": "string",
+                                  "enum": [
+                                    "depth",
+                                    "since",
+                                    "exhausted",
+                                    "source_limit"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "pages_fetched",
+                                "scanned",
+                                "requested_depth",
+                                "effective_depth",
+                                "stopped_at"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "source_updated_at": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            },
+                            "labels": {
+                              "type": "object",
+                              "properties": {
+                                "mode": {
+                                  "const": "default"
+                                },
+                                "status": {
+                                  "const": "skipped"
+                                },
+                                "pending": {
+                                  "const": 0
+                                },
+                                "skipped_count": {
+                                  "type": "integer",
+                                  "minimum": 0
+                                }
+                              },
+                              "required": [
+                                "mode",
+                                "status",
+                                "pending",
+                                "skipped_count"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "_warnings": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "total",
+                            "returned_count",
+                            "dropped",
+                            "next_cursor",
+                            "app_id",
+                            "country",
+                            "requested_language",
+                            "sort_by",
+                            "pagination",
+                            "source_updated_at",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

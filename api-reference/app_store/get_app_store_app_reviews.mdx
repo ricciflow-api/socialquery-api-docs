@@ -1,6 +1,16 @@
 ---
-title: "App Store App Reviews"
+title: "App Store reviews"
 openapi: "GET /app_store/app-reviews"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read original Apple storefront reviews on the canonical `{ review }` shape. Every row includes its ID, `entity_id`, stars, title, full text, reviewer and UTC publication time when supplied. The first feed entry is preserved. Unknown language, helpful votes, purchase verification, images and developer responses remain null.
+
+`depth` defaults to 50, rounds upward to a 50-review page, and clamps at **500**. A request for 51 reads up to 100; 501 reads at most 500. This is Apple's finite recent/helpful feed, not lifetime review history. `total` counts returned rows. `pagination` reports pages and source rows scanned, effective depth and why the walk stopped. There is no continuation cursor beyond that bounded collection.
+
+Choose `most_recent` (default) or `most_helpful`. `since` and `until` require recent ordering; date-only upper bounds include the entire UTC day. Older rows stop a `since` walk; newer rows excluded by `until` do not stop it. Undated rows are retained. Supported aliases include `published_after`, `start_date`, `from_date`, `published_before`, `end_date`, `to_date`, `publish_time` and `max_age_days`.
+
+Country selects the actual feed: an Apple storefront ISO code, `UK`, or a country name/numeric code from the current location metadata, such as `United Kingdom` or `2840`. `language` records your requested locale; Apple reviewer text remains original, without translation or language filtering.
+
+A nonempty uncached collection costs **5 credits**, regardless of depth. Set `X-Max-Credits: 5`. Confirmed empty feeds/windows and all failures are free; successful replay and cache hits are also free. Repeated IDs, wrong app/country, malformed rows, ignored ordering or a failed later page reject the entire collection without charging for partial data. Native source calls share a 20-read/minute budget.
+
+`rating` returns free 400 because Apple cannot filter stars upstream. Judgment enrichment and `fit` remain unavailable. Default/on judgments report `status: skipped`, zero pending jobs and `review_judgments_unavailable`; `label=none` or `judgments=off` removes that block. Explicit unsupported labels/fit options return free 422. This endpoint does not infer sentiment from stars.
