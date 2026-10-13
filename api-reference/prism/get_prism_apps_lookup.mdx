@@ -1,6 +1,18 @@
 ---
-title: "Prism Apps Lookup"
+title: "Cross-store app lookup"
 openapi: "GET /prism/apps-lookup"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Resolve an app by `title`, `google_play_id`, or `app_store_id`; at least one is required. Explicit IDs anchor their stores directly. Without a title, the resolved anchor supplies the search title for the other store. `stores` is a nonempty CSV subset of `google_play,app_store`; IDs for excluded stores are rejected.
+
+Each selected store returns an independent status and canonical App. Search uses a bounded ranked window (Google Play: 30 requested rows; Apple: 100). A candidate must pass the title threshold, default **0.6**, and competing publishers within **two native source positions** and **0.05 title similarity** are treated as ambiguous. Native source rank breaks more distant ties; this can exclude lower-ranked homonyms, so supply explicit IDs when identity must be authoritative. The selected candidate is then enriched with full app details. Failed enrichment preserves only the known search fields and marks that store partial.
+
+Cross-store matches currently use the **title + developer fallback**. Both normalized title and developer guards must pass before merging. Different publishers stay separate, even with the same title. `match.confidence` is an uncalibrated string-similarity score, **not a probability**. Korean/English title equivalence and other multilingual AI judgments are not yet supported.
+
+`include` selects a nonempty CSV subset of `merged,similar,developer`, default all three. Omitted blocks are not computed. `merged` is null unless both listings pass the match guards. Its rating gap is Google Play minus Apple; ratings are specific to each market and collection time. Apple install counts are unavailable and remain null. Similar apps and developer apps are source lists, not independently verified recommendations.
+
+Country/language must be accepted by every selected store; defaults are US/en. The stores share a **47-second deadline**. Source tasks are persisted for one hour, so retrying pending work reuses the same task. A timeout, exhausted provider allowance or source failure never turns into an empty successful result.
+
+A fresh successful response costs **30 credits**, including clean no-match and explicitly partial results. No resolved listing yields 404; a required source failure with no usable listing yields 503. Both are free, as are cache hits and idempotent replays. Use `X-Max-Credits: 30` and a 60-second client timeout. Invalid `include` returns 400; other unsupported options return 422 before source work.
+
+<Note>DataForSEO and Apple public lookups reuse existing credentials and finite verification allowances. Configured routes and successful fixtures do not establish sustained production capacity. AI matching remains an explicit feature-parity gap.</Note>
