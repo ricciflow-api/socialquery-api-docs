@@ -1,6 +1,14 @@
 ---
-title: "App Store App Info"
+title: "App Store app details"
 openapi: "GET /app_store/app-info"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Pass one numeric `app_id`, obtained from app-search. The response `data` is one canonical App object, not a one-item list. It includes description, subtitle, developer and public website, category, ratings, price, release/update date, version, minimum OS, screenshots, supported languages and related/developer apps when supplied. Missing fields remain null. Google-only install/email/address fields are null. A missing app is an uncharged 404.
+
+Choose one of the source's 105 country locations by ISO code, country name or numeric code (`US`, `United Kingdom`, `2840`). `UK` aliases `GB`. Language uses one of the 39 supported source locale codes and defaults to `en`; unsupported countries/languages fail before submitting tasks.
+
+DataForSEO supplies ranking and localized listing text. Anonymous Apple batch lookups provide developer/category metadata and missing detail fields. Those enrichment labels are not guaranteed to match the requested language. Age advisories can differ between the two sources: the source page advisory stays in `advisories` and Apple's rating is retained under `ext.appdata.apple_advisory`. The adapter does not hide that disagreement or infer a rating.
+
+Nonempty uncached results cost **5 credits** regardless of depth. Empty search results, all failures, cache hits and successful replays are free. Use `X-Max-Credits: 5`. A failed enrichment batch rejects the collection instead of charging for incomplete app rows. Use a 60-second client timeout. When task processing exceeds the polling window, an uncharged `UPSTREAM_TASK_PENDING` response asks you to retry the same parameters; durable task state avoids a new provider submission for one hour.
+
+<Note>New source tasks share a non-resetting ceiling of twenty submissions within the existing DataForSEO trial balance. No paid plan or top-up is enabled. Ongoing funded capacity remains unconfigured.</Note>
