@@ -32507,7 +32507,7 @@
       "get": {
         "operationId": "get_tiktokshop_search",
         "summary": "TikTok Shop Search",
-        "description": "Find records through TikTok Shop Search using the accepted query and filters. Keep the query with any pagination state, and check the returned sample against your task. Availability is operation-specific.",
+        "description": "Search a current TikTok Shop product page in one of 16 markets. Canonical product wrappers preserve prices, ratings, seller IDs, observed sold counts and merchandising signals. Missing fields remain null. Explicit page 1–100 is supported; source page sizes vary and continuation metadata is absent, so cursor is rejected instead of fabricated. Market currencies are validated. Nonempty uncached pages cost 1 credit; confirmed empty pages, errors, cache hits and replays are free. Currently operates within a finite 10-source-request verification ceiling, not a funded ongoing plan.",
         "x-credit-cost": 1,
         "x-launch-status": "beta",
         "parameters": [
@@ -32526,8 +32526,11 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1
-            }
+              "minimum": 1,
+              "maximum": 100
+            },
+            "deprecated": false,
+            "description": "Explicit source page, from 1 to 100. Page sizes vary. The provider does not publish continuation metadata."
           },
           {
             "name": "region",
@@ -32561,7 +32564,8 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "Unavailable for this source: returns free 422. Use an explicit page number; next_cursor and has_more remain null."
           },
           {
             "name": "Cache-Control",
@@ -32594,7 +32598,276 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Search a current TikTok Shop product page in one of 16 markets. Canonical product wrappers preserve prices, ratings, seller IDs, observed sold counts and merchandising signals. Missing fields remain null. Explicit page 1–100 is supported; source page sizes vary and continuation metadata is absent, so cursor is rejected instead of fabricated. Market currencies are validated. Nonempty uncached pages cost 1 credit; confirmed empty pages, errors, cache hits and replays are free. Currently operates within a finite 10-source-request verification ceiling, not a funded ongoing plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "items": {
+                              "type": "array",
+                              "maxItems": 100,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "product": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      },
+                                      "description": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "image_urls": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "price": {
+                                        "type": "object",
+                                        "properties": {
+                                          "current": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "original": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "currency": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "current",
+                                          "original",
+                                          "currency"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "rating": {
+                                        "type": "object",
+                                        "properties": {
+                                          "average": {
+                                            "type": [
+                                              "number",
+                                              "null"
+                                            ],
+                                            "minimum": 0,
+                                            "maximum": 5
+                                          },
+                                          "count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          }
+                                        },
+                                        "required": [
+                                          "average",
+                                          "count"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "seller": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ]
+                                      },
+                                      "brand": {
+                                        "type": "null"
+                                      },
+                                      "availability": {
+                                        "type": "null"
+                                      },
+                                      "reviews_count": {
+                                        "type": [
+                                          "integer",
+                                          "null"
+                                        ],
+                                        "minimum": 0
+                                      },
+                                      "features": {
+                                        "type": "null"
+                                      },
+                                      "specifications": {
+                                        "type": "null"
+                                      },
+                                      "variations": {
+                                        "type": "null"
+                                      },
+                                      "ext": {
+                                        "type": "object",
+                                        "properties": {
+                                          "seller_id": {
+                                            "type": [
+                                              "string",
+                                              "null"
+                                            ]
+                                          },
+                                          "sold_count": {
+                                            "type": [
+                                              "integer",
+                                              "null"
+                                            ],
+                                            "minimum": 0
+                                          },
+                                          "tiktokshop": {
+                                            "type": "object",
+                                            "properties": {
+                                              "trust_label": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "ships_from": {
+                                                "type": [
+                                                  "string",
+                                                  "null"
+                                                ]
+                                              },
+                                              "promotion_labels": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "category_breadcrumb": {
+                                                "type": [
+                                                  "array",
+                                                  "null"
+                                                ],
+                                                "items": {}
+                                              },
+                                              "video": {}
+                                            },
+                                            "required": [
+                                              "trust_label",
+                                              "ships_from",
+                                              "promotion_labels",
+                                              "category_breadcrumb",
+                                              "video"
+                                            ],
+                                            "additionalProperties": false
+                                          }
+                                        },
+                                        "required": [
+                                          "seller_id",
+                                          "sold_count",
+                                          "tiktokshop"
+                                        ],
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "title",
+                                      "url",
+                                      "description",
+                                      "image_urls",
+                                      "price",
+                                      "rating",
+                                      "seller",
+                                      "brand",
+                                      "availability",
+                                      "reviews_count",
+                                      "features",
+                                      "specifications",
+                                      "variations",
+                                      "ext"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "product"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "returned_count": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "total": {
+                              "type": "null"
+                            },
+                            "next_cursor": {
+                              "type": "null"
+                            },
+                            "query": {
+                              "type": "string"
+                            },
+                            "region": {
+                              "type": "string"
+                            },
+                            "currency": {
+                              "type": "string"
+                            },
+                            "page": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 100
+                            },
+                            "has_more": {
+                              "type": "null"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "items",
+                            "returned_count",
+                            "total",
+                            "next_cursor",
+                            "query",
+                            "region",
+                            "currency",
+                            "page",
+                            "has_more",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"
@@ -32759,7 +33032,7 @@
       "get": {
         "operationId": "get_tiktokshop_sales",
         "summary": "TikTok Shop Sales",
-        "description": "Use TikTok Shop Sales to inspect the selected public resource. The reference defines accepted identifiers, optional fields, and the expected credit amount. Validate a small response before depending on preview coverage.",
+        "description": "Aggregate one first-page product search per requested market (1–8 distinct markets). Reports observed lifetime units and current-price sales estimates in each market currency, listing coverage and top products. These are first-page listing estimates, not period sales or whole-market totals. Missing inputs are excluded with explicit coverage counts, never treated as zero. Empty/failed markets have null figures and cost zero; each nonempty market costs 1 credit. The request reserves one credit per market and settles only successful markets. Per-market request_id identifies the parent request, not separate billed child records. Partial failures are not cached. Provider free allowance is finite.",
         "x-credit-cost": 0,
         "x-launch-status": "beta",
         "parameters": [
@@ -32822,7 +33095,210 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Success"
+            "description": "Aggregate one first-page product search per requested market (1–8 distinct markets). Reports observed lifetime units and current-price sales estimates in each market currency, listing coverage and top products. These are first-page listing estimates, not period sales or whole-market totals. Missing inputs are excluded with explicit coverage counts, never treated as zero. Empty/failed markets have null figures and cost zero; each nonempty market costs 1 credit. The request reserves one credit per market and settles only successful markets. Per-market request_id identifies the parent request, not separate billed child records. Partial failures are not cached. Provider free allowance is finite.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SocialQueryResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "query": {
+                              "type": "string"
+                            },
+                            "regions": {
+                              "type": "array",
+                              "minItems": 1,
+                              "maxItems": 8,
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "region": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string",
+                                    "enum": [
+                                      "ok",
+                                      "empty",
+                                      "failed"
+                                    ]
+                                  },
+                                  "listings": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "listings_with_sales": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "listings_with_estimate": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "units_sold": {
+                                    "type": [
+                                      "integer",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "estimated_sales": {
+                                    "type": [
+                                      "number",
+                                      "null"
+                                    ],
+                                    "minimum": 0
+                                  },
+                                  "currency": {
+                                    "type": "string"
+                                  },
+                                  "top_products": {
+                                    "type": "array",
+                                    "maxItems": 20,
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "title": {
+                                          "type": "string"
+                                        },
+                                        "url": {
+                                          "type": "string"
+                                        },
+                                        "price": {
+                                          "type": [
+                                            "number",
+                                            "null"
+                                          ],
+                                          "minimum": 0
+                                        },
+                                        "units_sold": {
+                                          "type": "integer",
+                                          "minimum": 0
+                                        },
+                                        "estimated_sales": {
+                                          "type": [
+                                            "number",
+                                            "null"
+                                          ],
+                                          "minimum": 0
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "title",
+                                        "url",
+                                        "price",
+                                        "units_sold",
+                                        "estimated_sales"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "sales_coverage_complete": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "estimate_coverage_complete": {
+                                    "type": [
+                                      "boolean",
+                                      "null"
+                                    ]
+                                  },
+                                  "credits": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 1
+                                  },
+                                  "request_id": {
+                                    "type": "string"
+                                  },
+                                  "elapsed_ms": {
+                                    "type": "integer",
+                                    "minimum": 0
+                                  },
+                                  "error_code": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "region",
+                                  "status",
+                                  "listings",
+                                  "listings_with_sales",
+                                  "listings_with_estimate",
+                                  "units_sold",
+                                  "estimated_sales",
+                                  "currency",
+                                  "top_products",
+                                  "sales_coverage_complete",
+                                  "estimate_coverage_complete",
+                                  "credits",
+                                  "request_id",
+                                  "elapsed_ms",
+                                  "error_code"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "markets_checked": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "succeeded": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "as_of": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "coverage_note": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "query",
+                            "regions",
+                            "markets_checked",
+                            "succeeded",
+                            "as_of",
+                            "coverage_note"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/Error400"

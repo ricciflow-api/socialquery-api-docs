@@ -3,4 +3,12 @@ title: "TikTok Shop Sales"
 openapi: "GET /tiktokshop/sales"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Send a keyword and up to eight comma-separated `regions`, for example `US,GB`. The adapter reads the same first-page product search used by `/v1/tiktokshop/search`. Duplicate markets are counted once; `top` selects 1–20 listings ranked by observed lifetime units sold (default 5).
+
+Each market reports `listings`, `listings_with_sales`, `listings_with_estimate`, `units_sold`, `estimated_sales`, `currency`, `top_products` and completeness flags. Sales estimates multiply observed lifetime units by current prices. They are **first-page listing estimates**, not period sales or whole-market totals. Unknown inputs are excluded and disclosed; they never become zeros. Different calls can return different listings, so subtracting totals does not reliably measure period sales.
+
+Empty or failed markets have null aggregate figures and cost zero. A nonempty market costs **1 credit**, even if its listings omit sales counts. The request reserves one credit for each requested distinct market, then releases unused credits. Set `X-Max-Credits` to the market count. Per-market `credits` describes original computation cost; the response envelope reports zero on cache or replay.
+
+Per-market `request_id` is the parent API request ID. Separate child request records are not created. One market can fail while others succeed; inspect every `status`. Results containing failures are not cached. An all-failed collection is returned with `succeeded: 0` and no charge; it is not usable sales evidence.
+
+<Note>This provider uses its existing free account within a non-resetting 10-source-request verification ceiling. Exhaustion fails closed. Ongoing funded capacity has not been configured; this is a bounded verified integration, not an availability guarantee.</Note>

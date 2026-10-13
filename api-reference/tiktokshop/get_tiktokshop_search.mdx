@@ -3,4 +3,12 @@ title: "TikTok Shop Search"
 openapi: "GET /tiktokshop/search"
 ---
 
-<Note>This reference describes a preview operation. Test the required call before integrating it; a request that is unavailable returns HTTP 503 without consuming credits.</Note>
+Read product wrappers with `price.current`, `rating.average`, `image_urls`, seller name, and `ext.seller_id` / `ext.sold_count`. Missing sales and ratings remain null. Search merchandising fields live under `ext.tiktokshop`.
+
+Use `query`, `region` (default US) and explicit `page` (1–100). US and GB have passed live source checks, including a second US page. The remaining documented markets are supported by source configuration but have not all been live-tested. Currency is validated; the source does not echo the requested region.
+
+The upstream gives no total match count or continuation flag. Consequently, `total`, `has_more` and `next_cursor` are null. `cursor` returns free 422. Explicit page requests are available, but universal cursor parity remains incomplete.
+
+Nonempty uncached pages cost **1 credit**. Empty pages, errors, cache hits and successful idempotent replays are free. Use `X-Max-Credits: 1` to cap billing.
+
+<Note>This provider uses its existing free account within a non-resetting 10-source-request verification ceiling. Exhaustion fails closed. Ongoing funded capacity has not been configured; this is a bounded verified integration, not an availability guarantee.</Note>
